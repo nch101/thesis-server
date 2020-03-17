@@ -1,1 +1,1 @@
-# My project about traffic light system
+# The project abouts traffic light system
