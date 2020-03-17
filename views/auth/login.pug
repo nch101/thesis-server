@@ -1,0 +1,30 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1')
+  link(rel='stylesheet', href='/stylesheets/login.css')
+  link(rel="stylesheet", href="/stylesheets/bootstrap.min.css")
+  title Login 
+.container-main
+  .login-container
+    .background-title
+      span.login-title HE THONG DEN GIAO THONG THONG MINH
+    form.form-container(action='#', method='POST')
+      .label-form
+        span.label-input Ten dang nhap
+        span.input-container
+          input.login-input(type='text', placeholder='Enter username', name='username', value = values ? values.username : "")
+          span.focus-input
+      .label-form
+        span.label-input Mat khau
+        span.input-container
+          input.login-input(type='password', placeholder='Enter password', name='password', value = values ? values.password : "")
+          span.focus-input
+      .login-button-form
+        button.login-button(type='submit', name='submit') Login
+  if (errors) 
+    each error in errors
+      .alert.alert-danger= error
+script(src="/javascripts/jquery-3.2.1.slim.min.js")
+script(src="/javascripts/popper.min.js")
+script(src="/javascripts/bootstrap.min.js")
