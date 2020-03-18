@@ -67,7 +67,7 @@ var creTableTrafficLight = 'CREATE TABLE IF NOT EXISTS TrafficLight ' +
 var queryDb = [creDatabase, useDatabase, creTableUsers, creTableDevices, 
     creTableIntersection, creTableTrafficLight];
 
-var accessDbPromise = function(command) {
+var createDbPromise = function(command) {
     return new Promise(function(resolve, reject) {
         connect.query(command, function(err, results) {
             if (err) 
@@ -80,7 +80,7 @@ var accessDbPromise = function(command) {
 
 Promise.all(
     queryDb.map(function(command) {
-        return accessDbPromise(command);
+        return createDbPromise(command);
     })
 ).then(function() {
     console.log('Connected to demo database! ');
@@ -88,7 +88,19 @@ Promise.all(
     console.log(err);
 })
 
+var accessDbPromise = function(command, parameter) {
+    return new Promise(function(resolve, reject) {
+        connect.query(command, parameter, function(err, results) {
+            if (err) 
+                reject(err);
+            else
+                resolve(results);
+        });
+    });
+}
+
 module.exports = {
-    connect,
-    accessDbPromise: accessDbPromise,
+    connect: connect,
+    createDbPromise: createDbPromise,
+    accessDbPromise: accessDbPromise
 } 
