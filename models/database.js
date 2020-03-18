@@ -64,15 +64,10 @@ var creTableTrafficLight = 'CREATE TABLE IF NOT EXISTS TrafficLight ' +
                             'PRIMARY KEY (tId), ' + 
                             'FOREIGN KEY (intersectionId) REFERENCES Intersection(iId))';
 
-var configParameter = 'CREATE TABLE IF NOT EXISTS Parameter ' +
-                        '(pId INT NOT NULL AUTO_INCREMENT, ' +
-                        'Name VARCHAR(255) NOT NULL, ' +
-                        'Parameter VARCHAR(255) NOT NULL, ' +
-                        'PRIMARY KEY (pId))';
+var queryDb = [creDatabase, useDatabase, creTableUsers, creTableDevices, 
+    creTableIntersection, creTableTrafficLight];
 
-var queryDb = [creDatabase, useDatabase, configParameter, creTableUsers, creTableDevices, creTableIntersection, creTableTrafficLight];
-
-function accessDbPromise(command) {
+var accessDbPromise = function(command) {
     return new Promise(function(resolve, reject) {
         connect.query(command, function(err, results) {
             if (err) 
@@ -95,5 +90,5 @@ Promise.all(
 
 module.exports = {
     connect,
-    accessDbPromise
+    accessDbPromise: accessDbPromise,
 } 
