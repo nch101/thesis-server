@@ -19,31 +19,68 @@ module.exports = {
         // if (error) {
         //    return res.render();
         // };
+        try {
+            if (await userModel.exists({Username: username})) {
+                return res.json({
+                    message: 'Username has exist! '
+                });
+            }
+            else {
+                var hashPassword = bcrypt.hashSync(password, 10);
+                var dataUser = {
+                    Username: username,
+                    Password: hashPassword,
+                    Fullname: fullname,
+                    Email: email,
+                    Phone: phone,
+                    Address: address,
+                    Admin: admin,
+                    Banned: banned
+                };
+                userModel.create(dataUser)
+                    .then(function() {
+                        console.log('Tao user thanh cong');
+                    })
+            }
+        } catch(error) {
+            console.log(error);
+        };
+    },
 
-        if (await userModel.exists({Username: username})) {
+    getProfile: function(req, res) {
+        var id = req.locals.id;
+        if (!id) {
+            try {
+                console.log(userModel.findById(id));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    },
+
+    banned: async function(req, res) {
+        var id = req.params.id;
+        console.log(id);
+        if (!id) {
             return res.json({
-                message: 'Username has exist! '
+                message: 'Id is not available! '
             });
-        }
-        else {
-            var hashPassword = bcrypt.hashSync(password, 10);
-            var dataUser = {
-                Username: username,
-                Password: hashPassword,
-                Fullname: fullname,
-                Email: email,
-                Phone: phone,
-                Address: address,
-                Admin: admin,
-                Banned: banned
-            };
-            userModel.create(dataUser)
-                .then(function() {
-                    console.log('Tao user thanh cong');
-                })
-                .catch(function(err) {
-                    console.log(err);
-                })
-        }
-    }
+        } else {
+            try {
+                var results = await Person.replaceOne({ _id: id }, { Banned: true }); 
+                if (results){
+                    return res.json({
+                        message: 'User has already banned! '
+                    });
+                }
+                else {
+                    return res.json({
+                        message: 'User does not exist!'
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+    },
 }
