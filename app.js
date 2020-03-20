@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useFindAndModify
 
 // var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// var loginRouter = require('./routes/login');
+var adminRouter = require('./routes/admin');
 var app = express();
 
 // view engine setup
@@ -23,8 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', loginRouter);
-app.use('/users', usersRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

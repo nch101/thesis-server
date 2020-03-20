@@ -13,34 +13,34 @@ var pointSchema = new mongoose.Schema({
 });
 
 var deviceSchema = new mongoose.Schema({
-    Username: {
+    username: {
         type: String,
         required: true
     },
-    Password: {
+    password: {
         type: String,
         required: true
     },
-    License_plate: {
+    license_plate: {
         type: String,
         required: true
     },
-    AvatarURL: String,
-    Phone: String,
-    Address: String,
-    Company: String,
-    Status: {
+    avatarURL: String,
+    phone: String,
+    address: String,
+    company: String,
+    status: {
         type: String,
         enum: ['online', 'offline'],
         default: 'offline',
         required: true
     },
-    Banned: {
+    banned: {
         type: Boolean,
         default: false,
         required: true
     },
-    Journey: {
+    journey: {
         type: pointSchema,
         required: true
     }

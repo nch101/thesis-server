@@ -1,54 +1,54 @@
 var mongoose = require('mongoose');
 
 var trafficLightSchema = new mongoose.Schema({
-    StreetName: {
+    streetName: {
         type: String,
         required: true
     },
-    LightStatus: {
+    lightStatus: {
         type: String,
         enum: ['red', 'yellow', 'green'],
         required: true
     },
-    ControlStatus: {
+    controlStatus: {
         type: String,
         enum: ['automatic', 'manual', 'emergency'],
         default: 'automatic',
         required: true
     },
-    TimeRed: {
+    timeRed: {
         type: Number,
         required: true
     },
-    TimeYellow: {
+    timeYellow: {
         type: Number,
         required: true
     },
-    TimeGreen: {
+    timeGreen: {
         type: Number,
         required: true
     },
-    Camip: String,
-    Bearing: {
+    camip: String,
+    bearing: {
         type: Number,
         required: true
     }
 });
 
 var intersectionSchema = new mongoose.Schema({
-    Name: {
+    name: {
         type: String,
         required: true
     },
-    Coordinates: {
+    coordinates: {
         type: [Number],
         required: true
     },
-    Bearing: {
+    bearing: {
         type: [Number],
         required: true
     },
-    TrafficLight: {
+    trafficLight: {
         type: trafficLightSchema,
         required: true
     }

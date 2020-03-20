@@ -2,25 +2,25 @@ var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
     _id: String,
-    Email: String,
-    Username: {
+    email: String,
+    username: {
         type: String,
         required: true
     },
-    Password: {
+    password: {
         type: String,
         required: true
     },
-    Fullname: String,
-    AvatarURL: String,
-    Phone: String,
-    Address: String,
-    Admin: {
+    fullname: String,
+    avatarURL: String,
+    phone: String,
+    address: String,
+    admin: {
         type: Boolean,
         default: false,
         required: true,
     },
-    Blocked: {
+    blocked: {
         type: Boolean,
         default: false,
         required: true,
