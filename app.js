@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true});
 
 // var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

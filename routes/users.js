@@ -8,6 +8,6 @@ router.get('/', function(req, res, next) {
 });
 router.post('/', usersController.createUser);
 
-router.get('/:id', usersController.banned);
+router.get('/:id', usersController.blocked);
 
 module.exports = router;

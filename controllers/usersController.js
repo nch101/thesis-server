@@ -60,7 +60,7 @@ module.exports = {
         }
     },
 
-    banned: async function(req, res) {
+    blocked: async function(req, res) {
         var id = req.params.id;
         console.log(id);
         if (!id) {
@@ -69,11 +69,41 @@ module.exports = {
             });
         } else {
             try {
-                var results = await userModel.findByIdAndUpdate(id, { $set: {Banned: true}}).select('_id');
+                var results = await userModel.findByIdAndUpdate(id, { $set: {Blocked: true}}).select('Blocked');
                 console.log(results);
                 if (results){
                     return res.json({
-                        message: 'User has already banned! '
+                        message: 'User has been blocked !'
+                    });
+                }
+                else {
+                    return res.json({
+                        message: 'User does not exist!'
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+                return res.json({
+                    message: 'Id is not available! '
+                });
+            }
+        };
+    },
+
+    unBlocked: async function(req, res) {
+        var id = req.params.id;
+        console.log(id);
+        if (!id) {
+            return res.json({
+                message: 'Id is not available! '
+            });
+        } else {
+            try {
+                var results = await userModel.findByIdAndUpdate(id, { $set: {Blocked: false}}).select('Blocked');
+                console.log(results);
+                if (results){
+                    return res.json({
+                        message: 'User has been unblocked !'
                     });
                 }
                 else {
