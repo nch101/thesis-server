@@ -1,4 +1,5 @@
 var bcrypt = require('bcryptjs');
+var ids = require('shortid');
 var userModel = require('../models/user.model');
 
 module.exports = {
@@ -28,6 +29,7 @@ module.exports = {
             else {
                 var hashPassword = bcrypt.hashSync(password, 10);
                 var dataUser = {
+                    _id: ids.generate(),
                     Username: username,
                     Password: hashPassword,
                     Fullname: fullname,
@@ -67,7 +69,8 @@ module.exports = {
             });
         } else {
             try {
-                var results = await Person.replaceOne({ _id: id }, { Banned: true }); 
+                var results = await userModel.findByIdAndUpdate(id, { $set: {Banned: true}}).select('_id');
+                console.log(results);
                 if (results){
                     return res.json({
                         message: 'User has already banned! '
@@ -80,6 +83,9 @@ module.exports = {
                 }
             } catch (error) {
                 console.log(error);
+                return res.json({
+                    message: 'Id is not available! '
+                });
             }
         };
     },
