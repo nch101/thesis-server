@@ -4,13 +4,15 @@ var userModel = require('../models/user.model');
 
 module.exports = {
     createUser: function(req, res){
-/*         var error = [];
-        if (!req.body.username) error.push('Username is required!');
-        if (!req.body.password) error.push('Password is required!');
-        if (!req.body.admin) error.push('Field admin is required!');
-        if (error) {
-           return res.render();
-        }; */
+        // var errors = [];
+        // if (!req.body.name) error.push('Username is required!');
+        // if (!req.body)
+        // if (errors.length) {
+        //    return res.render('', {
+        //        errors: errors,
+        //        values: req.body
+        //    });
+        // };
         
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var user = new userModel(req.body);

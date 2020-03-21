@@ -10,12 +10,6 @@ var trafficLightSchema = new mongoose.Schema({
         enum: ['red', 'yellow', 'green'],
         required: true
     },
-    controlStatus: {
-        type: String,
-        enum: ['automatic', 'manual', 'emergency'],
-        default: 'automatic',
-        required: true
-    },
     timeRed: {
         type: Number,
         required: true
@@ -47,6 +41,12 @@ var intersectionSchema = new mongoose.Schema({
     },
     bearing: {
         type: [Number],
+        required: true
+    },
+    controlStatus: {
+        type: String,
+        enum: ['automatic', 'manual', 'emergency'],
+        default: 'automatic',
         required: true
     },
     trafficLight: {

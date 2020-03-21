@@ -18,4 +18,8 @@ router.delete('/priority-vehicle/delete-device/:id', deviceControllers.deleteDev
 router.get('/priority-vehicle/get-all', deviceControllers.getAllDevices);
 
 router.post('/intersection/create', intersectionControllers.createIntersection);
+router.get('/intersection/get-all', intersectionControllers.getAllIntersections);
+router.get('/intersection/get/:id', intersectionControllers.getIntersection);
+router.delete('/intersection/delete/:id', intersectionControllers.deleteIntersection);
+router.post('/intersection/edit/:id', intersectionControllers.editIntersection);
 module.exports = router;
