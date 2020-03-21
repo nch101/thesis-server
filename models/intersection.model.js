@@ -36,6 +36,7 @@ var trafficLightSchema = new mongoose.Schema({
 });
 
 var intersectionSchema = new mongoose.Schema({
+    _id: String,
     name: {
         type: String,
         required: true
@@ -49,7 +50,7 @@ var intersectionSchema = new mongoose.Schema({
         required: true
     },
     trafficLight: {
-        type: trafficLightSchema,
+        type: [trafficLightSchema],
         required: true
     }
 });

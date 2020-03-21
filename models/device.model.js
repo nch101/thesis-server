@@ -13,6 +13,7 @@ var pointSchema = new mongoose.Schema({
 });
 
 var deviceSchema = new mongoose.Schema({
+    _id: String,
     username: {
         type: String,
         required: true

@@ -11,9 +11,9 @@ module.exports = {
         if (error) {
            return res.render();
         }; */
+        
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var user = new userModel(req.body);
-
         user._id = ids.generate();
         user.save()
         .then(function(user) {

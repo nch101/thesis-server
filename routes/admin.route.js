@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var userControllers = require('../controllers/user.controller');
 var deviceControllers = require('../controllers/device.controller');
+var intersectionControllers =require('../controllers/intersection.controller');
 
 router.post('/user/create-user', userControllers.createUser);
 router.put('/user/block-user/:id', userControllers.blockedUser);
@@ -16,4 +17,5 @@ router.put('/priority-vehicle/unlock-device/:id', deviceControllers.unlockedDevi
 router.delete('/priority-vehicle/delete-device/:id', deviceControllers.deleteDevice);
 router.get('/priority-vehicle/get-all', deviceControllers.getAllDevices);
 
+router.post('/intersection/create', intersectionControllers.createIntersection);
 module.exports = router;

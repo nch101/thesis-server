@@ -28,7 +28,7 @@ module.exports = {
     },
 
     getAllDevices: function(req, res) {
-        deviceModel.find().select('username license_plate status blocked ')
+        deviceModel.find().select('username license_plate status blocked')
         .then(function(data) {
             res.json(data);
         })
