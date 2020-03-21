@@ -9,8 +9,7 @@ var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true});
 
 // var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var adminRouter = require('./routes/admin');
+var adminRouter = require('./routes/admin.route');
 var app = express();
 
 // view engine setup

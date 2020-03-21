@@ -35,7 +35,7 @@ var deviceSchema = new mongoose.Schema({
         default: 'offline',
         required: true
     },
-    banned: {
+    blocked: {
         type: Boolean,
         default: false,
         required: true
