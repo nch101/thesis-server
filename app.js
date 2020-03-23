@@ -10,6 +10,8 @@ mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useFindAndModify
 
 // var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin.route');
+var testRouter = require('./routes/test');
+
 var app = express();
 
 // view engine setup
@@ -23,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', adminRouter);
+app.use('/test', testRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

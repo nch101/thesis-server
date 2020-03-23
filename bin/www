@@ -21,6 +21,11 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+//Test socket.io
+
+var io = require('socket.io')(server);
+require('../socket.io/trafficLight.socket')(io);
+
 /**
  * Listen on provided port, on all network interfaces.
  */
