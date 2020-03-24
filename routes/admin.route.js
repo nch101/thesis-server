@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var userControllers = require('../controllers/user.controller');
 var deviceControllers = require('../controllers/device.controller');
-var intersectionControllers =require('../controllers/intersection.controller');
+var intersectionControllers = require('../controllers/intersection.controller');
+var trafficLightControllers = require('../controllers/trafficLight.controller');
 
 router.post('/user/create-user', userControllers.createUser);
 router.put('/user/block-user/:id', userControllers.blockedUser);
@@ -22,4 +23,8 @@ router.get('/intersection/get-all', intersectionControllers.getAllIntersections)
 router.get('/intersection/get/:id', intersectionControllers.getIntersection);
 router.delete('/intersection/delete/:id', intersectionControllers.deleteIntersection);
 router.post('/intersection/edit/:id', intersectionControllers.editIntersection);
+
+router.get('/traffic-light/:id', trafficLightControllers.getTrafficLight);
+
+
 module.exports = router;

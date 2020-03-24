@@ -21,7 +21,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-//Test socket.io
+/* Add module traffic light SocketIO */
 
 var io = require('socket.io')(server);
 require('../socket.io/trafficLight.socket')(io);
