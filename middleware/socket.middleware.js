@@ -2,7 +2,13 @@ var io = require('socket.io')();
 var intersectionModel = require('../models/intersection.model');
 
 var isValid = function(clientId) {
-    
+    intersectionModel.find({'trafficLight._id': clientId})
+    .then(function() {
+        return true
+    })
+    .catch(function() {
+        return false
+    })
 }
 var socketMiddleware = function() {
     io.use(function(socket, next) {
@@ -13,3 +19,5 @@ var socketMiddleware = function() {
         return next(new Error('authentication error'));
     })
 }
+
+module.exports = socketMiddleware;
