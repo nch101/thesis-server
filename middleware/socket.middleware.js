@@ -12,7 +12,7 @@ var isValid = function(clientId) {
 }
 var socketMiddleware = function() {
     io.use(function(socket, next) {
-        let clientId = socket.handshake.headers['x-clientid'];
+        let clientId = socket.handshake.headers['clientId'];
         if (isValid(clientId)) {
             return next();
         }

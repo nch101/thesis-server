@@ -1,8 +1,8 @@
 module.exports = function(io) {
-  const trafficLightPath = io.of('/traffic-light');
-  trafficLightPath.on('connection', function (socket) {
+  const trafficLightPath = io.of('/data-collect');
+  trafficLightPath.on('connect', function (socket) {
     socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
+    socket.on('news', function (data) {
       console.log(data);
     });
   trafficLightPath.emit('hi', 'Success!');
