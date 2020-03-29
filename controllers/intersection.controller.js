@@ -1,107 +1,166 @@
-var ids = require('shortid');
+var mongoose = require('mongoose');
 var intersectionModel = require('../models/intersection.model');
+var trafficLightModel = require('../models/traffic-light.model');
 
 module.exports = {
     createIntersection: function(req, res) {
-        var errors = [];
-        if (!req.body.name) errors.push('Name is required!');
-        if (!req.body.coordinates) errors.push('Coordinates is required!');
-        if (!req.body.bearing) errors.push('Bearing is; required!');
-        if (!req.body.trafficLight) errors.push('Traffic light is required');
-        if (errors.length) {
-           return res.render('', {
-               errors: errors,
-               values: req.body
-           });
-        };
-
-        intersectionModel.findOne({name: req.body.name}).select('_id')
+        intersectionModel
+        .findOne({name: req.body.name})
+        .select('_id')
         .then(function(results) {
             if (results)
-                return res.json({
-                    message: 'Intersection available!'
+                return res
+                .status(400)
+                .json({ message: 'Intersection already exists' });
+
+            var Intersection = new intersectionModel({
+                _id: mongoose.Types.ObjectId(),
+                name: req.body.name,
+                coordinates: req.body.coordinates,
+                bearing: req.body.bearing,
+                controlStatus: req.body.controlStatus,
+            });
+            for (let index = 0; index < req.body.trafficLights.length; index++) {
+                var trafficLight = new trafficLightModel(req.body.trafficLights[index])
+                Intersection.trafficLights.push(trafficLight._id);
+                trafficLight.intersection = Intersection._id;
+                trafficLight.save()
+                .catch(function(error) {
+                    return res
+                    .status(501)
+                    .json(error)
                 })
-            var intersection = new intersectionModel(req.body);
-            intersection._id = ids.generate();
-            intersection.save()
-            .then(function(data) {
-                res.json(data);
+            }
+            Intersection.save()
+            .then(function(results) {
+                return res
+                .status(301)
+                .json(results)
             })
             .catch(function(error) {
-                console.log(error);
-                res.json({
-                    message: 'Create intersection unsuccess! '
-                })
-            });
+                return res
+                .status(501)
+                .json(error)
+            })
         })
         .catch(function(error) {
-            console.log(error);
-            res.json({
-                message: 'Create intersection unsuccess! '
-            })
+            return res
+            .status(501)
+            .json(error)
         })
     },
 
     getAllIntersections: function(req, res) {
-        intersectionModel.find().select('name coordinates controlStatus')
+        intersectionModel
+        .find()
+        .select('name coordinates controlStatus')
         .then(function(data) {
-            res.json(data);
+            return res
+            .status(301)
+            .json(data);
         })
         .catch(function(error) {
-            console.log(error);
-            res.json({
-                message: 'Cannot get all intersections'
-            });
+            return res
+            .status(501)
+            .json({ message: 'Cannot get all intersections' });
         });
     },
 
     getIntersection: function(req, res) {
-        intersectionModel.findById(req.params.id)
+        intersectionModel
+        .findById(req.params.id)
+        .populate({path: 'trafficLights', 
+        select: 'streetName timeRed timeYellow timeGreen camip bearing'})
         .then(function(data) {
-            res.json(data);
+            return res
+            .status(301)
+            .json(data)
         })
         .catch(function(error) {
-            console.log(error);
-            res.json({
-                message: 'Cannot get'
-            });
+            return res
+            .status(501)
+            .json({ message: 'Cannot get' })
         })
     },
 
     deleteIntersection: function(req, res) {
-        if (!req.params.id) {
-            return res.json({
-                message: 'Id is not available! '
-            });
-        } else {
-            intersectionModel.findByIdAndRemove(req.params.id).select('_id')
-            .then(function(results) {
-                if (results)
-                    return res.json({
-                        message: 'Intersection has been deleted!'
-                    });
-                return res.json({
-                    message: 'Intersection does not exist!'
-                })
+        if (!req.params.id)
+            return res
+            .status(401)
+            .json({ message: 'Id is not available!' });
+        else {
+            intersectionModel
+            .findById(req.params.id)
+            .select('trafficLights -_id')
+            .then(function(data) {
+                if (data) {
+                    for (let index = 0; index < data.get('trafficLights').length; index++) {
+                        trafficLightModel
+                        .findByIdAndRemove(data.get('trafficLights')[index])
+                        .catch(function (error) {
+                            return res
+                            .status(501)
+                            .json(error)
+                        })
+                    };
+                    intersectionModel
+                    .findByIdAndRemove(req.params.id)
+                    .then(function() {
+                        return res
+                        .status(301)
+                        .json({ message: 'Deleted!' });
+                    })
+                }
+                else {
+                    return res
+                    .status(401)
+                    .json({ message: 'Intersection does not exist!' })
+                }
             })
             .catch(function(error) {
                 console.log(error);
-                return res.json({
-                    message: 'Id is not available! '
-                });
+                return res
+                .status(501)
+                .json({ message: 'Cannot delete!' });
             });
         }
     },
 
     editIntersection: function(req, res) {
-        intersectionModel.findByIdAndUpdate(req.params.id, req.body)
+        intersectionModel
+        .findByIdAndUpdate(req.params.id, { $set: {
+            name: req.body.name,
+            coordinates: req.body.coordinates,
+            bearing: req.body.bearing,
+            controlStatus: req.body.controlStatus
+        }})
         .then(function(data) {
-            return res.json(data);
+            if (data) {
+                for (let index = 0; index < data.get('trafficLights').length; index++) {
+                    trafficLightModel
+                    .findByIdAndUpdate(data.get('trafficLights')[index], {
+                        $set: req.body.trafficLights[index]
+                    })
+                    .catch(function (error) {
+                        return res
+                        .status(501)
+                        .json(error)
+                    })
+                };
+                return res
+                .status(301)
+                .json({ message: 'Updated successful!'})
+            }
+            else {
+                return res
+                .status(401)
+                .json({ message: 'Intersection does not exist!' })
+            }
         })
         .catch(function(error) {
-            return res.json({
-                message: 'Cannot update intersection'
-            });
+            return res
+            .status(501)
+            .json({ message: 'Cannot update intersection' });
         });
     }
 }

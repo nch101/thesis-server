@@ -6,11 +6,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, 
+  useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true});
 
 // var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin.route');
-var testRouter = require('./routes/test');
+var intersectionRouter = require('./routes/intersection.route');
+var trafficLightRouter = require('./routes/trafficLight.route');
 
 var app = express();
 
@@ -25,7 +27,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', adminRouter);
-app.use('/traffic-light', testRouter);
+app.use('/intersection', intersectionRouter);
+app.use('/traffic-light', trafficLightRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

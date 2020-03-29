@@ -1,10 +1,13 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var uniqueValidator = require('mongoose-unique-validator');
 
-var userSchema = new mongoose.Schema({
+var userSchema = new Schema({
     _id: String,
     email: String,
     username: {
         type: String,
+        unique: true,
         required: true
     },
     password: {
@@ -27,6 +30,6 @@ var userSchema = new mongoose.Schema({
     }
 });
 
-var user = mongoose.model('User', userSchema);
+userSchema.plugin(uniqueValidator, { message: 'Error, {VALUE} already exists' });
 
-module.exports = user;
+module.exports = mongoose.model('User', userSchema);

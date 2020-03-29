@@ -1,39 +1,11 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var trafficLightSchema = new mongoose.Schema({
-    streetName: {
-        type: String,
-        required: true
-    },
-    lightStatus: {
-        type: String,
-        enum: ['red', 'yellow', 'green'],
-        required: true
-    },
-    timeRed: {
-        type: Number,
-        required: true
-    },
-    timeYellow: {
-        type: Number,
-        required: true
-    },
-    timeGreen: {
-        type: Number,
-        required: true
-    },
-    camip: String,
-    bearing: {
-        type: Number,
-        required: true
-    }
-});
-
-var intersectionSchema = new mongoose.Schema({
-    _id: String,
+var intersectionSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        uniqueCaseInsensitive: true
     },
     coordinates: {
         type: [Number],
@@ -49,12 +21,11 @@ var intersectionSchema = new mongoose.Schema({
         default: 'automatic',
         required: true
     },
-    trafficLight: {
-        type: [trafficLightSchema],
-        required: true
-    }
+    trafficLights: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'Traffic-light', 
+        require: true
+    }]
 });
 
-var intersection = new mongoose.model('Intersection', intersectionSchema);
-
-module.exports = intersection;
+module.exports = mongoose.model('Intersection', intersectionSchema);

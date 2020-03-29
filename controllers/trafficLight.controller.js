@@ -1,14 +1,28 @@
-var intersectionModel = require('../models/intersection.model');
+var trafficLightModel = require('../models/traffic-light.model');
 
 module.exports = {
     getTrafficLight: function(req, res) {
-        intersectionModel.find({'trafficLight._id': req.params.id})
+        trafficLightModel.findById(req.params.id)
+        .populate({path: 'intersection', select: 'name controlStatus -_id'})
         .then(function(data) {
-            res.json(data)
+            return res.status(301).json(data);
         })
-        .catch((error) => {
-            res.json('Cannot get')
+        .catch(function(error) {
+            console.log(error);
+            res.status(501).json({
+                message: 'Cannot get'
+            });
         })
     },
 
+    getData: function(req, res) {
+        intersectionModel.find({'trafficLight._id': req.params.id})
+        .select('trafficLight controlStatus -_id')
+        .then(function(data) {
+            return res.json(data)
+        })
+        .catch((error) => {
+            return res.json('Cannot get');
+        })
+    }
 }
