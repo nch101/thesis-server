@@ -9,7 +9,7 @@ module.exports = {
             name: req.body.name,
             coordinates: req.body.coordinates,
             bearing: req.body.bearing,
-            controlStatus: req.body.controlStatus,
+            modeControl: req.body.modeControl,
         });
         for (let index = 0; index < req.body.trafficLights.length; index++) {
             var trafficLight = new trafficLightModel(req.body.trafficLights[index])
@@ -38,7 +38,7 @@ module.exports = {
     getAllIntersections: function(req, res) {
         intersectionModel
         .find()
-        .select('name coordinates controlStatus')
+        .select('name coordinates modeControl')
         .then(function(data) {
             return res
             .status(301)
@@ -90,7 +90,7 @@ module.exports = {
             }
             else {
                 return res
-                .status(401)
+                .status(503)
                 .json({ message: 'Intersection does not exist!' })
             }
         })
@@ -108,7 +108,7 @@ module.exports = {
             name: req.body.name,
             coordinates: req.body.coordinates,
             bearing: req.body.bearing,
-            controlStatus: req.body.controlStatus
+            modeControl: req.body.modeControl
         }})
         .then(function(data) {
             if (data) {
@@ -129,7 +129,7 @@ module.exports = {
             }
             else {
                 return res
-                .status(401)
+                .status(503)
                 .json({ message: 'Intersection does not exist!' })
             }
         })
@@ -138,5 +138,60 @@ module.exports = {
             .status(501)
             .json({ message: 'Cannot update intersection' });
         });
+    },
+
+    updateManualControl: function(req, res) {
+        intersectionModel
+        .findByIdAndUpdate(req.params.id, { $set: { modeControl: 'manual' } })
+        .then(function(data) {
+            return res
+            .status(200)
+            .json(data)
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json(error)
+        })
+    },
+
+    updateAutomaticControl: function(req, res) {
+        intersectionModel
+        .findByIdAndUpdate(req.params.id, { $set: { modeControl: 'automatic' } })
+        .then(function(data) {
+            return res
+            .status(200)
+            .json(data)
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json(error)
+        })
+    },
+
+    configTime: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .select('trafficLights')
+        .then(function(data) {
+            for (let index = 0; index < data.get('trafficLights').length; index++) {
+                trafficLightModel
+                .findByIdAndUpdate(data.get('trafficLights')[index], { $set: req.body.configTime[index] })
+                .catch(function(error) {
+                    return res
+                    .status(501)
+                    .json(error)
+                })
+            }
+            return res
+                .status(301)
+                .json({ message: 'Updated successful!'})
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json(error)
+        })
     }
 }

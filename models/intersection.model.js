@@ -15,7 +15,7 @@ var intersectionSchema = new Schema({
         type: [Number],
         required: true
     },
-    controlStatus: {
+    modeControl: {
         type: String,
         enum: ['automatic', 'manual', 'emergency'],
         default: 'automatic',

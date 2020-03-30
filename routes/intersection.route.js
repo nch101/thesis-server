@@ -4,5 +4,7 @@ var intersectionControllers = require('../controllers/intersection.controller')
 
 router.get('/get-all', intersectionControllers.getAllIntersections);
 router.get('/get/:id', intersectionControllers.getIntersection);
+router.put('/mode-control/manual/:id', intersectionControllers.updateManualControl);
+router.put('/mode-control/automatic/:id', intersectionControllers.updateAutomaticControl);
 
 module.exports = router
