@@ -193,5 +193,22 @@ module.exports = {
             .status(501)
             .json(error)
         })
+    },
+
+    getData: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .select('trafficLights modeControl')
+        .populate({ path: 'trafficLights', select: 'timeRed timeYellow timeGreen' })
+        .then(function(data) {
+            return res
+            .status(200)
+            .json(data)
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json(error)
+        })
     }
 }
