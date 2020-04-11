@@ -15,7 +15,6 @@ var pointSchema = new Schema({
 });
 
 var deviceSchema = new Schema({
-    _id: String,
     license_plate: {
         type: String,
         unique: true,

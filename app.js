@@ -10,10 +10,10 @@ var cors = require('cors');
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, 
   useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true});
 
-// var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin.route');
 var intersectionRouter = require('./routes/intersection.route');
 var trafficLightRouter = require('./routes/trafficLight.route');
+var deviceRouter = require('./routes/device.route');
 var mapRouter = require('./routes/map.route');
 
 var app = express();
@@ -31,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRouter);
 app.use('/intersection', intersectionRouter);
 app.use('/traffic-light', trafficLightRouter);
+app.use('/device', deviceRouter);
 app.use('/map', cors(), mapRouter);
 
 // catch 404 and forward to error handler
