@@ -2,6 +2,7 @@ var bcrypt = require('bcryptjs');
 var deviceModel = require('../models/device.model');
 
 module.exports = {
+    //For admin user
     createDevice: function(req, res) {
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var device = new deviceModel(req.body);
@@ -15,20 +16,14 @@ module.exports = {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Create device unsuccess !'
-            })
+            .json(error)
         });
-    },
-
-    editDevice: function(req, res) {
-
     },
 
     getAllDevices: function(req, res) {
         deviceModel
         .find()
-        .select('username license_plate status blocked')
+        .select('license_plate status blocked')
         .then(function(data) {
             return res
             .status(301)
@@ -42,25 +37,6 @@ module.exports = {
                 message: 'Cannot get'
             });
         });
-    },
-
-    getDevice: function(req, res) {
-        deviceModel
-        .findById(req.params.id)
-        .select('username license_plate email phone company -_id')
-        .then(function(data) {
-            return res
-            .status(301)
-            .json(data);
-        })
-        .catch(function(error) {
-            console.log(error);
-            return res
-            .status(501)
-            .json({
-                message: 'Can not get user'
-            });
-        })
     },
 
     blockedDevice: function(req, res) {
@@ -144,6 +120,84 @@ module.exports = {
         });
     },
 
+    //For standard user
+
+    getDevice: function(req, res) {
+        deviceModel
+        .findById(req.params.id)
+        .select('-password')
+        .then(function(data) {
+            return res
+            .status(301)
+            .json(data);
+        })
+        .catch(function(error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({
+                message: 'Can not get user'
+            });
+        })
+    },
+
+    editDevice: function(req, res) {
+        deviceModel
+        .findByIdAndUpdate(req.params.id, { $set: {
+            license_plate: req.body.license_plate,
+            phone: req.body.phone,
+            address: req.body.address,
+            company: req.body.company
+        }})
+        .then(function() {
+            return res
+            .status(301)
+            .json({ message: 'Update successful' });
+        })
+        .catch(function(error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Cannot update' });
+        })
+    },
+
+    changePassword: function(req, res) {
+        deviceModel
+        .findById(req.params.id)
+        .select('password')
+        .then(function(data) {
+            if (bcrypt.compareSync(req.body.oldPassword, data.password)) {
+                deviceModel
+                .findByIdAndUpdate(req.params.id, { $set: {
+                    password: bcrypt.hashSync(req.body.newPassword, 10)
+                }})
+                .then(function(results) {
+                    return res
+                    .status(301)
+                    .json({ message: 'Change password successed!' })
+                })
+                .catch(function(error) {
+                    console.log(error)
+                    return res
+                    .status(501)
+                    .json({ message: 'Change password unsuccessed!' })
+                })
+            }
+            else {
+                return res
+                .status(400)
+                .json({ message: 'Old password incorrect!' })
+            }
+        })
+        .catch(function(error) {
+            console.log(error)
+            return res
+            .status(501)
+            .json({ message: 'Change password unsuccessed!' })
+        })
+    },
+
     getLocation: function(req, res) {
         deviceModel
         .findById(req.params.id)
@@ -165,7 +219,9 @@ module.exports = {
 
     updateLocation: function(req,res) {
         deviceModel
-        .findByIdAndUpdate(req.params.id, { $set: {}})
+        .findByIdAndUpdate(req.params.id, { $set: {
+            journey: req.body.journey
+        }})
         .select('_id')
         .then(function (data) {
             if (data)

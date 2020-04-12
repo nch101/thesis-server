@@ -39,10 +39,9 @@ var deviceSchema = new Schema({
         default: false,
         required: true
     },
-    journey: {
+    journey: [{
         type: pointSchema,
-        required: true
-    }
+    }]
 });
 
 deviceSchema.plugin(uniqueValidator, { message: 'Error, {VALUE} already exists' });

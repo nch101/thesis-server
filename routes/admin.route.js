@@ -14,15 +14,15 @@ router.delete('/user/delete-user/:id', userControllers.deleteUser);
 router.get('/user/get-all', userControllers.getAllUsers);
 router.get('/user/get/:id', userControllers.getUser);
 
-router.post('/priority-vehicle/create-device', deviceControllers.createDevice);
-router.put('/priority-vehicle/block-device/:id', deviceControllers.blockedDevice);
-router.put('/priority-vehicle/unlock-device/:id', deviceControllers.unlockedDevice);
-router.delete('/priority-vehicle/delete-device/:id', deviceControllers.deleteDevice);
-router.get('/priority-vehicle/get-all', deviceControllers.getAllDevices);
+router.post('/device/', deviceControllers.createDevice);
+router.get('/device/', deviceControllers.getAllDevices);
+router.put('/device/blocked/:id', deviceControllers.blockedDevice);
+router.put('/device/unblocked/:id', deviceControllers.unBlockedDevice);
+router.delete('/device/:id', deviceControllers.deleteDevice);
 
-router.post('/intersection/create', intersectionValidate.checkField, intersectionValidate.nameExists, intersectionControllers.createIntersection);
-router.delete('/intersection/delete/:id', intersectionControllers.deleteIntersection);
-router.put('/intersection/edit/:id', intersectionValidate.checkField, intersectionControllers.editIntersection);
+router.post('/intersection', intersectionValidate.checkField, intersectionValidate.nameExists, intersectionControllers.createIntersection);
+router.delete('/intersection/:id', intersectionControllers.deleteIntersection);
+router.put('/intersection/:id', intersectionValidate.checkField, intersectionControllers.editIntersection);
 router.put('/intersection/config-time/:id', intersectionControllers.configTime);
 
 
