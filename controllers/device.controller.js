@@ -201,10 +201,10 @@ module.exports = {
     getLocation: function(req, res) {
         deviceModel
         .findById(req.params.id)
-        .select('journey -_id')
+        .select('license_plate journey -_id')
         .then(function(data) {
             return res
-            .status(301)
+            .status(200)
             .json(data)
         })
         .catch(function(error) {
@@ -226,7 +226,7 @@ module.exports = {
         .then(function (data) {
             if (data)
                 return res
-                .status(301)
+                .status(200)
                 .json(data);
             return res
             .status(503)

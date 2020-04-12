@@ -2,15 +2,27 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
 
-var pointSchema = new Schema({
+var journeySchema = new Schema({
     type: {
         type: String,
-        enum: ['Departure', 'Current position', 'Destination'],
-        required: true
+        default: 'Feature'
     },
-    coordinates: {
-        type: [Number],
-        required: true
+    geometry: {
+        type: {
+            type: String,
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
+    properties: {
+        name: {
+            type: String,
+            enum: ['Departure', 'Current position', 'Destination'],
+            require: true
+        }
     }
 });
 
@@ -40,7 +52,7 @@ var deviceSchema = new Schema({
         required: true
     },
     journey: [{
-        type: pointSchema,
+        type: journeySchema,
     }]
 });
 

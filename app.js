@@ -28,10 +28,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use('/admin', adminRouter);
 app.use('/intersection', intersectionRouter);
 app.use('/traffic-light', trafficLightRouter);
-app.use('/device', deviceRouter);
+app.use('/device', cors(), deviceRouter);
 app.use('/map', cors(), mapRouter);
 
 // catch 404 and forward to error handler
