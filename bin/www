@@ -25,6 +25,7 @@ var server = http.createServer(app);
 
 var io = require('socket.io')(server);
 require('../socket.io/trafficLight.socket')(io);
+require('../socket.io/trackingVehicle.socket')(io);
 
 /**
  * Listen on provided port, on all network interfaces.

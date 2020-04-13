@@ -1,13 +1,10 @@
 header
-  title Demo socketIO
-  script(src='/socket.io/socket.io.js')
+	title Demo socketIO
+	script(src='/socket.io/socket.io.js')
 div
-  script.
-    var socket = io('/traffic-light');
-    socket.on('news', function (data) {
-      console.log(data);
-    socket.emit('my other event', { my: 'data' });
-    socket.on('hi', function(data) {
-      console.log(data);
-    })
-    });
+	script.
+		var socket = io('/socket/tracking-device');
+		socket.on('news', function (data) {
+			console.log(data);
+			socket.emit('news', 'Ok.. tra loi client');
+		});
