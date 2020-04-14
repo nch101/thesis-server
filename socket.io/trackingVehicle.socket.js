@@ -3,16 +3,16 @@ var userModel = require('../models/user.model');
 
 function isValid(clientId, next) {
 	var isVehicle = deviceModel.findById(clientId).select('_id');
-	var isUser = deviceModel.findById(clientId).select('_id');
+	var isUser = userModel.findById(clientId).select('_id');
 
-	deviceModel
-	.findById(clientId)
-	.select('_id')
+	Promise.all([isVehicle, isUser])
 	.then(function(results) {
-		if (results) {
-			return next()
+		if (results[0] || results[1]){
+			return next();
 		}
-		return next(new Error('authentication error'));	
+		else {
+			return next(new Error('authentication error'));	
+		}
 	})
 	.catch(function(error) {
 		console.log(error);
@@ -29,7 +29,8 @@ module.exports = function(io) {
 	});
 
 	trackingDevicePath.on('connect', function(socket) {
-		console.log('Tracking vehicle connection is established!' + socket.id);
+		console.log('Tracking vehicle connection is established!');
+		console.log(socket.handshake.headers['license-plate']);
 		socket.on('vehicle-location', function(data) {
 			console.log(data);
 			trackingDevicePath.emit('tracking-vehicle', data);
