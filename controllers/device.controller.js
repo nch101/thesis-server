@@ -25,17 +25,22 @@ module.exports = {
         .find()
         .select('license_plate status blocked')
         .then(function(data) {
-            return res
-            .status(301)
-            .json(data);
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Cannot get'
-            });
+            .json({ message: 'Error!' });
         });
     },
 
@@ -43,26 +48,23 @@ module.exports = {
         deviceModel
         .findByIdAndUpdate(req.params.id, { $set: {blocked: true}})
         .select('_id')
-        .then(function (results) {
-            if (results)
+        .then(function(data) {
+            if (data) {
                 return res
-                .status(301)
-                .json({
-                    message: 'Device has been blocked!'
-            });
-            return res
-            .status(503)
-            .json({
-                message: 'Device does not exist!'
-            });
+                .status(200)
+                .json({ message: 'Blocked!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function (error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Id is not available! '
-            });
+            .json({ message: 'Error!' });
         })
     },
 
@@ -70,26 +72,23 @@ module.exports = {
         deviceModel
         .findByIdAndUpdate(req.params.id, { $set: {blocked: false}})
         .select('_id')
-        .then(function (results) {
-            if (results)
+        .then(function(data) {
+            if (data) {
                 return res
-                .status(301)
-                .json({
-                    message: 'Device has been unblocked!'
-            });
-            return res
-            .status(503)
-            .json({
-                message: 'Device does not exist!'
-            });
+                .status(200)
+                .json({ message: 'Unblocked!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function (error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Id is not available! '
-            });
+            .json({ message: 'Error!' });
         })
     },
 
@@ -97,26 +96,23 @@ module.exports = {
         deviceModel
         .findByIdAndRemove(req.params.id)
         .select('_id')
-        .then(function(results) {
-            if (results)
+        .then(function(data) {
+            if (data) {
                 return res
-                .status(301)
-                .json({
-                    message: 'Device has been deleted!'
-                });
-            return res
-            .status(503)
-            .json({
-                message: 'Device does not exist!'
-            })
+                .status(200)
+                .json({ message: 'Deleted!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Id is not available! '
-            });
+            .json({ message: 'Error!' });
         });
     },
 
@@ -127,17 +123,22 @@ module.exports = {
         .findById(req.params.id)
         .select('-password')
         .then(function(data) {
-            return res
-            .status(301)
-            .json(data);
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Can not get user'
-            });
+            .json({ message: 'Error!' });
         })
     },
 
@@ -149,16 +150,23 @@ module.exports = {
             address: req.body.address,
             company: req.body.company
         }})
-        .then(function() {
-            return res
-            .status(301)
-            .json({ message: 'Update successful' });
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json({ message: 'Edited!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({ message: 'Cannot update' });
+            .json({ message: 'Error!' });
         })
     },
 
@@ -167,34 +175,41 @@ module.exports = {
         .findById(req.params.id)
         .select('password')
         .then(function(data) {
-            if (bcrypt.compareSync(req.body.oldPassword, data.password)) {
-                deviceModel
-                .findByIdAndUpdate(req.params.id, { $set: {
-                    password: bcrypt.hashSync(req.body.newPassword, 10)
-                }})
-                .then(function(results) {
+            if (data) {
+                if (bcrypt.compareSync(req.body.oldPassword, data.password)) {
+                    deviceModel
+                    .findByIdAndUpdate(req.params.id, { $set: {
+                        password: bcrypt.hashSync(req.body.newPassword, 10)
+                    }})
+                    .then(function(results) {
+                        return res
+                        .status(301)
+                        .json({ message: 'Change password successed!' })
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                        return res
+                        .status(501)
+                        .json({ message: 'Change password unsuccessed!' })
+                    })
+                }
+                else {
                     return res
-                    .status(301)
-                    .json({ message: 'Change password successed!' })
-                })
-                .catch(function(error) {
-                    console.log(error)
-                    return res
-                    .status(501)
-                    .json({ message: 'Change password unsuccessed!' })
-                })
+                    .status(400)
+                    .json({ message: 'Old password incorrect!' })
+                }
             }
             else {
                 return res
-                .status(400)
-                .json({ message: 'Old password incorrect!' })
+                .status(404)
+                .json({ message: 'Not found!' })
             }
         })
         .catch(function(error) {
             console.log(error)
             return res
             .status(501)
-            .json({ message: 'Change password unsuccessed!' })
+            .json({ message: 'Error!' })
         })
     },
 
@@ -203,17 +218,22 @@ module.exports = {
         .findById(req.params.id)
         .select('license_plate journey -_id')
         .then(function(data) {
-            return res
-            .status(200)
-            .json(data)
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Cannot get'
-            });
+            .json({ message: 'Error!' });
         })
     },
 
@@ -223,24 +243,23 @@ module.exports = {
             journey: req.body.journey
         }})
         .select('_id')
-        .then(function (data) {
-            if (data)
+        .then(function(data) {
+            if (data) {
                 return res
                 .status(200)
-                .json(data);
-            return res
-            .status(503)
-            .json({
-                message: 'Device does not exist!'
-            });
+                .json({ message: 'Updated!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function (error) {
             console.log(error);
             return res
             .status(501)
-            .json({
-                message: 'Cannot update location'
-            });
+            .json({ message: 'Error!' });
         })
     },
 }
