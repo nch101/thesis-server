@@ -7,8 +7,8 @@ module.exports = {
         var Intersection = new intersectionModel({
             _id: mongoose.Types.ObjectId(),
             name: req.body.name,
-            coordinates: req.body.coordinates,
-            bearing: req.body.bearing,
+            location: req.body.location,
+            bearings: req.body.bearings,
             modeControl: req.body.modeControl,
         });
         for (let index = 0; index < req.body.trafficLights.length; index++) {
@@ -25,46 +25,13 @@ module.exports = {
         Intersection.save()
         .then(function(results) {
             return res
-            .status(301)
+            .status(200)
             .json(results)
         })
         .catch(function(error) {
             return res
             .status(501)
             .json(error)
-        })
-    },
-
-    getAllIntersections: function(req, res) {
-        intersectionModel
-        .find()
-        .select('name coordinates modeControl')
-        .then(function(data) {
-            return res
-            .status(301)
-            .json(data);
-        })
-        .catch(function(error) {
-            return res
-            .status(501)
-            .json({ message: 'Cannot get all intersections' });
-        });
-    },
-
-    getIntersection: function(req, res) {
-        intersectionModel
-        .findById(req.params.id)
-        .populate({path: 'trafficLights', 
-        select: 'streetName timeRed timeYellow timeGreen camip bearing'})
-        .then(function(data) {
-            return res
-            .status(301)
-            .json(data)
-        })
-        .catch(function(error) {
-            return res
-            .status(501)
-            .json({ message: 'Cannot get' })
         })
     },
 
@@ -90,15 +57,15 @@ module.exports = {
             }
             else {
                 return res
-                .status(503)
-                .json({ message: 'Intersection does not exist!' })
+                .status(404)
+                .json({ message: 'Not found!' })
             }
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({ message: 'Cannot delete!' });
+            .json({ message: 'Error!' });
         });
     },
 
@@ -106,8 +73,8 @@ module.exports = {
         intersectionModel
         .findByIdAndUpdate(req.params.id, { $set: {
             name: req.body.name,
-            coordinates: req.body.coordinates,
-            bearing: req.body.bearing,
+            location: req.body.location,
+            bearings: req.body.bearings,
             modeControl: req.body.modeControl
         }})
         .then(function(data) {
@@ -125,49 +92,19 @@ module.exports = {
                 };
                 return res
                 .status(301)
-                .json({ message: 'Updated successful!'})
+                .json({ message: 'Updated successful!' })
             }
             else {
                 return res
-                .status(503)
-                .json({ message: 'Intersection does not exist!' })
+                .status(404)
+                .json({ message: 'Not found!' })
             }
         })
         .catch(function(error) {
             return res
             .status(501)
-            .json({ message: 'Cannot update intersection' });
+            .json({ message: 'Error!' });
         });
-    },
-
-    updateManualControl: function(req, res) {
-        intersectionModel
-        .findByIdAndUpdate(req.params.id, { $set: { modeControl: 'manual' } })
-        .then(function(data) {
-            return res
-            .status(200)
-            .json(data)
-        })
-        .catch(function(error) {
-            return res
-            .status(501)
-            .json(error)
-        })
-    },
-
-    updateAutomaticControl: function(req, res) {
-        intersectionModel
-        .findByIdAndUpdate(req.params.id, { $set: { modeControl: 'automatic' } })
-        .then(function(data) {
-            return res
-            .status(200)
-            .json(data)
-        })
-        .catch(function(error) {
-            return res
-            .status(501)
-            .json(error)
-        })
     },
 
     configTime: function(req, res) {
@@ -175,23 +112,101 @@ module.exports = {
         .findById(req.params.id)
         .select('trafficLights')
         .then(function(data) {
-            for (let index = 0; index < data.get('trafficLights').length; index++) {
-                trafficLightModel
-                .findByIdAndUpdate(data.get('trafficLights')[index], { $set: req.body.configTime[index] })
-                .catch(function(error) {
-                    return res
-                    .status(501)
-                    .json(error)
-                })
-            }
-            return res
-                .status(301)
+            if (data) {
+                for (let index = 0; index < data.get('trafficLights').length; index++) {
+                    trafficLightModel
+                    .findByIdAndUpdate(data.get('trafficLights')[index], { $set: req.body.configTime[index] })
+                    .catch(function(error) {
+                        return res
+                        .status(501)
+                        .json(error)
+                    })
+                }
+                return res
+                .status(200)
                 .json({ message: 'Updated successful!'})
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' })
+            }
         })
         .catch(function(error) {
             return res
             .status(501)
-            .json(error)
+            .json({ message: 'Error!' });
+        })
+    },
+
+    getAllIntersections: function(req, res) {
+        intersectionModel
+        .find()
+        .select('name location modeControl')
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
+    },
+
+    getIntersection: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .populate({path: 'trafficLights', 
+        select: 'streetName timeRed timeYellow timeGreen camip bearing'})
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        })
+    },
+
+    updateModeControl: function(req, res) {
+        intersectionModel
+        .findByIdAndUpdate(req.params.id, { $set: { 
+            modeControl: req.body.modeControl 
+        }})
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
         })
     },
 
@@ -201,14 +216,21 @@ module.exports = {
         .select('trafficLights modeControl')
         .populate({ path: 'trafficLights', select: 'timeRed timeYellow timeGreen' })
         .then(function(data) {
-            return res
-            .status(200)
-            .json(data)
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             return res
             .status(501)
-            .json(error)
+            .json({ message: 'Error!' });
         })
     }
 }
