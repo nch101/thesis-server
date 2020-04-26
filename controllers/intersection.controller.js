@@ -195,7 +195,7 @@ module.exports = {
             if (data) {
                 return res
                 .status(200)
-                .json(data);
+                .json({ message: 'Updated!' });
             }
             else {
                 return res
