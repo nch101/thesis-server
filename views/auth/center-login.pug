@@ -19,11 +19,12 @@ head
             .input-box
                 span.icon
                     i.fas.fa-user
-                input(type='text', name='username', placeholder='Tên đăng nhập', required='')
+                input(type='text', name='username', placeholder='Tên đăng nhập', required='', value=values ? values.username : '')
             .input-box
                 span.icon
                     i.fas.fa-key
-                input(type='password', name='password', placeholder='Mật khẩu', required='')
+                input(type='password', name='password', placeholder='Mật khẩu', required='', value=values ? values.password : '')
             a(href='/vehicle/login') > phương tiện ưu tiên
             button(type='submit') đăng nhập
-    .alert-error Tên đăng nhập hoặc mật khẩu không đúng !
+    if error
+        .alert-error Tên đăng nhập hoặc mật khẩu không đúng !
