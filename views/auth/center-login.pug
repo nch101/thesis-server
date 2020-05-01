@@ -1,0 +1,29 @@
+doctype html
+head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Đăng nhập hệ thống
+    link(rel='shortcut icon', href='/images/LogoBK.png', type='image/x-icon')
+    link(rel='stylesheet', href='/stylesheets/login.css')
+    script(src='https://kit.fontawesome.com/4392fea608.js', crossorigin='anonymous')
+.wrap
+    .container
+        span.logo
+        h1
+            | hệ thống
+            br
+            | đèn giao thông
+            br
+            | thông minh
+        form(action='#', method='post')
+            .input-box
+                span.icon
+                    i.fas.fa-user
+                input(type='text', name='username', placeholder='Tên đăng nhập', required='')
+            .input-box
+                span.icon
+                    i.fas.fa-key
+                input(type='password', name='password', placeholder='Mật khẩu', required='')
+            a(href='/vehicle/login') > phương tiện ưu tiên
+            button(type='submit') đăng nhập
+    .alert-error Tên đăng nhập hoặc mật khẩu không đúng !
