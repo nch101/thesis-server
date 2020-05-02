@@ -1,25 +1,11 @@
-doctype html
-head
-	meta(charset='UTF-8')
-	meta(name='viewport', content='width=device-width, initial-scale=1.0')
-	title Đăng nhập hệ thống
-	link(rel='shortcut icon', href='/images/LogoBK.png', type='image/x-icon')
-	link(rel='stylesheet', href='/stylesheets/login.css')
-	script(src='https://kit.fontawesome.com/4392fea608.js', crossorigin='anonymous')
-.wrap
-	.container
-		span.logo
-		h1
-			| hệ thống
-			br
-			| đèn giao thông
-			br
-			| thông minh
-		.selection-container
-			h2 Chọn kiểu đăng nhập 
-			a.selection(href='/vehicle/login')
-				i.fas.fa-ambulance
-				span phương tiện ưu tiên
-			a.selection(href='/center-control/login')
-				i.fas.fa-users
-				span trung tâm điều hành
+extends layout
+
+block content
+	.selection-container
+		h2 Chọn kiểu đăng nhập 
+		a.selection(href='/vehicle/login')
+			i.fas.fa-ambulance
+			span phương tiện ưu tiên
+		a.selection(href='/center-control/login')
+			i.fas.fa-users
+			span trung tâm điều hành

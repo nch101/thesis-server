@@ -10,7 +10,7 @@ var cors = require('cors');
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, 
 	useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true});
 
-var loginRouter = require('./routes/login.route');
+var pageRouter = require('./routes/page.route');
 var userRouter = require('./routes/user.route');
 var deviceRouter = require('./routes/device.route');
 var adminRouter = require('./routes/admin.route');
@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', loginRouter);
+app.use('/', pageRouter);
 app.use('/user', userRouter);
 app.use('/device', cors(), deviceRouter);
 app.use('/admin', adminRouter);
