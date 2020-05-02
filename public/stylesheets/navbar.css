@@ -1,0 +1,142 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+a {
+    padding: 0.3rem;
+    border: none;
+    text-decoration: none;
+    color: #0070e2;
+}
+
+.top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #0070e2;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand-logo, .avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    background-color: white;
+    background-position: center;
+    background-size: cover;
+}
+
+.brand-logo {
+    background-image: url('../images/LogoBK.png');
+}
+
+.brand-name {
+    margin-left: 1rem;
+    text-transform: uppercase;
+    color: aliceblue;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    color: aliceblue;
+}
+
+.user-info .username {
+    margin: 0 0.7rem;
+    text-transform: capitalize;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 2px 35px 0px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-item {
+    display: flex;
+    align-items: center;
+    margin: 0 0.2rem;
+}
+
+.navbar-item > a {
+    padding: 1rem 0.5rem;
+    border: none;
+    text-decoration: none;
+    color: #0070e2;
+}
+
+i + span {
+    margin: 0 0.3rem;
+}
+
+.active {
+    border-bottom: 0.2rem solid #0070e2;
+}
+
+.active > a {
+    padding-bottom: 0.8rem;
+}
+
+.has-sub {
+    position: relative;
+}
+
+.sub-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: #0070e2;
+    list-style: none;
+    box-shadow: 0px 3px 19px 0px rgba(0, 0, 0, 0.2);
+}
+
+.sub-menu li {
+    display: flex;
+    flex-direction: row;
+}
+
+.sub-menu > li > a {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    text-decoration: none;
+    color: #0070e2;
+}
+
+.has-sub:hover .sub-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+li > a:hover {
+    background-color: #EEE;
+}
+
+.spin-arrow {
+    transition: transform 0.5s;
+}
+
+.navbar-item:hover .spin-arrow, .user-info:hover .spin-arrow {
+    transform: rotate(180deg);
+}
