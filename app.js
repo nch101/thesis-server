@@ -11,10 +11,11 @@ mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true,
 	useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true});
 
 var loginRouter = require('./routes/login.route');
+var userRouter = require('./routes/user.route');
+var deviceRouter = require('./routes/device.route');
 var adminRouter = require('./routes/admin.route');
 var intersectionRouter = require('./routes/intersection.route');
 var trafficLightRouter = require('./routes/trafficLight.route');
-var deviceRouter = require('./routes/device.route');
 var mapRouter = require('./routes/map.route');
 
 var app = express();
@@ -30,10 +31,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', loginRouter);
+app.use('/user', userRouter);
+app.use('/device', cors(), deviceRouter);
 app.use('/admin', adminRouter);
 app.use('/intersection', intersectionRouter);
 app.use('/traffic-light', trafficLightRouter);
-app.use('/device', cors(), deviceRouter);
 app.use('/map', cors(), mapRouter);
 
 //Test socketIO

@@ -8,11 +8,10 @@ var intersectionControllers = require('../controllers/intersection.controller');
 var intersectionValidate = require('../validates/intersection.validate');
 
 router.post('/user', userControllers.createUser);
+router.get('/user', userControllers.getAllUsers);
 router.put('/user/blocked/:id', userControllers.blockedUser);
 router.put('/user/unlocked/:id', userControllers.unlockedUser);
 router.delete('/user/:id', userControllers.deleteUser);
-router.get('/user', userControllers.getAllUsers);
-router.get('/user/:id', userControllers.getUser);
 
 router.post('/device', deviceControllers.createDevice);
 router.get('/device/', deviceControllers.getAllDevices);

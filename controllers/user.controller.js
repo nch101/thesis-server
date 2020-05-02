@@ -3,131 +3,214 @@ var ids = require('shortid');
 var userModel = require('../models/user.model');
 
 module.exports = {
+    //For admin user
     createUser: function(req, res){
-        // var errors = [];
-        // if (!req.body.name) error.push('Username is required!');
-        // if (!req.body)
-        // if (errors.length) {
-        //    return res.render('', {
-        //        errors: errors,
-        //        values: req.body
-        //    });
-        // };
-        
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var user = new userModel(req.body);
         user._id = ids.generate();
         user.save()
-        .then(function(user) {
-            res.json(user);
+        .then(function(results) {
+            return res
+            .status(200)
+            .json(results);
         })
         .catch(function(error) {
             console.log(error);
-            res.json({
-                message: 'Create user unsuccess !'
-            })
+            return res
+            .status(501)
+            .json({ message: 'Create user unsuccess !' })
         });
     },
 
     getAllUsers: function(req, res) {
-        userModel.find().select('username fullname admin blocked ')
+        userModel
+        .find()
+        .select('username fullname admin blocked ')
         .then(function(data) {
-            res.json(data);
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
         .catch(function(error) {
             console.log(error);
-            res.json({
-                message: 'Can not get all users'
-            });
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
         });
     },
 
-    getUser: function(req, res) {
-        userModel.findById(req.params.id).select('username fullname email phone company ')
-        .then(function(data) {
-            res.json(data);
-        })
-        .catch(function(error) {
-            console.log(error);
-            res.json({
-                message: 'Can not get user'
-            });
-        })
-    },
-
     blockedUser: function(req, res) {
-        if (!req.params.id) {
-            return res.json({
-                message: 'Id is not available! '
-            });
-        } else {
-            userModel.findByIdAndUpdate(req.params.id, { $set: {blocked: true}}).select('_id')
-            .then(function (results) {
-                if (results)
-                    return res.json({
-                        message: 'User has been blocked!'
-                    });
-                return res.json({
-                    message: 'User does not exist!'
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-                return res.json({
-                    message: 'Id is not available! '
-                });
-            })
-        }
+        userModel
+        .findByIdAndUpdate(req.params.id, { $set: { blocked: true } })
+        .select('_id')
+        .then(function (data) {
+            if (data) {
+                return res
+                .status(200)
+                .json({ message: 'Blocked!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
     },
 
     unlockedUser: function(req, res) {
-        if (!req.params.id) {
-            return res.json({
-                message: 'Id is not available! '
-            });
-        } else {
-            userModel.findByIdAndUpdate(req.params.id, { $set: {blocked: false}}).select('_id')
-            .then(function (results) {
-                if (results)
-                    return res.json({
-                        message: 'User has been unblocked!'
-                    });
-                return res.json({
-                    message: 'User does not exist!'
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-                return res.json({
-                    message: 'Id is not available! '
-                });
-            })
-        }
+        userModel
+        .findByIdAndUpdate(req.params.id, { $set: { blocked: false }}).select('_id')
+        .then(function (data) {
+            if (data) {
+                return res
+                .status(200)
+                .json({ message: 'Unblocked!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        })
     },
 
     deleteUser: function(req, res) {
-        var id = req.params.id;
-        if (!id) {
-            return res.json({
-                message: 'Id is not available! '
-            });
-        } else {
-            userModel.findByIdAndRemove(id).select('_id')
-            .then(function(results) {
-                if (results)
-                    return res.json({
-                        message: 'User has been deleted!'
-                    });
-                return res.json({
-                    message: 'User does not exist!'
-                })
-            })
-            .catch(function(error) {
-                console.log(error);
-                return res.json({
-                    message: 'Id is not available! '
-                });
-            });
-        }
+        userModel
+        .findByIdAndRemove(req.params.id)
+        .select('_id')
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json({ message: 'Deleted!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
+    },
+
+    //For standard user
+    
+    getUser: function(req, res) {
+        userModel
+        .findById(req.params.id)
+        .select('username fullname email phone company ')
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
+    },
+
+    editUser: function(req, res) {
+        userModel
+        .findByIdAndUpdate(req.params.id, { $set: {
+            email: req.body.email,
+            fullname: req.body.fullname,
+            phone: req.body.phone,
+            address: req.body.address,
+        }})
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json({ message: 'Edited!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        })
+    },
+
+    changePassword: function(req, res) {
+        userModel
+        .findById(req.params.id)
+        .select('password')
+        .then(function(data) {
+            if (data) {
+                if (bcrypt.compareSync(req.body.oldPassword, data.password)) {
+                    userModel
+                    .findByIdAndUpdate(req.params.id, { $set: {
+                        password: bcrypt.hashSync(req.body.newPassword, 10)
+                    }})
+                    .then(function(results) {
+                        return res
+                        .status(301)
+                        .json({ message: 'Password change successful!' })
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                        return res
+                        .status(501)
+                        .json({ message: 'Password change unsuccessful!' })
+                    })
+                }
+                else {
+                    return res
+                    .status(400)
+                    .json({ message: 'Old password incorrect!' })
+                }
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' })
+            }
+        })
+        .catch(function(error) {
+            console.log(error)
+            return res
+            .status(501)
+            .json({ message: 'Error!' })
+        })
     },
 }
