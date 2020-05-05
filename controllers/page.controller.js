@@ -21,5 +21,17 @@ module.exports = {
         return res
         .status(200)
         .render('users/overview');
+    },
+
+    createVehiclePage: function(req, res) {
+        return res
+        .status(200)
+        .render('users/create-vehicle');
+    },
+
+    createCenterControlPage: function(req, res) {
+        return res
+        .status(200)
+        .render('users/create-center-control')
     }
 }

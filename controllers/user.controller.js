@@ -25,7 +25,7 @@ module.exports = {
     getAllUsers: function(req, res) {
         userModel
         .find()
-        .select('username fullname admin blocked ')
+        .select('firstname lastname username admin blocked ')
         .then(function(data) {
             if (data) {
                 return res
@@ -122,7 +122,7 @@ module.exports = {
     getUser: function(req, res) {
         userModel
         .findById(req.params.id)
-        .select('username fullname email phone company ')
+        .select('firstname lastname email phone')
         .then(function(data) {
             if (data) {
                 return res

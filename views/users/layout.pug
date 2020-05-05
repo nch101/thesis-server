@@ -5,9 +5,13 @@ html
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
         link(rel='shortcut icon', href='/images/LogoBK.png', type='image/x-icon')
         script(src='/javascripts/fontawesome.js')
-        link(rel='stylesheet' href='/stylesheets/navbar.css')
+        link(rel='stylesheet' href='/stylesheets/main.css')
         title Hệ thống đèn giao thông thông minh
     body
         include navbar
-        block content
+        .content-wrapper
+            .sidebar
+            .content
+                block content
+            .sidebar
         script(src='/javascripts/main.js')
