@@ -29,6 +29,7 @@ var journeySchema = new Schema({
 var deviceSchema = new Schema({
     license_plate: {
         type: String,
+        uppercase: true,
         unique: true,
         required: true
     },
@@ -36,7 +37,6 @@ var deviceSchema = new Schema({
         type: String,
         required: true
     },
-    avatarURL: String,
     phone: String,
     address: String,
     company: String,
