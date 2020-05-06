@@ -1,5 +1,9 @@
 extends layout
 
+block navbar 
+    - var isActive = 'create'
+    include navbar
+
 block content
     span.create-header Tạo tài khoản quản lý
     form.create-container(action='/admin/user', method='post')

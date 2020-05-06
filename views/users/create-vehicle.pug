@@ -1,5 +1,9 @@
 extends layout
 
+block navbar 
+    - var isActive = 'create'
+    include navbar
+
 block content
     span.create-header Tạo phương tiện ưu tiên
     form.create-container(action='/admin/device', method='post')
