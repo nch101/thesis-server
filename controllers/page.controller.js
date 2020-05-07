@@ -26,12 +26,18 @@ module.exports = {
     createVehiclePage: function(req, res) {
         return res
         .status(200)
-        .render('users/create-vehicle');
+        .render('users/vehicle.create.pug');
     },
 
     createCenterControlPage: function(req, res) {
         return res
         .status(200)
-        .render('users/create-center-control')
+        .render('users/center.create.pug')
+    },
+
+    createIntersectionPage: function(req, res) {
+        return res
+        .status(200)
+        .render('users/intersection.create.pug')
     }
 }

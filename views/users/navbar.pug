@@ -24,7 +24,7 @@ mixin submenu(manager, vehicle, trafficLight)
 				a(href='#')
 					i.fas.fa-sign-out-alt
 					span Đăng xuất
-ul#navbar-container.navbar
+ul.navbar
 	li.navbar-item(class= (isActive === 'home' ? 'active' : undefined))
 		a(href='/overview')
 			i.fas.fa-home
@@ -42,7 +42,7 @@ ul#navbar-container.navbar
 			i.far.fa-plus-square
 			span Tạo mới
 			i.fas.fa-chevron-up.spin-arrow
-		+submenu('/center-control/create/', '/vehicle/create/', '#')
+		+submenu('/center-control/create/', '/vehicle/create/', '/intersection/create')
 	li.navbar-item.has-sub
 		a(href='#')
 			i.fas.fa-list-ul

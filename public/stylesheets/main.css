@@ -147,10 +147,7 @@ li > a:hover {
 }
 
 .content-wrapper {
-    margin: 2rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    margin: 2rem 10rem;
 }
 
 .sidebar {
@@ -158,7 +155,7 @@ li > a:hover {
 }
 
 .content {
-    padding: 1.8rem 2rem 7.3rem 2rem;
+    padding: 2rem;
     background-color: white;
     flex-basis: 1100px;
     justify-content: center;
@@ -175,6 +172,7 @@ li > a:hover {
 
 .create-container {
     position: relative;
+    height: 330px;
     margin: 1rem 0;
     display: flex;
     flex-direction: column;
@@ -209,11 +207,11 @@ li > a:hover {
     padding: 0.5rem 0.1rem;
 }
 
-.form-group > div {
+.form-group > .line {
     position: absolute;
     bottom: 0;
     width: 0;
-    border-bottom: 2px solid #48A5EA;
+    border-bottom: 1px solid #48A5EA;
 }
 
 .create-container button[type=submit] {
@@ -237,16 +235,210 @@ li > a:hover {
     color: #48A5EA;
 }
 
-.form-group > input:focus ~ div {
+.form-group > input:focus ~ .line {
     transition: 0.7s;
     width: 100%;
 }
 
 .form-group > input:valid {
-    border-bottom: 1.5px solid #77cbb9;
+    border-bottom: 1px solid #77cbb9;
 }
 
 .create-container button[type=submit]:hover {
     transition: 0.3s;
     background-color: rgb(33, 129, 202);
+}
+
+.i-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.i-map-container {
+    margin-top: 1rem;
+    position: relative;
+    width: 100%;
+    height: 360px;
+}
+
+.i-map-container a {
+    font-size: 0.7rem;
+}
+
+.i-form-container {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-shadow: 0 0 1px rgba(0,0,0,.15);
+}
+
+#info-street {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4f4f4; 
+    border-radius: 5px;
+  }
+
+::-webkit-scrollbar-thumb {
+    background: #c2c2c2; 
+    border-radius: 5px;
+}
+
+.i-form-item {
+    width: 250px;
+    margin: 0 0.5rem;
+    padding: 0.5rem;
+    border: 2px dashed #CFCFCF;
+    border-radius: 5px;
+    background-color: #d4d4d421;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 1px rgba(0,0,0,.15);
+}
+
+.i-form-container button[type=submit] {
+    width: 7rem;
+    height: 2.2rem;
+    margin: 0 1rem;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    background-color: #48A5EA;
+    text-align: center;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 1px 3px 22px rgba(0, 0, 0, 0.15);
+}
+
+.input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.input-box {
+    position: relative;
+    width: 17rem;
+    height: 2.2rem;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.i-box {
+    width: auto;
+    margin: 0.2rem 0.3rem;
+}
+
+.input-box .icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 1px solid #CCC;
+    border-radius: 6px 0 0 6px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-box input {
+    width: 100%;
+    height: 2.2rem;
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    outline: none;
+    padding: 10px 5px 10px 42px;
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.input-box input:focus {
+    border: none;
+    box-shadow: 0 0 2px 2px #0096ff;
+}
+
+.btn-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: inline-block;
+    background-color: white;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-radius: 4px;
+    border: 0;
+    z-index: 2;
+}
+
+.btn {
+    width: 29px;
+    height: 29px;
+    display: block;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.btn-container .btn + .btn {
+    border-color: rgba(31, 51, 73, .3);
+    border-top-width: 1px;
+    border-style: solid;
+}
+
+.btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn:focus {
+    box-shadow: 0 0 2px 2px #0096ff;
+}
+
+#line-tool:focus {
+    border-radius: 4px 4px 0 0;
+}
+
+#bearings-config:focus {
+    border-radius: 0 0 4px 4px;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.street-location {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: salmon;
+    display: block;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }

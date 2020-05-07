@@ -1,0 +1,60 @@
+extends layout
+
+mixin iFormItem
+    .i-form-item
+        .input-box.i-box
+            span.icon
+                i.fas.fa-road
+            input(type='text', name='streetName', placeholder='Tên đường', required='')
+        .input-box.i-box
+            span.icon(style='color: #6eeb83;')
+                i.fas.fa-map-marker-alt
+            input(type='text', name='location', placeholder='Latitude', required='')
+        .input-box.i-box
+            span.icon(style='color: #6cd4ff;')
+                i.fas.fa-map-marker-alt
+            input(type='text', name='location', placeholder='Longitude', required='')
+        .input-container
+            .input-box.i-box
+                span.icon(style='color: #FF1B1C;')
+                    i.fas.fa-clock
+                input(type='text', name='timeRed', required='')
+            .input-box.i-box
+                span.icon(style='color: #e8aa14;')
+                    i.fas.fa-clock
+                input(type='text', name='timeYellow', required='')
+            .input-box.i-box
+                span.icon(style='color: #00c88b;')
+                    i.fas.fa-clock
+                input(type='text', name='timeGreen', required='')
+
+block head
+    include map.head.pug
+
+block navbar 
+    - var isActive = 'create'
+    include navbar
+
+block content
+    span.create-header Tạo hệ thống đèn giao thông
+    form.i-container(action='#', method='post')
+        .i-map-container
+            .btn-container
+                button#line-tool.btn(type='button')
+                    i.fas.fa-route
+                button#delete-tool.btn(type='button')
+                    i.fas.fa-trash-alt
+                button#location-config.btn(type='button')
+                    i.fas.fa-map-marked-alt
+            #map
+        .i-form-container
+            .form-group
+                input#intersectionName.form-control(type='text', name='intersectionName', required='', style='text-transform: uppercase;')
+                label(for='intersectionName') Tên giao lộ
+                .line
+            button(type='submit') Tạo
+        #info-street.i-form-container
+            +iFormItem
+            +iFormItem
+            +iFormItem
+    script(src='/javascripts/intersection.js')
