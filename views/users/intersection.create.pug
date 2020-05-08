@@ -9,11 +9,11 @@ mixin iFormItem
         .input-box.i-box
             span.icon(style='color: #6eeb83;')
                 i.fas.fa-map-marker-alt
-            input(type='text', name='location', placeholder='Latitude', required='')
+            input(type='text', name='location', placeholder='Tọa độ', required='')
         .input-box.i-box
             span.icon(style='color: #6cd4ff;')
-                i.fas.fa-map-marker-alt
-            input(type='text', name='location', placeholder='Longitude', required='')
+                i.fas.fa-angle-left
+            input(type='text', name='bearing', placeholder='Góc', required='')
         .input-container
             .input-box.i-box
                 span.icon(style='color: #FF1B1C;')
@@ -44,8 +44,6 @@ block content
                     i.fas.fa-route
                 button#delete-tool.btn(type='button')
                     i.fas.fa-trash-alt
-                button#location-config.btn(type='button')
-                    i.fas.fa-map-marked-alt
             #map
         .i-form-container
             .form-group
@@ -57,4 +55,4 @@ block content
             +iFormItem
             +iFormItem
             +iFormItem
-    script(src='/javascripts/intersection.js')
+    script(src='/javascripts/intersection.mapbox.js')

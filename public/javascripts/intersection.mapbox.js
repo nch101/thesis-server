@@ -1,8 +1,5 @@
 var lineTool = document.getElementById('line-tool');
-var locationConfig = document.getElementById('location-config');
 var deleteTool = document.getElementById('delete-tool');
-
-var infoStreet = document.getElementById('infoStreet');
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
 
@@ -13,7 +10,9 @@ var map = new mapboxgl.Map({
     zoom: 10
 });
 
-var inStreet = [];
+var lineToolIsActive = false;
+
+var markerArray = [];
 
 var geojson = {
     'type': 'FeatureCollection',
@@ -59,12 +58,7 @@ map.on('load' , function() {
         },
         filter: ['in', '$type', 'LineString']
     });
-
-    lineTool.addEventListener('click', function() {
-        map.getCanvas().style.cursor = 'crosshair'
-        map.on('click', onAdd);
-    });
-});
+})
 
 function onAdd(e) {
     var point = {
@@ -87,14 +81,13 @@ function onAdd(e) {
     map.getSource('geojson').setData(geojson);
     
     if (geojson.features.length > 2) {
-        findStreetLocation();
-        map.off('click', onAdd);
-        map.getCanvas().style.cursor = '';
-        lineTool.disabled = true;
+        getDirection();
+        lineToolIsActive = false;
+        offLineTool();
     }
 }
 
-function findStreetLocation() {
+function getDirection() {
     var directionsLocation = linestring.geometry.coordinates[0].join() + ';' 
                             + linestring.geometry.coordinates[1].join();
     var directionURL = 'https://api.mapbox.com/directions/v5/mapbox/driving/'
@@ -109,35 +102,61 @@ function findStreetLocation() {
 }
 
 function showLocation(res) {
-    var intersectionData = res.data.routes[0].legs[0].steps[0].intersections
-    intersectionData.forEach(function(marker) {
-        var el = document.createElement('div');
-        el.className = 'street-location';
+    var steps = res.data.routes[0].legs[0].steps
+    for (var step of steps) {
+        for (var intersection of step.intersections) {
+            var popupContent = '';
+            var popupInfos = {
+                'Location': intersection.location, 
+                'Bearings': intersection.bearings, 
+                'In': intersection.in, 
+                'Out': intersection.out
+            };
 
-        var streetMarker = new mapboxgl.Marker(el)
-        .setLngLat(marker.location)
-        .addTo(map);
+            for (var popupInfo in popupInfos) {
+                popupContent += '<strong>' + popupInfo + '</strong>' 
+                                + '<p>' + popupInfos[popupInfo] + '</p>'
+            };
 
-        locationConfig.addEventListener('click', function() {
-            el.addEventListener('click', function(marker) {
-                var pointStreet = {
-                    'type': 'Point',
-                    'coordinates': [marker.location]
-                };
-                inStreet.push(pointStreet);
-                console.log(inStreet);
-            });
-        });
-        deleteTool.addEventListener('click', function() {
-            streetMarker.remove();
-            inStreet = [];
-            geojson.features = [];
-            map.getSource('geojson').setData(geojson);
-            lineTool.disabled = false;
-        })
-    });
+            var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent);
+            var el = document.createElement('div');
+            el.className = 'street-location';
+            var marker = new mapboxgl.Marker(el)
+            .setLngLat(intersection.location)
+            .setPopup(popup)
+            .addTo(map);
+            markerArray.push(marker);
+        }
+    }
+    geojson.features = [];
+    map.getSource('geojson').setData(geojson);
 }
 
-// function createInfoStreet() {
-//     infoStreet.innerHTML
-// }
+function onLineTool() {
+    lineTool.classList.add('btn-active')
+    map.getCanvas().style.cursor = 'crosshair';
+    map.on('click', onAdd);
+}
+
+function offLineTool() {
+    lineTool.classList.remove('btn-active');
+    map.getCanvas().style.cursor = '';
+    map.off('click', onAdd);
+}
+
+lineTool.addEventListener('click', function() {
+    if (lineToolIsActive) {
+        lineToolIsActive = false;
+        offLineTool()
+    }
+    else {
+        lineToolIsActive = true;
+        onLineTool()
+    }
+});
+
+deleteTool.addEventListener('click', function() {
+    for (var marker of markerArray) {
+        marker.remove();
+    }
+})

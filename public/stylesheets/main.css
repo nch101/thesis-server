@@ -4,7 +4,6 @@
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.95rem;
-    font-weight: 300;
 }
 
 body {
@@ -380,49 +379,39 @@ li > a:hover {
     position: absolute;
     top: 20px;
     right: 20px;
-    display: inline-block;
-    background-color: white;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    border: 0;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
     z-index: 2;
 }
 
 .btn {
-    width: 29px;
-    height: 29px;
-    display: block;
+    width: 30px;
+    height: 30px;
     padding: 0;
-    outline: 0;
-    border: 0;
-    box-sizing: border-box;
+    border: none;
+    outline: none;
     background-color: transparent;
     cursor: pointer;
 }
 
-.btn-container .btn + .btn {
-    border-color: rgba(31, 51, 73, .3);
-    border-top-width: 1px;
-    border-style: solid;
+.btn-container .btn:first-child {
+    border-radius: 4px 4px 0 0;
+}
+
+.btn-container .btn:last-child {
+    border-top: 1px solid rgba(31, 51, 73, .3);
+    border-radius: 0 0 4px 4px;
+}
+
+.btn-active {
+    box-shadow: 0 0 2px 2px #0096ff;
 }
 
 .btn:hover {
     background-color: rgba(0, 0, 0, 0.05);
-}
-
-.btn:focus {
-    box-shadow: 0 0 2px 2px #0096ff;
-}
-
-#line-tool:focus {
-    border-radius: 4px 4px 0 0;
-}
-
-#bearings-config:focus {
-    border-radius: 0 0 4px 4px;
 }
 
 #map {
@@ -437,8 +426,5 @@ li > a:hover {
     height: 20px;
     border-radius: 50%;
     background-color: salmon;
-    display: block;
-    border: none;
     cursor: pointer;
-    padding: 0;
 }
