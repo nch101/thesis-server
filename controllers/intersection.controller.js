@@ -2,19 +2,32 @@ var mongoose = require('mongoose');
 var intersectionModel = require('../models/intersection.model');
 var trafficLightModel = require('../models/traffic-light.model');
 
+function preProcessLocationData(locationDataString) {
+    var locationDataArray = locationDataString.split(',');
+    var locationData = {
+        'type': 'Point',
+        'coordinates': [locationDataArray[0], locationDataArray[1]]
+    }
+    return locationData;
+}
+
 module.exports = {
     createIntersection: function(req, res) {
-        var Intersection = new intersectionModel({
+        var intersection = new intersectionModel({
             _id: mongoose.Types.ObjectId(),
-            name: req.body.name,
-            location: req.body.location,
-            bearings: req.body.bearings,
-            modeControl: req.body.modeControl,
+            intersectionName: req.body.intersectionName,
         });
-        for (let index = 0; index < req.body.trafficLights.length; index++) {
-            var trafficLight = new trafficLightModel(req.body.trafficLights[index])
-            Intersection.trafficLights.push(trafficLight._id);
-            trafficLight.intersection = Intersection._id;
+        for (var index in  req.body.bearings) {
+            var trafficLight = new trafficLightModel({
+                intersectionId: intersection._id,
+                streetName: req.body.streetNames[index],
+                location: preProcessLocationData(req.body.locations[index]), 
+                bearing: req.body.bearings[index],
+                timeRed: req.body.timeReds[index],
+                timeYellow: req.body.timeYellows[index],
+                timeGreen: req.body.timeGreens[index]
+            });
+            intersection.trafficLights.push(trafficLight._id);
             trafficLight.save()
             .catch(function(error) {
                 return res
@@ -22,11 +35,11 @@ module.exports = {
                 .json(error)
             })
         }
-        Intersection.save()
+        intersection.save()
         .then(function(results) {
             return res
-            .status(200)
-            .json(results)
+            .status(304)
+            .redirect('/overview')
         })
         .catch(function(error) {
             return res

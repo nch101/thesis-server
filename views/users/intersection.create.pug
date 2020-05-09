@@ -1,33 +1,5 @@
 extends layout
 
-mixin iFormItem
-    .i-form-item
-        .input-box.i-box
-            span.icon
-                i.fas.fa-road
-            input(type='text', name='streetName', placeholder='Tên đường', required='')
-        .input-box.i-box
-            span.icon(style='color: #6eeb83;')
-                i.fas.fa-map-marker-alt
-            input(type='text', name='location', placeholder='Tọa độ', required='')
-        .input-box.i-box
-            span.icon(style='color: #6cd4ff;')
-                i.fas.fa-angle-left
-            input(type='text', name='bearing', placeholder='Góc', required='')
-        .input-container
-            .input-box.i-box
-                span.icon(style='color: #FF1B1C;')
-                    i.fas.fa-clock
-                input(type='text', name='timeRed', required='')
-            .input-box.i-box
-                span.icon(style='color: #e8aa14;')
-                    i.fas.fa-clock
-                input(type='text', name='timeYellow', required='')
-            .input-box.i-box
-                span.icon(style='color: #00c88b;')
-                    i.fas.fa-clock
-                input(type='text', name='timeGreen', required='')
-
 block head
     include map.head.pug
 
@@ -37,7 +9,7 @@ block navbar
 
 block content
     span.create-header Tạo hệ thống đèn giao thông
-    form.i-container(action='#', method='post')
+    form.i-container(action='/admin/intersection', method='post')
         .i-map-container
             .btn-container
                 button#line-tool.btn(type='button')
@@ -50,9 +22,16 @@ block content
                 input#intersectionName.form-control(type='text', name='intersectionName', required='', style='text-transform: uppercase;')
                 label(for='intersectionName') Tên giao lộ
                 .line
+            .select-list-group
+                label(for='numStreet', name='numStreet') Số ngã
+                select#numStreet(onchange='renderFormStreet()')
+                    option(value='0', selected) Số ngã
+                    option(value='3') 3
+                    option(value='4') 4
+                    option(value='5') 5
+                    option(value='6') 6
+                    option(value='7') 7
+                    option(value='8') 8
             button(type='submit') Tạo
         #info-street.i-form-container
-            +iFormItem
-            +iFormItem
-            +iFormItem
     script(src='/javascripts/intersection.mapbox.js')

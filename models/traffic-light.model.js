@@ -14,7 +14,7 @@ var pointSchema = new Schema({
 });
 
 var trafficLightSchema = new Schema({
-    intersection: {
+    intersectionId: {
         type: Schema.Types.ObjectId, 
         ref: 'Intersection'
     },
@@ -22,10 +22,14 @@ var trafficLightSchema = new Schema({
         type: String,
         required: true
     },
-    location: [{
+    location: {
         type: pointSchema,
         required: true
-    }],
+    },
+    bearing: {
+        type: Number,
+        required: true
+    },
     timeRed: {
         type: Number,
         required: true
