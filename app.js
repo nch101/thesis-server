@@ -33,8 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', pageRouter);
 app.use('/user', userRouter);
 app.use('/device', cors(), deviceRouter);
-app.use('/admin', adminRouter);
-app.use('/intersection', intersectionRouter);
+app.use('/admin', cors(), adminRouter);
+app.use('/intersection', cors(), intersectionRouter);
 app.use('/traffic-light', trafficLightRouter);
 app.use('/map', cors(), mapRouter);
 

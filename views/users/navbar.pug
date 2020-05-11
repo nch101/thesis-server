@@ -33,7 +33,7 @@ ul.navbar
 		a(href='#')
 			i.fas.fa-search-location
 			span Giám sát
-	li.navbar-item
+	li.navbar-item(class= (isActive === 'control' ? 'active' : undefined))
 		a(href='#')
 			i.fas.fa-traffic-light
 			span Điều khiển

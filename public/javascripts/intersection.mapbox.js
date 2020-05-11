@@ -7,7 +7,7 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     center: [106.66008, 10.763512],
-    zoom: 10
+    zoom: 13
 });
 
 var lineToolIsActive = false;

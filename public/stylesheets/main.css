@@ -304,7 +304,7 @@ li > a:hover {
     box-shadow: 0 0 1px rgba(0,0,0,.15);
 }
 
-.i-form-container button[type=submit] {
+.i-form-container button {
     width: 7rem;
     height: 2.2rem;
     margin: 0 1rem;
@@ -448,4 +448,36 @@ li > a:hover {
     border: none;
     border-bottom: 1px solid #CCC;
     background-color: white;
+}
+
+.alert {
+    position: absolute;
+    right: 0px;
+    top: 140px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    padding: 15px;
+    animation: alerting 5s;
+    opacity: 0;
+    user-select: none;
+}
+
+.alert-error  {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+@keyframes alerting {
+    0% { right: 0px; }
+    1% { right: -340px; opacity: 1;} 
+    15% { right: 10px; opacity: 1;}
+    70% { right: 10px; opacity: 1;}
+    80% { right: 40px; opacity: 1;}
+    99% { right: -340px; opacity: 1;}
+    100% {right: 0px; opacity: 0;}
 }

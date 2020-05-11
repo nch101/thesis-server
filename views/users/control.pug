@@ -1,0 +1,15 @@
+extends layout
+
+block head
+    include map.head.pug
+
+block navbar 
+    - var isActive = 'control'
+    include navbar
+
+block content
+    span.create-header Điều khiển đèn giao thông
+    .c-wrapper
+        .i-map-container
+            #map
+    script(src="/javascripts/control-traffic-light.js")

@@ -16,6 +16,7 @@ module.exports = {
         var intersection = new intersectionModel({
             _id: mongoose.Types.ObjectId(),
             intersectionName: req.body.intersectionName,
+            location: preProcessLocationData(req.body.locations[0])
         });
         for (var index in  req.body.bearings) {
             var trafficLight = new trafficLightModel({
@@ -38,13 +39,19 @@ module.exports = {
         intersection.save()
         .then(function(results) {
             return res
-            .status(304)
-            .redirect('/overview')
+            .status(200)
+            .render('users/intersection.create.pug', {
+                success: true,
+                message: 'Khởi tạo thành công! '
+            })
         })
         .catch(function(error) {
             return res
             .status(501)
-            .json(error)
+            .render('users/intersection.create.pug', {
+                error: true,
+                message: 'Khởi tạo thất bại! '
+            })
         })
     },
 
@@ -85,9 +92,8 @@ module.exports = {
     editIntersection: function(req, res) {
         intersectionModel
         .findByIdAndUpdate(req.params.id, { $set: {
-            name: req.body.name,
-            location: req.body.location,
-            bearings: req.body.bearings,
+            intersectionName: req.body.intersectionName,
+            location: req.body.locations,
             modeControl: req.body.modeControl
         }})
         .then(function(data) {
@@ -155,7 +161,7 @@ module.exports = {
     getAllIntersections: function(req, res) {
         intersectionModel
         .find()
-        .select('name location modeControl')
+        .select('intersectionName location modeControl')
         .then(function(data) {
             if (data) {
                 return res
@@ -178,8 +184,8 @@ module.exports = {
     getIntersection: function(req, res) {
         intersectionModel
         .findById(req.params.id)
-        .populate({path: 'trafficLights', 
-        select: 'streetName timeRed timeYellow timeGreen camip bearing'})
+        .populate({ path: 'trafficLights', 
+        select: 'streetName bearing timeRed timeYellow timeGreen camip ' })
         .then(function(data) {
             if (data) {
                 return res

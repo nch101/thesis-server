@@ -2,6 +2,10 @@ extends layout
 
 block head
     include map.head.pug
+    style.
+        html {
+            scroll-behavior: smooth;
+        }
 
 block navbar 
     - var isActive = 'create'
@@ -25,13 +29,12 @@ block content
             .select-list-group
                 label(for='numStreet', name='numStreet') Số ngã
                 select#numStreet(onchange='renderFormStreet()')
-                    option(value='0', selected) Số ngã
+                    option(value='0', selected) Chọn số ngã
                     option(value='3') 3
                     option(value='4') 4
-                    option(value='5') 5
-                    option(value='6') 6
-                    option(value='7') 7
-                    option(value='8') 8
             button(type='submit') Tạo
         #info-street.i-form-container
-    script(src='/javascripts/intersection.mapbox.js')
+    script(src='/javascripts/intersection.create.js')
+    //- script(src='/javascripts/intersection.mapbox.js')
+    script.
+        window.scrollTo(0, 500);

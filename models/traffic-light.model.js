@@ -20,6 +20,7 @@ var trafficLightSchema = new Schema({
     },
     streetName: {
         type: String,
+        lowercase: true,
         required: true
     },
     location: {
