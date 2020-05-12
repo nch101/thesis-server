@@ -1,9 +1,7 @@
 var renderInteract = document.getElementById('render-interact');
-var renderAnimation = document.getElementById('render-animation');
-var renderInfo = document.getElementById('render-info');
 var renderControl = document.getElementById('render-control');
 
-var intersectionName = document.getElementById('intersection-name');
+var intersectionNameHTML = document.getElementById('intersection-name');
 var stateControl = document.getElementById('state-control');
 var isManual = document.getElementById('isManual');
 
@@ -12,7 +10,9 @@ var rightStreet = document.getElementById('right-street');
 var bottomStreet = document.getElementById('bottom-street');
 var leftStreet = document.getElementById('left-street');
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+var idIntersection;
+
+/* mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -35,27 +35,31 @@ function renderIntersection(res) {
 
         for (var popupInfo in popupInfos) {
             popupContent += '<strong>' + popupInfo + '</strong>' 
-                            + '<p>' + popupInfos[popupInfo] + '</p>'
+                            + '<p style="text-transform: capitalize;">' + popupInfos[popupInfo] + '</p>'
         };
 
-        var popup = new mapboxgl.Popup({ 
-                                            offset: 25,
-                                            closeButton: false,
-                                            closeOnClick: false
-                                        })
-                                .setHTML(popupContent);
+        var popup = new mapboxgl.Popup({ closeOnClick: false })
+                                .setLngLat(intersectionData.location.coordinates)
+                                .setHTML(popupContent)
+                                .addTo(map);
 
         var el = document.createElement('div');
         el.className = 'intersection';
-        el.addEventListener('click', getInfoIntersection(intersection._id))
+        el.addEventListener('click', getInfoIntersection);
+        el.params = intersectionData._id;
         new mapboxgl.Marker(el)
         .setLngLat(intersectionData.location.coordinates)
         .setPopup(popup)
         .addTo(map);
     }
 }
+ */
+getInfoIntersection();
 
-function getInfoIntersection(idIntersection) {
+function getInfoIntersection() {
+    // @params: event -------^
+    // idIntersection = event.currentTarget.params;
+    idIntersection = '5eb90fe69f1398273bba559a';
     axios({
         method: 'get',
         url: 'http://localhost:3000/api/intersection/' + idIntersection
@@ -72,11 +76,11 @@ function renderInfoIntersection(res) {
     renderInteract.style.display = 'flex';
 
     for (var index in streetInfo) {
-        streetArray[index].value = streetInfo[index].streetName;
+        streetArray[index].innerHTML = streetInfo[index].streetName;
     }
 
-    intersectionName.value = intersectionName;
-    stateControl.value = modeControl;
+    intersectionNameHTML.innerHTML = intersectionName;
+    stateControl.innerHTML = modeControl;
 
     if (modeControl === 'automatic') {
         isManual.checked = false;
@@ -92,7 +96,6 @@ function renderInfoIntersection(res) {
     else;
 
 }
-
 
 function updateStateControl() {
     if (isManual.checked) {
@@ -135,9 +138,10 @@ function manualControl() {
     renderControl.innerHTML = '';
     renderControl.innerHTML = manualControlHTML;
 
-    stateControlHTML.style.backgroundColor = '#D9B26F';
-    stateControlHTML.innerText = '';
-    stateControlHTML.innerText = 'manual';
+    stateControl.classList.remove('automatic-control');
+    stateControl.classList.add('manual-control');
+    stateControl.innerText = '';
+    stateControl.innerText = 'manual';
 }
 
 function automaticControl(streetInfo) {
@@ -150,7 +154,7 @@ function automaticControl(streetInfo) {
         trafficLightHTML += '<div class="config-item">' +
                                 '<div class="config-title">' +
                                     '<span>Duong</span>' +
-                                    '<span>' + trafficLight.streetName + '</span>' +
+                                    '<span> ' + trafficLight.streetName + '</span>' +
                                 '</div>' +
                                 '<div class="input-container">' +
                                     '<div class="input-box i-box">' +
@@ -178,8 +182,9 @@ function automaticControl(streetInfo) {
     renderControl.innerHTML = '';
     renderControl.innerHTML = trafficLightHTML + btnUpdateHTML;
 
-    stateControlHTML.style.backgroundColor = '#736CED';
-    stateControlHTML.innerText = '';
-    stateControlHTML.innerText = 'automatic';
+    stateControl.classList.remove('manual-control');
+    stateControl.classList.add('automatic-control');
+    stateControl.innerText = '';
+    stateControl.innerText = 'automatic';
 }
 

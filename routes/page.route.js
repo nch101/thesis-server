@@ -19,6 +19,8 @@ router.get('/vehicle/create', pageController.createVehiclePage);
 router.get('/center-control/create', pageController.createCenterControlPage);
 router.get('/intersection/create', pageController.createIntersectionPage);
 
+router.get('/intersection/control', pageController.controlPage);
+
 router.post('/intersection/test', function(req, res) {
 	return res
 	.status(200)

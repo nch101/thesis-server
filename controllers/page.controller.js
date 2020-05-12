@@ -1,4 +1,7 @@
 module.exports = {
+
+    /** Login page controller **/
+
     loginOption: function(req, res) {
         return res
         .status(200)
@@ -17,11 +20,15 @@ module.exports = {
         .render('auth/center-login');
     },
 
+    /** End of login page controller **/
+
     overviewPage: function(req, res) {
         return res
         .status(200)
         .render('users/overview');
     },
+
+    /** Create page controller **/
 
     createVehiclePage: function(req, res) {
         return res
@@ -39,5 +46,17 @@ module.exports = {
         return res
         .status(200)
         .render('users/intersection.create.pug')
+    },
+
+    /** End of create page controller **/
+
+    /** Control page controller **/
+
+    controlPage: function(req, res) {
+        return res
+        .status(200)
+        .render('users/intersection.control.pug')
     }
+
+    /** End of control page controller **/
 }

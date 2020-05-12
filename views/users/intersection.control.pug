@@ -1,0 +1,71 @@
+extends layout
+
+block head
+    include map.head.pug
+
+block navbar
+    - var isActive = 'control'
+    include navbar
+
+block content
+    span.create-header Điều khiển từ xa hệ thống đèn
+    .c-wrapper
+        .i-map-container
+            #map
+        #render-interact.c-container
+            .cam-container
+                .cam-item
+                .cam-item
+            .interact-container
+                .animation-wrapper
+                    .angle
+                    #top-street.horizontal-street-title
+                    .angle
+                    #left-street.vertical-street-title
+                    .animation-container
+                        .col1-row1
+                            span#top-street-time.red-number
+                        .traffic-light-container
+                            #top.traffic-light
+                                .color
+                                .color
+                                .color
+                        .col3-row1
+                            span#right-street-time.yellow-number
+                        .traffic-light-container
+                            #left.traffic-light
+                                .color
+                                .color
+                                .color
+                        .col2-row2
+                        .traffic-light-container
+                            #right.traffic-light
+                                .color
+                                .color
+                                .color
+                        .col1-row3
+                            span#left-street-time.green-number
+                        .traffic-light-container
+                            #bottom.traffic-light
+                                .color.red-light
+                                .color.yellow-light
+                                .color.green-light
+                        .col3-row3
+                            span#bottom-street-time.green-number
+                    #right-street.vertical-street-title
+                    .angle
+                    #bottom-street.horizontal-street-title
+                    .angle
+                #render-info.info-container
+                    .info-item
+                        label Tên giao lộ
+                        label#intersection-name
+                    .info-item
+                        label Trạng thái điều khiển
+                        label#state-control.badge
+                    .info-item
+                        label(for='isManual') Điều khiển từ xa
+                        input#isManual.switch(type='checkbox', onchange='updateStateControl()')
+                #render-control.control-container
+    script(src="/socket.io/socket.io.js")
+    script(src="/javascripts/intersection.control.js")

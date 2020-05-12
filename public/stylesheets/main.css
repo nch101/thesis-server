@@ -481,3 +481,294 @@ li > a:hover {
     99% { right: -340px; opacity: 1;}
     100% {right: 0px; opacity: 0;}
 }
+
+.c-wrapper {
+    width: 100%;
+    margin: 1rem 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.c-container {
+    width: 100%;
+    margin: 1rem 0;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.cam-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.cam-item {
+    width: 533px;
+    height: 400px;
+    background-color: #BBB;
+}
+
+.cam-item:last-child {
+    margin-top: 0.5rem;
+}
+
+.interact-container {
+    width: 400px;
+    padding: 1rem;
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.animation-wrapper {
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 20px 360px 20px;
+    grid-template-rows: 20px 360px 20px;
+}
+
+.vertical-street-title {
+    text-align: center;
+    writing-mode: vertical-rl;
+    text-transform: capitalize;
+}
+
+.horizontal-street-title {
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.animation-container {
+    border: 1px solid #CCC;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 120px 120px 120px;
+    grid-template-rows: 120px 120px 120px;  
+}
+
+.traffic-light-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.col1-row1, .col3-row1, .col1-row3, .col3-row3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.col1-row1 {
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    background-color: #CCC;
+}
+
+.col3-row1 {
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    background-color: #CCC;
+}
+
+.col1-row3 {
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    background-color: #CCC;
+}
+
+.col3-row3 {
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    background-color: #CCC;
+}
+
+.traffic-light {
+    width: 37px;
+    height: 93px;
+    border-radius: 8px;
+    background-color: #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.color {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin: 2px;
+    background-color: grey;
+}
+
+.red-light {
+    background-color: #FF0000;
+    box-shadow: 0 0 6em #ff3333;
+}
+
+.yellow-light {
+    background-color: #FFFF00;
+    box-shadow: 0 0 6em #ffff33;
+}
+
+.green-light {
+    background-color: #27fb6b;
+    box-shadow: 0 0 6em #33ff33;
+}
+
+.red-number, .yellow-number, .green-number {
+    font-size: 50px;
+}
+
+.red-number {
+    color: red;   
+}
+
+.yellow-number {
+    color: yellow;
+}
+
+.green-number {
+    color: #379e58;
+}
+
+.info-container {
+    width: 360px;
+    padding: 1rem;
+    margin: 0 20px 1rem 20px;
+    border: 1px solid #AAA;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-item {
+    margin: 0.3rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.info-item label:first-child {
+    font-weight: 600;
+}
+
+.info-item label:last-child {
+    margin-left: 1rem;
+    text-transform: capitalize;
+}
+
+.badge {
+    padding: 0.2rem 0.3rem;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.switch {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 42px;
+    margin-left: 1rem;
+    background-color: #c6c6c6;
+    border-radius: 40px;
+    outline: none;
+    border: 1px solid gray;
+    position: relative;
+    transition: 200ms;
+}
+
+.switch:checked{
+    background-color: mediumseagreen;
+    border: 1px solid mediumseagreen;
+}
+
+.switch:before {
+    content: '';
+    height: 18px;
+    width: 18px;
+    background-color: white;
+    position: absolute;
+    border-radius: 50%;
+    top: 0px;
+    left: 0px;
+    transition: 200ms;
+}
+
+.switch:checked:before {
+    left: 22px;
+}
+
+.control-container {
+    width: 360px;
+    padding: 1rem;
+    margin: 0 20px 1rem 20px;
+    border: 1px solid #AAA;    
+    display: flex;
+    flex-direction: column;
+}
+
+.control-item > label {
+    font-weight: 600;
+}
+
+.btn-change {
+    margin-left: 3rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    outline: none;
+    border-radius: 6px;
+    background-color: #0070e2;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-change > i {
+    margin-right: 0.8rem;
+}
+
+.btn-change:hover {
+    border: 1px solid #CCC;
+    background-color: white;
+    color: #0070e2;
+}
+
+.config-item {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #CCC;
+}
+
+.config-title > span:first-child {
+    font-weight: 600;
+}
+
+.config-title > span:last-child {
+    margin-left: 1rem;
+    text-transform: capitalize;
+}
+
+.btn-update {
+    margin: 0.5rem 0;
+}
+
+.intersection {
+    width: 14px;
+    height: 30px;
+    background-image: url('../images/traffic-light.png');
+    background-position: center;
+    background-size: cover;
+    background-color: transparent;
+}
+
+.automatic-control {
+    background-color: #736CED;
+}
+
+.manual-control {
+    background-color: #D9B26F;
+}
