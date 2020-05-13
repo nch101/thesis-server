@@ -30,6 +30,10 @@ var intersectionSchema = new Schema({
         default: 'automatic',
         required: true
     },
+    delta: {
+        type: Number,
+        required: true
+    },
     trafficLights: [{
         type: Schema.Types.ObjectId, 
         ref: 'Traffic-light', 

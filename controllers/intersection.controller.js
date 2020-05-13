@@ -16,7 +16,8 @@ module.exports = {
         var intersection = new intersectionModel({
             _id: mongoose.Types.ObjectId(),
             intersectionName: req.body.intersectionName,
-            location: preProcessLocationData(req.body.locations[0])
+            location: preProcessLocationData(req.body.locations[0]),
+            delta: req.body.delta
         });
         for (var index in  req.body.bearings) {
             var trafficLight = new trafficLightModel({

@@ -274,7 +274,7 @@ li > a:hover {
 #info-street {
     overflow: auto;
     white-space: nowrap;
-    display: -webkit-inline-box;
+    display: none;
 }
 
 ::-webkit-scrollbar {
@@ -771,4 +771,13 @@ li > a:hover {
 
 .manual-control {
     background-color: #D9B26F;
+}
+
+.rotate-icon {
+    width: 60px;
+    height: 60px;
+    margin: 30px;
+    background-image: url(../images/rotate.png);
+    background-position: center;
+    background-size: cover;
 }

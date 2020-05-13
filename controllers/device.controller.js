@@ -9,14 +9,20 @@ module.exports = {
         device.save()
         .then(function(data) {
             return res
-            .status(301)
-            .json(data);
+            .status(200)
+            .render('users/center.create.pug', {
+                success: true,
+                message: 'Tạo tài khoản thành công!'
+            });
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json(error)
+            .render('users/center.create.pug', {
+                error: true,
+                message: 'Tạo tài khoản KHÔNG thành công!'
+            });
         });
     },
 

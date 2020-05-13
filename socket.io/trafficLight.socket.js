@@ -1,27 +1,24 @@
 var intersectionModel = require('../models/intersection.model');
 
 module.exports = function(io) {
-	const timeLight = io.of('/socket/time-light');
+	const stateLight = io.of('/socket/state-light');
 	const controlLightPath = io.of('/socket/control-light');
 	
 	controlLightPath.on('connect', function(socket) {
 		socket.on('[center]-change-light', function(data) {
-			socket.broadcast.emit('[intersection]-change-light', data)			
+			socket.emit('[intersection]-change-light', data)			
 		});
 		socket.on('disconnect', function(reason) {
 			console.log('Reason of disconnection: ' + reason);
 		})
 	});
 
-	timeLight.on('connect', function(socket) {
-		socket.on('[intersection]-time-red', function(timeRed) {
-			socket.broadcast.emit('[center]-time-red', timeRed);
+	stateLight.on('connect', function(socket) {
+		socket.on('[intersection]-time-light', function(timeLight) {
+			socket.emit('[center]-time-light', timeLight);
 		})
-		socket.on('[intersection]-time-yellow', function(timeRed) {
-			socket.broadcast.emit('[center]-time-yellow', timeRed);
-		})
-		socket.on('[intersection]-time-green', function(timeRed) {
-			socket.broadcast.emit('[center]-time-green', timeRed);
+		socket.on('[intersection]-light-state', function(lightState) {
+			socket.emit('[center]-light-state', lightState);
 		})
 		socket.on('disconnect', function(reason) {
 			console.log('Reason of disconnection: ' + reason);

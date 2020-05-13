@@ -30,6 +30,7 @@ module.exports = {
     getIntersection: function(req, res) {
         intersectionModel
         .findById(req.params.id)
+        .select('intersectionName modeControl delta trafficLights')
         .populate({ path: 'trafficLights', 
         select: 'streetName bearing timeRed timeYellow timeGreen camip ' })
         .then(function(data) {

@@ -2,6 +2,7 @@ var renderInteract = document.getElementById('render-interact');
 var renderControl = document.getElementById('render-control');
 
 var intersectionNameHTML = document.getElementById('intersection-name');
+var delta = document.getElementById('delta');
 var stateControl = document.getElementById('state-control');
 var isManual = document.getElementById('isManual');
 
@@ -9,6 +10,12 @@ var topStreet = document.getElementById('top-street');
 var rightStreet = document.getElementById('right-street');
 var bottomStreet = document.getElementById('bottom-street');
 var leftStreet = document.getElementById('left-street');
+
+var topStreetTime = document.getElementById('top-street-time')
+var rightStreetTime = document.getElementById('right-street-time')
+var bottomStreetTime = document.getElementById('bottom-street-time')
+var leftStreetTime = document.getElementById('left-street-time')
+
 
 var idIntersection;
 
@@ -52,8 +59,8 @@ function renderIntersection(res) {
         .setPopup(popup)
         .addTo(map);
     }
-}
- */
+} */
+
 getInfoIntersection();
 
 function getInfoIntersection() {
@@ -70,6 +77,7 @@ function getInfoIntersection() {
 function renderInfoIntersection(res) {
     var intersectionName = res.data.intersectionName;
     var modeControl = res.data.modeControl;
+    var deltaTime = res.data.delta;
     var streetInfo = res.data.trafficLights;
     var streetArray = [topStreet, rightStreet, bottomStreet, leftStreet];
 
@@ -81,6 +89,7 @@ function renderInfoIntersection(res) {
 
     intersectionNameHTML.innerHTML = intersectionName;
     stateControl.innerHTML = modeControl;
+    delta.innerHTML = deltaTime;
 
     if (modeControl === 'automatic') {
         isManual.checked = false;
@@ -188,3 +197,25 @@ function automaticControl(streetInfo) {
     stateControl.innerText = 'automatic';
 }
 
+function renderTimeLight(data) {
+    
+}
+
+function renderStateLight(data) {
+
+}
+
+function controlLight(data) {
+    
+}
+
+/** Socket IO **/
+
+const stateLightSocket = io(window.location.host + '/socket/state-light');
+const controlLightSocket = io(window.location.host + '/socket/control-light');
+
+
+function getStateLight() {
+    stateLightSocket.on('[center]-time-light', renderTimeLight)
+    stateLightSocket.on('[center]-time-light', renderStateLight)
+}

@@ -8,7 +8,7 @@ block navbar
     include navbar
 
 block content
-    span.create-header Điều khiển từ xa hệ thống đèn
+    span.create-header Điều khiển từ xa hệ thống đèn giao thông thông minh
     .c-wrapper
         .i-map-container
             #map
@@ -37,7 +37,7 @@ block content
                                 .color
                                 .color
                                 .color
-                        .col2-row2
+                        .col2-row2#rotate.rotate-icon
                         .traffic-light-container
                             #right.traffic-light
                                 .color
@@ -66,6 +66,9 @@ block content
                     .info-item
                         label(for='isManual') Điều khiển từ xa
                         input#isManual.switch(type='checkbox', onchange='updateStateControl()')
+                    .info-item
+                        label Thời gian trễ
+                        label#delta
                 #render-control.control-container
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/intersection.control.js")

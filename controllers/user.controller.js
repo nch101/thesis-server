@@ -12,13 +12,19 @@ module.exports = {
         .then(function(results) {
             return res
             .status(200)
-            .json(results);
+            .render('users/center.create.pug', {
+                success: true,
+                message: 'Tạo tài khoản thành công!'
+            });
         })
         .catch(function(error) {
             console.log(error);
             return res
             .status(501)
-            .json({ message: 'Create user unsuccess !' })
+            .render('users/center.create.pug', {
+                error: true,
+                message: 'Tạo tài khoản KHÔNG thành công!'
+            });
         });
     },
 

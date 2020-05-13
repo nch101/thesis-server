@@ -1,4 +1,12 @@
 var infoStreets = document.getElementById('info-street');
+var numStreet = document.getElementById('num-street');
+var formItemArray = document.getElementsByClassName('i-form-item');
+var bearingsArray = document.getElementsByName('bearings');
+
+var timeDelta = document.getElementsByName('delta');
+var timeReds = document.getElementsByName('timeReds');
+var timeYellows = document.getElementsByName('timeYellows');
+var timeGreens = document.getElementsByName('timeGreens');
 
 var formStreet = '<div class="i-form-item">'
                 +    '<div class="input-box i-box">'
@@ -17,7 +25,7 @@ var formStreet = '<div class="i-form-item">'
                 +         '<span class="icon" style="color: #6cd4ff;">'
                 +             '<i class="fas fa-angle-left"></i>'
                 +         '</span>'
-                +         '<input type="text" name="bearings" placeholder="Góc" required>'
+                +         '<input type="text" name="bearings" placeholder="Góc" onchange="sortFormStreet()" required>'
                 +     '</div>'
                 +     '<div class="input-container">'
                 +         '<div class="input-box i-box">'
@@ -42,9 +50,22 @@ var formStreet = '<div class="i-form-item">'
                 + '</div>'
 
 function renderFormStreet() {
-    var numStreet = document.getElementById('numStreet').value;
+    infoStreets.style.display = '-webkit-inline-box';
     infoStreets.innerHTML = '';
-    for (let i = 0; i < numStreet; i++) {
+    for (let i = 0; i < numStreet.value; i++) {
         infoStreets.innerHTML += formStreet;
+    }
+}
+
+function sortFormStreet() {
+    for (var i = 0; i < numStreet.value-1; i++) {
+        var min = i;
+        for (var j = i+1; j < numStreet.value; j++) {
+            if (parseInt(bearingsArray[j].value) > parseInt(bearingsArray[min].value))
+                min = j;
+        }
+        if (min != i) {
+            infoStreets.insertBefore(formItemArray[min], formItemArray[i]);
+        }
     }
 }
