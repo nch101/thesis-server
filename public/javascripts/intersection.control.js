@@ -77,6 +77,7 @@ function getInfoIntersection() {
     // @params: event -------^
     // idIntersection = event.currentTarget.params;
     idIntersection = '5eb90fe69f1398273bba559a';
+
     axios({
         method: 'get',
         url: 'http://localhost:3000/api/intersection/' + idIntersection
@@ -215,6 +216,8 @@ function automaticControl(streetInfo) {
 }
 
 function getStateLight() {
+    stateLightSocket.emit('room', idIntersection)
+    controlLightSocket.emit('room', idIntersection)
     stateLightSocket.on('[center]-time-light', renderTimeLight)
     stateLightSocket.on('[center]-light-state', renderStateLight)
 }
