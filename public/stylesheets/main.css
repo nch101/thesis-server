@@ -781,3 +781,7 @@ li > a:hover {
     background-position: center;
     background-size: cover;
 }
+
+.time {
+    font-family: 'Segment7Standard';
+}

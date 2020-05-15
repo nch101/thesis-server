@@ -2,6 +2,8 @@ extends layout
 
 block head
     include map.head.pug
+    link(rel='stylesheet', media='screen', href='https://fontlibrary.org/face/segment7', type='text/css')
+
 
 block navbar
     - var isActive = 'control'
@@ -24,14 +26,14 @@ block content
                     #left-street.vertical-street-title
                     .animation-container
                         .col1-row1
-                            span#top-street-time
+                            span#top-street-time.time
                         .traffic-light-container
                             #top-street-light.traffic-light
                                 .color
                                 .color
                                 .color
                         .col3-row1
-                            span#right-street-time
+                            span#right-street-time.time
                         .traffic-light-container
                             #left-street-light.traffic-light
                                 .color
@@ -44,14 +46,14 @@ block content
                                 .color
                                 .color
                         .col1-row3
-                            span#left-street-time
+                            span#left-street-time.time
                         .traffic-light-container
                             #bottom-street-light.traffic-light
                                 .color
                                 .color
                                 .color
                         .col3-row3
-                            span#bottom-street-time
+                            span#bottom-street-time.time
                     #right-street.vertical-street-title
                     .angle
                     #bottom-street.horizontal-street-title
@@ -70,5 +72,11 @@ block content
                         label Thời gian trễ
                         label#delta
                 #render-control.control-container
+                    #control-item
+                        label(for='btn-change') Thay doi trang thai
+                        button#btn-change.btn-change
+                            i.fas.fa-sync-alt
+                            | Thay doi
+
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/intersection.control.js")

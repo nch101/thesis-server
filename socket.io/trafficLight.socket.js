@@ -6,9 +6,11 @@ module.exports = function(io) {
 	
 	controlLightPath.on('connect', function(socket) {
 		socket.on('[center]-change-light', function(data) {
+			console.log('Server received: ' + data)
 			controlLightPath.emit('[intersection]-change-light', data)			
 		});
 		socket.on('[center]-change-mode', function(data) {
+			console.log('Server received: ' + data)
 			controlLightPath.emit('[intersection]-change-mode', data)
 		})
 		socket.on('disconnect', function(reason) {
@@ -19,11 +21,9 @@ module.exports = function(io) {
 	stateLightPath.on('connect', function(socket) {
 		socket.on('[intersection]-time-light', function(timeLight) {
 			stateLightPath.emit('[center]-time-light', timeLight);
-			console.log(timeLight);
 		})
 		socket.on('[intersection]-light-state', function(lightState) {
 			stateLightPath.emit('[center]-light-state', lightState);
-			console.log(lightState);
 		})
 		socket.on('disconnect', function(reason) {
 			console.log('Reason of disconnection: ' + reason);

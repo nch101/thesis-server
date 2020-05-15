@@ -11,15 +11,21 @@ var rightStreet = document.getElementById('right-street');
 var bottomStreet = document.getElementById('bottom-street');
 var leftStreet = document.getElementById('left-street');
 
-var topStreetTime = document.getElementById('top-street-time')
-var rightStreetTime = document.getElementById('right-street-time')
-var bottomStreetTime = document.getElementById('bottom-street-time')
-var leftStreetTime = document.getElementById('left-street-time')
+var topStreetTime = document.getElementById('top-street-time');
+var rightStreetTime = document.getElementById('right-street-time');
+var bottomStreetTime = document.getElementById('bottom-street-time');
+var leftStreetTime = document.getElementById('left-street-time');
 
 var topStreetLight = document.getElementById('top-street-light');
 var rightStreetLight = document.getElementById('right-street-light');
 var bottomStreetLight = document.getElementById('bottom-street-light');
-var leftStreetLight = document.getElementById('left-street-light')
+var leftStreetLight = document.getElementById('left-street-light');
+
+var btnChange = document.getElementById('btn-change');
+var btnUpdate = document.getElementById('btn-update');
+
+const stateLightSocket = io(window.location.host + '/socket/state-light');
+const controlLightSocket = io(window.location.host + '/socket/control-light');
 
 var idIntersection;
 
@@ -112,6 +118,8 @@ function renderInfoIntersection(res) {
 
 function updateStateControl() {
     if (isManual.checked) {
+        controlLightSocket.emit('[center]-change-mode', 'manual');
+
         axios({
             method: 'put',
             url: 'http://localhost:3000/intersection/mode-control/' + idIntersection,
@@ -122,6 +130,8 @@ function updateStateControl() {
         manualControl()
     }
     else {
+        controlLightSocket.emit('[center]-change-mode', 'automatic');
+
         axios({
             method: 'put',
             url: 'http://localhost:3000/intersection/mode-control/' + idIntersection,
@@ -151,14 +161,17 @@ function manualControl() {
     renderControl.innerHTML = '';
     renderControl.innerHTML = manualControlHTML;
 
+    var btnChange = document.getElementById('btn-change');
     stateControl.classList.remove('automatic-control');
     stateControl.classList.add('manual-control');
     stateControl.innerText = '';
     stateControl.innerText = 'manual';
+
+    btnChange.addEventListener('click', changeLight);
 }
 
 function automaticControl(streetInfo) {
-    var btnUpdateHTML = '<button id="btn-change" class="btn-change btn-update">' +
+    var btnUpdateHTML = '<button id="btn-update" class="btn-change btn-update">' +
                             '<i class="fas fa-sync-alt"></i>Cap nhat' +
                         '</button>';
     var trafficLightHTML = '';
@@ -201,10 +214,6 @@ function automaticControl(streetInfo) {
     stateControl.innerText = 'automatic';
 }
 
-
-const stateLightSocket = io(window.location.host + '/socket/state-light');
-const controlLightSocket = io(window.location.host + '/socket/control-light');
-
 function getStateLight() {
     stateLightSocket.on('[center]-time-light', renderTimeLight)
     stateLightSocket.on('[center]-light-state', renderStateLight)
@@ -231,11 +240,13 @@ function renderStateLight(stateLight) {
             
             colorLightArray[i].children[0].classList.add('red-light');
             colorLightArray[i].children[1].classList.remove('yellow-light');
+            colorLightArray[i].children[2].classList.remove('green-light');
         }
         else if (stateLight[i] == 'yellow') {
             timeLightArray[i].classList.remove('red-number', 'green-number');
             timeLightArray[i].classList.add('yellow-number');
 
+            colorLightArray[i].children[0].classList.remove('red-light');
             colorLightArray[i].children[1].classList.add('yellow-light');
             colorLightArray[i].children[2].classList.remove('green-light')
         }
@@ -244,10 +255,13 @@ function renderStateLight(stateLight) {
             timeLightArray[i].classList.add('green-number');
 
             colorLightArray[i].children[0].classList.remove('red-light');
+            colorLightArray[i].children[1].classList.remove('yellow-light');
             colorLightArray[i].children[2].classList.add('green-light')
         }
     }
 }
 
-/** Socket IO **/
-
+function changeLight() {
+    console.log('Change light')
+    controlLightSocket.emit('[center]-change-light', 'change-light');
+}
