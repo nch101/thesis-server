@@ -1,5 +1,6 @@
 var renderInteract = document.getElementById('render-interact');
 var renderControl = document.getElementById('render-control');
+var renderAlert = document.getElementById('render-alert');
 
 var intersectionNameHTML = document.getElementById('intersection-name');
 var delta = document.getElementById('delta');
@@ -100,7 +101,7 @@ function renderInfoIntersection(res) {
 
     intersectionNameHTML.innerHTML = intersectionName;
     stateControl.innerHTML = modeControl;
-    delta.innerHTML = deltaTime;
+    delta.value = deltaTime;
 
     if (modeControl === 'automatic') {
         isManual.checked = false;
@@ -153,9 +154,9 @@ function updateStateControl() {
 
 function manualControl() {
     var manualControlHTML = '<div class="control-item">' +
-                                '<label for="btn-change">Thay doi trang thai</label>' +
+                                '<label for="btn-change">Thay đổi trạng thái</label>' +
                                 '<button id="btn-change" class="btn-change">' +
-                                    '<i class="fas fa-sync-alt"></i>Thay doi' +
+                                    '<i class="fas fa-sync-alt"></i>Thay đổi' +
                                 '</button>' +
                             '</div>'
 
@@ -173,14 +174,14 @@ function manualControl() {
 
 function automaticControl(streetInfo) {
     var btnUpdateHTML = '<button id="btn-update" class="btn-change btn-update">' +
-                            '<i class="fas fa-sync-alt"></i>Cap nhat' +
+                            '<i class="fas fa-sync-alt"></i>Cập nhật dữ liệu' +
                         '</button>';
     var trafficLightHTML = '';
 
     for (var trafficLight of streetInfo) {
         trafficLightHTML += '<div class="config-item">' +
                                 '<div class="config-title">' +
-                                    '<span>Duong</span>' +
+                                    '<span>Đường</span>' +
                                     '<span> ' + trafficLight.streetName + '</span>' +
                                 '</div>' +
                                 '<div class="input-container">' +
@@ -188,19 +189,19 @@ function automaticControl(streetInfo) {
                                        ' <span class="icon" style="color: #FF1B1C;">' +
                                             '<i class="fas fa-clock"></i>' +
                                         '</span>' +
-                                        '<input type="text" name="timeRed" value="' + trafficLight.timeRed + '" required>' +
+                                        '<input type="text" name="timeReds" value="' + trafficLight.timeRed + '" required>' +
                                     '</div>' +
                                     '<div class="input-box i-box">' +
                                         '<span class="icon" style="color: #e8aa14;">' +
                                             '<i class="fas fa-clock"></i>' +
                                         '</span>' +
-                                        '<input type="text" name="timeYellow" value="' + trafficLight.timeYellow + '" required>' +
+                                        '<input type="text" name="timeYellows" value="' + trafficLight.timeYellow + '" required>' +
                                     '</div>' + 
                                     '<div class="input-box i-box">' +
                                         '<span class="icon" style="color: #00c88b;">' +
                                             '<i class="fas fa-clock"></i>' +
                                         '</span>' +
-                                        '<input type="text" name="timeGreen" value="' + trafficLight.timeGreen + '" required>' + 
+                                        '<input type="text" name="timeGreens" value="' + trafficLight.timeGreen + '" required>' + 
                                     '</div>' +
                                 '</div>' +
                             '</div>';
@@ -213,6 +214,9 @@ function automaticControl(streetInfo) {
     stateControl.classList.add('automatic-control');
     stateControl.innerText = '';
     stateControl.innerText = 'automatic';
+    var btnUpdate = document.getElementById('btn-update');
+    btnUpdate.addEventListener('click', updateData)
+    btnUpdate.params = streetInfo
 }
 
 function getStateLight() {
@@ -267,4 +271,46 @@ function renderStateLight(stateLight) {
 function changeLight() {
     console.log('Change light')
     controlLightSocket.emit('[center]-change-light', 'change-light');
+}
+
+function updateData(event) {
+    var timeReds = []
+    var timeYellows = []
+    var timeGreens = []
+
+    for (let index = 0; index < event.currentTarget.params.length; index++) {
+        timeReds.push(document.getElementsByName('timeReds')[index].value);
+        timeYellows.push(document.getElementsByName('timeYellows')[index].value);
+        timeGreens.push(document.getElementsByName('timeGreens')[index].value);
+    }
+
+    axios({
+        method: 'put',
+        url: 'http://localhost:3000/api/intersection/' + idIntersection,
+        data: {
+            delta: delta.value,
+            timeReds: timeReds,
+            timeYellows: timeYellows,
+            timeGreens: timeGreens
+        }
+    })
+    .then(function(res) {
+        if (res.data.status == 'success') {
+            setTimeout(function() {
+                renderAlert.classList.remove('alert', 'alert-success');
+                renderAlert.innerHTML = '';
+            }, 4800)
+            renderAlert.classList.add('alert', 'alert-success');
+            renderAlert.innerHTML = res.data.message;
+
+        }
+        else if (res.data.status == 'error') {
+            setTimeout(function() {
+                renderAlert.classList.remove('alert', 'alert-error');
+                renderAlert.innerHTML = '';
+            }, 4800)
+            renderAlert.classList.add('alert', 'alert-error');
+            renderAlert.innerHTML = res.data.message;
+        }
+    })
 }

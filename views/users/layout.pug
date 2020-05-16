@@ -13,8 +13,9 @@ html
         .content-wrapper
             .content
                 block content
+        #render-alert
         if error
             .alert.alert-error #{ message }
         if success
             .alert.alert-success #{ message }
-        script(src='/javascripts/main.js')
+        block addFile

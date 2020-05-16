@@ -130,7 +130,8 @@ module.exports = {
     configTime: function(req, res) {
         intersectionModel
         .findById(req.params.id)
-        .select('trafficLights')
+        .select('trafficLights -_id')
+        .populate('trafficLights')
         .then(function(data) {
             if (data) {
                 for (let index = 0; index < data.get('trafficLights').length; index++) {

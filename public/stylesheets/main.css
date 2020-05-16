@@ -202,7 +202,7 @@ li > a:hover {
     padding: 0.5rem 0.1rem;
 }
 
-.form-group > .line {
+.line {
     position: absolute;
     bottom: 0;
     width: 0;
@@ -451,7 +451,7 @@ li > a:hover {
 }
 
 .alert {
-    position: absolute;
+    position: fixed;
     right: 0px;
     top: 140px;
     border-radius: 4px;
@@ -748,7 +748,6 @@ li > a:hover {
 }
 
 .config-title > span:last-child {
-    margin-left: 1rem;
     text-transform: capitalize;
 }
 
@@ -773,15 +772,24 @@ li > a:hover {
     background-color: #D9B26F;
 }
 
-.rotate-icon {
+.north-icon {
     width: 60px;
     height: 60px;
     margin: 30px;
-    background-image: url(../images/rotate.png);
+    background-image: url(../images/gps.png);
     background-position: center;
     background-size: cover;
 }
 
 .time {
     font-family: 'Segment7Standard';
+}
+
+#delta {
+    margin: 0 1rem;
+    padding: 0.2rem 0.1rem;
+    width: 60px;
+    border: none;
+    border-bottom: 1px solid #CCC;
+    outline: none;
 }

@@ -39,7 +39,7 @@ block content
                                 .color
                                 .color
                                 .color
-                        .col2-row2#rotate.rotate-icon
+                        .col2-row2.north-icon
                         .traffic-light-container
                             #right-street-light.traffic-light
                                 .color
@@ -69,14 +69,10 @@ block content
                         label(for='isManual') Điều khiển từ xa
                         input#isManual.switch(type='checkbox', onchange='updateStateControl()')
                     .info-item
-                        label Thời gian trễ
-                        label#delta
+                        label(for='delta') Thời gian lệch
+                        input#delta(type='text', name='delta', required='')
                 #render-control.control-container
-                    #control-item
-                        label(for='btn-change') Thay doi trang thai
-                        button#btn-change.btn-change
-                            i.fas.fa-sync-alt
-                            | Thay doi
 
+block addFile
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/intersection.control.js")

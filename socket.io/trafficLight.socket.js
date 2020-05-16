@@ -13,13 +13,11 @@ module.exports = function(io) {
 		});
 
 		socket.on('[center]-change-light', function(data) {
-			console.log('Server received: ' + data)
-			console.log('RoomID center ' + roomID)
+
 			controlLightPath.to(roomID).emit('[intersection]-change-light', data)			
 		});
 
 		socket.on('[center]-change-mode', function(data) {
-			console.log('Server received: ' + data)
 			controlLightPath.to(roomID).emit('[intersection]-change-mode', data)
 		});
 
@@ -37,7 +35,6 @@ module.exports = function(io) {
 		});
 
 		socket.on('[intersection]-time-light', function(timeLight) {
-			console.log('RoomID ' + roomID)
 			stateLightPath.to(roomID).emit('[center]-time-light', timeLight);
 		})
 		socket.on('[intersection]-light-state', function(lightState) {

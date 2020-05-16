@@ -33,6 +33,7 @@ var trafficLightSchema = new Schema({
     },
     priority: {
         type: Boolean,
+        default: false,
         required: true
     },
     timeRed: {

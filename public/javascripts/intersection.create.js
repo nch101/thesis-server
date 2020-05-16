@@ -3,10 +3,16 @@ var numStreet = document.getElementById('num-street');
 var formItemArray = document.getElementsByClassName('i-form-item');
 var bearingsArray = document.getElementsByName('bearings');
 
+var intersectionName = document.getElementsByName('intersectionName');
+var locations = document.getElementsByName('locations');
 var timeDelta = document.getElementsByName('delta');
 var timeReds = document.getElementsByName('timeReds');
 var timeYellows = document.getElementsByName('timeYellows');
 var timeGreens = document.getElementsByName('timeGreens');
+
+
+
+var btnCreate = document.getElementById('btn-create');
 
 var formStreet = '<div class="i-form-item">'
                 +    '<div class="input-box i-box">'
@@ -68,4 +74,25 @@ function sortFormStreet() {
             infoStreets.insertBefore(formItemArray[min], formItemArray[i]);
         }
     }
+}
+
+btnCreate.addEventListener('click', postData)
+
+function postData() {
+    var formData = new FormData();
+    formData.append('intersectionName', intersectionName.value)
+    formData.append('delta', timeDelta.value)
+    for (var i = 0; i < numStreet; i++) {
+        formData.append('locations', locations[i].value)
+        formData.append('bearings', bearingsArray[i].value)
+        formData.append('timeReds', timeReds[i].value)
+        formData.append('timeYellows', timeYellows[i].value)
+        formData.append('timeGreens', timeGreens[i].value)
+    }
+
+    axios({
+        method: 'post',
+        url: 'http://localhost:3000/api/test',
+        data: formData
+    })
 }
