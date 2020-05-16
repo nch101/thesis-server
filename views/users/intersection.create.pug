@@ -2,10 +2,6 @@ extends layout
 
 block head
     include map.head.pug
-    style.
-        html {
-            scroll-behavior: smooth;
-        }
 
 block navbar 
     - var isActive = 'create'
@@ -13,7 +9,7 @@ block navbar
 
 block content
     span.create-header Tạo hệ thống đèn giao thông
-    form.i-container
+    .i-container
         .i-map-container
             .btn-container
                 button#line-tool.btn(type='button')
@@ -40,7 +36,5 @@ block content
         #info-street.i-form-container
 
 block addFile
-    script(src='/javascripts/intersection.create.js')
     //- script(src='/javascripts/intersection.mapbox.js')
-    script.
-        window.scrollTo(0, 500);
+    script(src='/javascripts/intersection.create.js')

@@ -1,16 +1,25 @@
 var infoStreets = document.getElementById('info-street');
 var numStreet = document.getElementById('num-street');
 var formItemArray = document.getElementsByClassName('i-form-item');
-var bearingsArray = document.getElementsByName('bearings');
+var renderAlert = document.getElementById('render-alert');
 
-var intersectionName = document.getElementsByName('intersectionName');
-var locations = document.getElementsByName('locations');
-var timeDelta = document.getElementsByName('delta');
-var timeReds = document.getElementsByName('timeReds');
-var timeYellows = document.getElementsByName('timeYellows');
-var timeGreens = document.getElementsByName('timeGreens');
+var intersectionNameDOM = document.getElementsByName('intersectionName');
+var timeDeltaDOM = document.getElementsByName('delta');
+var streetNamesDOM = document.getElementsByName('streetNames')
+var locationsDOM = document.getElementsByName('locations');
+var bearingsDOM = document.getElementsByName('bearings');
+var timeRedsDOM = document.getElementsByName('timeReds');
+var timeYellowsDOM = document.getElementsByName('timeYellows');
+var timeGreensDOM = document.getElementsByName('timeGreens');
 
-
+var formData = {
+    streetNames: streetNamesDOM,
+    locations: locationsDOM,
+    bearings: bearingsDOM,
+    timeReds: timeRedsDOM,
+    timeYellows: timeYellowsDOM,
+    timeGreens: timeGreensDOM,
+}
 
 var btnCreate = document.getElementById('btn-create');
 
@@ -67,7 +76,7 @@ function sortFormStreet() {
     for (var i = 0; i < numStreet.value-1; i++) {
         var min = i;
         for (var j = i+1; j < numStreet.value; j++) {
-            if (parseInt(bearingsArray[j].value) > parseInt(bearingsArray[min].value))
+            if (parseInt(bearingsDOM[j].value) < parseInt(bearingsDOM[min].value))
                 min = j;
         }
         if (min != i) {
@@ -79,20 +88,63 @@ function sortFormStreet() {
 btnCreate.addEventListener('click', postData)
 
 function postData() {
-    var formData = new FormData();
-    formData.append('intersectionName', intersectionName.value)
-    formData.append('delta', timeDelta.value)
-    for (var i = 0; i < numStreet; i++) {
-        formData.append('locations', locations[i].value)
-        formData.append('bearings', bearingsArray[i].value)
-        formData.append('timeReds', timeReds[i].value)
-        formData.append('timeYellows', timeYellows[i].value)
-        formData.append('timeGreens', timeGreens[i].value)
+    var intersectionName = intersectionNameDOM[0].value;
+    var delta = timeDeltaDOM[0].value;
+    var streetNames = []
+    var locations = []
+    var bearings = []
+    var timeReds = []
+    var timeYellows = []
+    var timeGreens = []
+
+    for (var i = 0; i < numStreet.value; i++) {
+        streetNames.push(streetNamesDOM[i].value);
+        locations.push(locationsDOM[i].value);
+        bearings.push(bearingsDOM[i].value);
+        timeReds.push(timeRedsDOM[i].value);
+        timeYellows.push(timeYellowsDOM[i].value);
+        timeGreens.push(timeGreensDOM[i].value);
     }
 
     axios({
         method: 'post',
-        url: 'http://localhost:3000/api/test',
-        data: formData
+        url: 'http://localhost:3000/api/intersection',
+        data: {
+            intersectionName: intersectionName,
+            delta: delta,
+            streetNames: streetNames,
+            locations: locations,
+            bearings: bearings,
+            timeReds: timeReds,
+            timeYellows: timeYellows,
+            timeGreens: timeGreens
+        }
     })
+    .then(function(res) {
+        if (res.data.status == 'success') {
+            setTimeout(function() {
+                renderAlert.classList.remove('alert', 'alert-success');
+                renderAlert.innerHTML = '';
+            }, 4800)
+            renderAlert.classList.add('alert', 'alert-success');
+            renderAlert.innerHTML = res.data.message;
+            removeAll()
+        }
+        else if (res.data.status == 'error') {
+            setTimeout(function() {
+                renderAlert.classList.remove('alert', 'alert-error');
+                renderAlert.innerHTML = '';
+            }, 4800)
+            renderAlert.classList.add('alert', 'alert-error');
+            renderAlert.innerHTML = res.data.message;
+        }
+    })
+}
+
+function removeAll() {
+    for (var item in formData) {
+        for (var i = 0; i < numStreet.value; i++) {
+            formData[item][i].value = ''
+        }
+    }
 }

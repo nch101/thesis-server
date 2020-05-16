@@ -3,7 +3,65 @@ var trafficLightModel = require('../models/traffic-light.model');
 var deviceModel = require('../models/device.model');
 var userModel = require('../models/user.model');
 
+function preProcessLocationData(locationDataString) {
+    var locationDataArray = locationDataString.split(',');
+    var locationData = {
+        'type': 'Point',
+        'coordinates': [locationDataArray[0], locationDataArray[1]]
+    }
+    return locationData;
+}
+
 module.exports = {
+    createIntersection: function(req, res) {
+        console.log(req.body)
+        var intersection = new intersectionModel({
+            intersectionName: req.body.intersectionName,
+            location: preProcessLocationData(req.body.locations[0]),
+            delta: req.body.delta
+        });
+        for (var index in  req.body.bearings) {
+            var trafficLight = new trafficLightModel({
+                intersectionId: intersection._id,
+                streetName: req.body.streetNames[index],
+                location: preProcessLocationData(req.body.locations[index]), 
+                bearing: req.body.bearings[index],
+                timeRed: req.body.timeReds[index],
+                timeYellow: req.body.timeYellows[index],
+                timeGreen: req.body.timeGreens[index]
+            });
+            intersection.trafficLights.push(trafficLight._id);
+            trafficLight.save()
+            .catch(function(error) {
+                console.log(error)
+                return res
+                .status(200)
+                .json({
+                    status: 'error', 
+                    message: 'Khởi tạo thất bại!'
+                })
+            })
+        }
+        intersection.save()
+        .then(function(results) {
+            return res
+            .status(200)
+            .json({
+                status: 'success', 
+                message: 'Khởi tạo thành công!'
+            })
+        })
+        .catch(function(error) {
+            console.log(error)
+            return res
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Khởi tạo thất bại!'
+            })
+        })
+    },
+
     getAllIntersections: function(req, res) {
         intersectionModel
         .find()
@@ -62,7 +120,7 @@ module.exports = {
                 .findByIdAndUpdate(req.params.id, { $set: { delta: req.body.delta }})
                 .catch(function(error) {
                     return res
-                    .status(501)
+                    .status(200)
                     .json({
                         status: 'error', 
                         message: 'Cập nhật thất bại!'
@@ -76,7 +134,7 @@ module.exports = {
                     }})
                     .catch(function(error) {
                         return res
-                        .status(501)
+                        .status(200)
                         .json({
                             status: 'error', 
                             message: 'Cập nhật thất bại!'
@@ -92,7 +150,7 @@ module.exports = {
             }
             else {
                 return res
-                .status(404)
+                .status(200)
                 .json({
                     status: 'error', 
                     message: 'Cập nhật thất bại!'
@@ -101,7 +159,7 @@ module.exports = {
         })
         .catch(function(error) {
             return res
-            .status(501)
+            .status(200)
             .json({
                 status: 'error', 
                 message: 'Cập nhật thất bại!'

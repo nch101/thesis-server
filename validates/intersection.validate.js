@@ -8,10 +8,10 @@ module.exports = {
         .then(function(results) {
             if (results) {
                 return res
-                .status(400)
-                .render('users/intersection.create.pug', {
-                    error: true,
-                    message: 'Tên giao lộ đã tồn tại! '
+                .status(200)
+                .json({
+                    status: 'error', 
+                    message: 'Tên giao lộ đã tồn tại!'
                 })
             }
             else 
@@ -20,10 +20,10 @@ module.exports = {
         .catch(function(error) {
             console.log(error)
             return res
-            .status(501)
-            .render('users/intersection.create.pug', {
-                error: true,
-                message: 'Khởi tạo thất bại! '
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Khởi tạo thất bại!'
             })
         })
     },
