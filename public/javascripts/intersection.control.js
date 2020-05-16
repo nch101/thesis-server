@@ -189,19 +189,19 @@ function automaticControl(streetInfo) {
                                        ' <span class="icon" style="color: #FF1B1C;">' +
                                             '<i class="fas fa-clock"></i>' +
                                         '</span>' +
-                                        '<input type="text" name="timeReds" value="' + trafficLight.timeRed + '" required>' +
+                                        '<input type="number" name="timeReds" value="' + trafficLight.timeRed + '" required>' +
                                     '</div>' +
                                     '<div class="input-box i-box">' +
                                         '<span class="icon" style="color: #e8aa14;">' +
                                             '<i class="fas fa-clock"></i>' +
                                         '</span>' +
-                                        '<input type="text" name="timeYellows" value="' + trafficLight.timeYellow + '" required>' +
+                                        '<input type="number" name="timeYellows" value="' + trafficLight.timeYellow + '" required>' +
                                     '</div>' + 
                                     '<div class="input-box i-box">' +
                                         '<span class="icon" style="color: #00c88b;">' +
                                             '<i class="fas fa-clock"></i>' +
                                         '</span>' +
-                                        '<input type="text" name="timeGreens" value="' + trafficLight.timeGreen + '" required>' + 
+                                        '<input type="number" name="timeGreens" value="' + trafficLight.timeGreen + '" required>' + 
                                     '</div>' +
                                 '</div>' +
                             '</div>';
