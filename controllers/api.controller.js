@@ -12,6 +12,8 @@ function preProcessLocationData(locationDataString) {
     return locationData;
 }
 
+var resError = 
+
 module.exports = {
     createIntersection: function(req, res) {
         console.log(req.body)
@@ -166,4 +168,47 @@ module.exports = {
             })
         })
     },
+
+    matchIntersection: function(req, res) {
+        console.log(res.body)
+        var PromiseAllArray = []
+        function matchIntersectionPromise(location, bearing) {
+            return new Promise(function(resolve, reject) {
+                trafficLightModel
+                .findOne()
+                .where('location')
+                .intersects()
+                .geometry({ type: 'Point', coordinates: location })
+                .where('bearing', bearing)
+                .select('_id')
+                .exec(function(err, data) {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        resolve(data);
+                    }
+                })
+            })
+        }
+
+        for (var data of req.body) {
+            PromiseAllArray
+            .push(matchIntersectionPromise(data.location, data.bearing))
+        }
+
+        Promise
+        .all(PromiseAllArray)
+        .then(function(data) {
+            console.log(data)
+            return res
+            .status(200)
+            .json(data)
+        })
+        .catch(function(error) {
+            return res
+            .status(501)
+            .json(error)
+        })
+    }
 }
