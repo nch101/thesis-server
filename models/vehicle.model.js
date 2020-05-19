@@ -26,7 +26,7 @@ var journeySchema = new Schema({
     }
 });
 
-var deviceSchema = new Schema({
+var vehicleSchema = new Schema({
     license_plate: {
         type: String,
         uppercase: true,
@@ -56,6 +56,6 @@ var deviceSchema = new Schema({
     }]
 });
 
-deviceSchema.plugin(uniqueValidator, { message: 'Error, {VALUE} already exists' });
+vehicleSchema.plugin(uniqueValidator, { message: 'Error, {VALUE} already exists' });
 
-module.exports = mongoose.model('Device', deviceSchema);
+module.exports = mongoose.model('Device', vehicleSchema);

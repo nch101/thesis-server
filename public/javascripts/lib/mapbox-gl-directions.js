@@ -6239,7 +6239,7 @@ function fetchDirections() {
         dispatch(setDirections(data.routes));
         
         //Add function outside mapbox-gl-directions
-        extraFunction(data.routes)
+        extraFunction(data.routes[0].legs[0].steps)
 
         // Revise origin / destination points
         dispatch(originPoint(data.waypoints[0].location));

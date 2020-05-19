@@ -56,7 +56,17 @@ module.exports = {
         return res
         .status(200)
         .render('users/intersection.control.pug')
-    }
+    },
 
     /** End of control page controller **/
+
+    /** Direction page **/
+
+    directionPage: function(req, res) {
+        return res
+        .status(200)
+        .render('vehicle/direction.pug')
+    },
+
+    /** End of direction page **/
 }

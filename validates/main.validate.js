@@ -1,6 +1,6 @@
 var bcrypt = require('bcryptjs');
 var userModel = require('../models/user.model');
-var deviceModel = require('../models/device.model');
+var vehicleModel = require('../models/vehicle.model');
 
 module.exports = {
     userValidate: function(req, res) {
@@ -34,14 +34,14 @@ module.exports = {
     },
 
     vehicleValidate: function(req, res) {
-        deviceModel
+        vehicleModel
         .findOne({ license_plate: req.body.license_plate })
         .select('password')
         .then(function(data) {
             if (bcrypt.compareSync(req.body.password, data.password)) {
                 return res
                 .status(304)
-                .redirect('/overview');
+                .redirect('/vehicle/direction');
             }
             else {
                 return res

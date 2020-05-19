@@ -13,7 +13,6 @@ module.exports = function(io) {
 		});
 
 		socket.on('[center]-change-light', function(data) {
-
 			controlLightPath.to(roomID).emit('[intersection]-change-light', data)			
 		});
 

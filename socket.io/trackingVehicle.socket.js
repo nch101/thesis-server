@@ -1,42 +1,57 @@
-var deviceModel = require('../models/device.model');
-var userModel = require('../models/user.model');
+// var vehicleModel = require('../models/vehicle.model');
+// var userModel = require('../models/user.model');
 
-function isValid(clientId, next) {
-	var isVehicle = deviceModel.findById(clientId).select('_id');
-	var isUser = userModel.findById(clientId).select('_id');
+// function isValid(clientId, next) {
+// 	var isVehicle = vehicleModel.findById(clientId).select('_id');
+// 	var isUser = userModel.findById(clientId).select('_id');
 
-	Promise.all([isVehicle, isUser])
-	.then(function(results) {
-		if (results[0] || results[1]){
-			return next();
-		}
-		else {
-			return next(new Error('authentication error'));	
-		}
-	})
-	.catch(function(error) {
-		console.log(error);
-		return next(new Error('authentication error'));	
-	})
-}
+// 	Promise.all([isVehicle, isUser])
+// 	.then(function(results) {
+// 		if (results[0] || results[1]){
+// 			return next();
+// 		}
+// 		else {
+// 			return next(new Error('authentication error'));	
+// 		}
+// 	})
+// 	.catch(function(error) {
+// 		console.log(error);
+// 		return next(new Error('authentication error'));	
+// 	})
+// }
 
 module.exports = function(io) {
-	const trackingDevicePath = io.of('/socket/tracking-vehicle');
+	const trackingVehiclePath = io.of('/socket/tracking-vehicle');
+	const controlLightPath = io.of('/socket/control-light');
 
-	trackingDevicePath.use(function(socket, next) {
-		let clientId = socket.handshake.headers['client-id'];
-		isValid(clientId, next);
-	});
+	// trackingVehiclePath.use(function(socket, next) {
+	// 	let clientId = socket.handshake.headers['client-id'];
+	// 	isValid(clientId, next);
+	// });
 
-	trackingDevicePath.on('connect', function(socket) {
-		console.log('Tracking vehicle connection is established!');
-		console.log(socket.handshake.headers['license-plate']);
-		socket.on('vehicle-location', function(data) {
-			console.log(data);
-			trackingDevicePath.emit('tracking-vehicle', data);
-		});
-		socket.on('disconnect', function() {
-			console.log('One client disconnected' + socket.id)
+	trackingVehiclePath.on('connect', function(socket) {
+		var roomID = ''
+		
+		socket.on('test', function(data) {
+			console.log('test: ', data)
 		})
+
+		socket.on('room', function(data) {
+			roomID = data;
+			socket.join(data);
+		});
+
+		socket.on('[vehicle]-realtime-location', function(data) {
+			trackingVehiclePath.to(roomID).emit('[center]-tracking-vehicle', data);
+			console.log("Vehicle's location: ", data);
+		});
+
+		socket.on('[vehicle]-set-priority', function(data) {
+			controlLightPath.to(data.id).emit('[intersection]-change-mode', data.mode);
+		});
+
+		socket.on('disconnect', function() {
+			console.log('One client disconnected: ' + socket.id);
+		});
 	});
 }

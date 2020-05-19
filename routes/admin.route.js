@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var userControllers = require('../controllers/user.controller');
-var deviceControllers = require('../controllers/device.controller');
+var vehicleController = require('../controllers/vehicle.controller');
 var intersectionControllers = require('../controllers/intersection.controller');
 
 var intersectionValidate = require('../validates/intersection.validate');
@@ -13,11 +13,11 @@ router.put('/user/blocked/:id', userControllers.blockedUser);
 router.put('/user/unlocked/:id', userControllers.unlockedUser);
 router.delete('/user/:id', userControllers.deleteUser);
 
-router.post('/device', deviceControllers.createDevice);
-router.get('/device/', deviceControllers.getAllDevices);
-router.put('/device/blocked/:id', deviceControllers.blockedDevice);
-router.put('/device/unblocked/:id', deviceControllers.unBlockedDevice);
-router.delete('/device/:id', deviceControllers.deleteDevice);
+router.post('/vehicle', vehicleController.createVehicle);
+router.get('/vehicle/', vehicleController.getAllVehicles);
+router.put('/vehicle/blocked/:id', vehicleController.blockedVehicle);
+router.put('/vehicle/unblocked/:id', vehicleController.unBlockedVehicle);
+router.delete('/vehicle/:id', vehicleController.deleteVehicle);
 
 router.post('/intersection', intersectionValidate.nameExists, intersectionControllers.createIntersection);
 router.delete('/intersection/:id', intersectionControllers.deleteIntersection);

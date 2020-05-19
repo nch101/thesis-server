@@ -1,12 +1,12 @@
 var bcrypt = require('bcryptjs');
-var deviceModel = require('../models/device.model');
+var vehicleModel = require('../models/vehicle.model');
 
 module.exports = {
     //For admin user
-    createDevice: function(req, res) {
+    createVehicle: function(req, res) {
         req.body.password = bcrypt.hashSync(req.body.password, 10);
-        var device = new deviceModel(req.body);
-        device.save()
+        var vehicle = new vehicleModel(req.body);
+        vehicle.save()
         .then(function(data) {
             return res
             .status(200)
@@ -26,8 +26,8 @@ module.exports = {
         });
     },
 
-    getAllDevices: function(req, res) {
-        deviceModel
+    getAllVehicles: function(req, res) {
+        vehicleModel
         .find()
         .select('license_plate status blocked')
         .then(function(data) {
@@ -50,8 +50,8 @@ module.exports = {
         });
     },
 
-    blockedDevice: function(req, res) {
-        deviceModel
+    blockedVehicle: function(req, res) {
+        vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: {blocked: true}})
         .select('_id')
         .then(function(data) {
@@ -74,8 +74,8 @@ module.exports = {
         })
     },
 
-    unBlockedDevice: function(req, res) {
-        deviceModel
+    unBlockedVehicle: function(req, res) {
+        vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: {blocked: false}})
         .select('_id')
         .then(function(data) {
@@ -98,8 +98,8 @@ module.exports = {
         })
     },
 
-    deleteDevice: function(req, res) {
-        deviceModel
+    deleteVehicle: function(req, res) {
+        vehicleModel
         .findByIdAndRemove(req.params.id)
         .select('_id')
         .then(function(data) {
@@ -124,8 +124,8 @@ module.exports = {
 
     //For standard user
 
-    getDevice: function(req, res) {
-        deviceModel
+    getVehicle: function(req, res) {
+        vehicleModel
         .findById(req.params.id)
         .select('-password')
         .then(function(data) {
@@ -148,8 +148,8 @@ module.exports = {
         })
     },
 
-    editDevice: function(req, res) {
-        deviceModel
+    editVehicle: function(req, res) {
+        vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: {
             license_plate: req.body.license_plate,
             phone: req.body.phone,
@@ -177,13 +177,13 @@ module.exports = {
     },
 
     changePassword: function(req, res) {
-        deviceModel
+        vehicleModel
         .findById(req.params.id)
         .select('password')
         .then(function(data) {
             if (data) {
                 if (bcrypt.compareSync(req.body.oldPassword, data.password)) {
-                    deviceModel
+                    vehicleModel
                     .findByIdAndUpdate(req.params.id, { $set: {
                         password: bcrypt.hashSync(req.body.newPassword, 10)
                     }})
@@ -220,7 +220,7 @@ module.exports = {
     },
 
     getLocation: function(req, res) {
-        deviceModel
+        vehicleModel
         .findById(req.params.id)
         .select('license_plate journey -_id')
         .then(function(data) {
@@ -244,7 +244,7 @@ module.exports = {
     },
 
     updateLocation: function(req,res) {
-        deviceModel
+        vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: {
             journey: req.body.journey
         }})

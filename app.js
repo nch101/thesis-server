@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true,
 
 var pageRouter = require('./routes/page.route');
 var userRouter = require('./routes/user.route');
-var deviceRouter = require('./routes/device.route');
+var vehicleRouter = require('./routes/vehicle.route');
 var adminRouter = require('./routes/admin.route');
 var intersectionRouter = require('./routes/intersection.route');
 var trafficLightRouter = require('./routes/trafficLight.route');
@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', pageRouter);
 app.use('/user', userRouter);
-app.use('/device', cors(), deviceRouter);
+app.use('/vehicle', cors(), vehicleRouter);
 app.use('/admin', cors(), adminRouter);
 app.use('/intersection', cors(), intersectionRouter);
 app.use('/api', cors(), apiRouter);

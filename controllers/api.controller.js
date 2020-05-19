@@ -1,6 +1,6 @@
 var intersectionModel = require('../models/intersection.model');
 var trafficLightModel = require('../models/traffic-light.model');
-var deviceModel = require('../models/device.model');
+var vehicleModel = require('../models/vehicle.model');
 var userModel = require('../models/user.model');
 
 function preProcessLocationData(locationDataString) {
@@ -11,8 +11,6 @@ function preProcessLocationData(locationDataString) {
     }
     return locationData;
 }
-
-var resError = 
 
 module.exports = {
     createIntersection: function(req, res) {
@@ -170,7 +168,6 @@ module.exports = {
     },
 
     matchIntersection: function(req, res) {
-        console.log(res.body)
         var PromiseAllArray = []
         function matchIntersectionPromise(location, bearing) {
             return new Promise(function(resolve, reject) {
@@ -180,7 +177,7 @@ module.exports = {
                 .intersects()
                 .geometry({ type: 'Point', coordinates: location })
                 .where('bearing', bearing)
-                .select('_id')
+                .select('_id location')
                 .exec(function(err, data) {
                     if (err) {
                         reject(err);
@@ -199,11 +196,16 @@ module.exports = {
 
         Promise
         .all(PromiseAllArray)
-        .then(function(data) {
-            console.log(data)
+        .then(function(preProcessData) {
+            var idIntersection = []
+            for (var data of preProcessData) {
+                if (data != null) {
+                    idIntersection.push(data);
+                }
+            }
             return res
             .status(200)
-            .json(data)
+            .json(idIntersection)
         })
         .catch(function(error) {
             return res
