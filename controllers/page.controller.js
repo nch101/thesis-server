@@ -69,4 +69,14 @@ module.exports = {
     },
 
     /** End of direction page **/
+
+    /**
+     * Tracking vehicles page
+     */
+
+     trackingPage: function(req, res) {
+        return res
+        .status(200)
+        .render('users/tracking-vehicles.pug')
+     }
 }

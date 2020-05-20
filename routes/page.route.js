@@ -17,6 +17,8 @@ router.post('/center-control/login', mainValidate.userValidate);
 
 router.get('/vehicle/direction', pageController.directionPage);
 
+router.get('/vehicle/tracking', pageController.trackingPage);
+
 router.get('/vehicle/create', pageController.createVehiclePage);
 router.get('/center-control/create', pageController.createCenterControlPage);
 router.get('/intersection/create', pageController.createIntersectionPage);

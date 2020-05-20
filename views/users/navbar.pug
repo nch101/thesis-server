@@ -29,8 +29,8 @@ ul.navbar
 		a(href='/overview')
 			i.fas.fa-home
 			span Tổng quan
-	li.navbar-item
-		a(href='#')
+	li.navbar-item(class= (isActive === 'tracking' ? 'active' : undefined))
+		a(href='/vehicle/tracking')
 			i.fas.fa-search-location
 			span Giám sát
 	li.navbar-item(class= (isActive === 'control' ? 'active' : undefined))
