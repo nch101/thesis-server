@@ -1,0 +1,30 @@
+extends layout
+
+block navbar
+    - var isActive = 'tracking'
+    include navbar
+
+block content
+    span.create-header Giám sát phương tiện
+    .vehicles-wrapper
+        #map
+        .vehicles-info-container
+            .vehicles-info-box
+                table.vehicles-info-table
+                    thead
+                        tr
+                            th STT
+                            th Biển kiểm soát
+                            th Loại phương tiện
+                            th Trạng thái hoạt động
+                            th Thời gian hoạt động
+                    tbody
+                        tr
+                            td 
+                            td 
+                            td
+                                label.badge 
+                            td
+                                label.badge 
+                            td 
+                            td
