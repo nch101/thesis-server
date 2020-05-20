@@ -32,8 +32,8 @@ module.exports = function(io) {
 	trackingVehiclePath.on('connect', function(socket) {
 		var roomID = ''
 		
-		socket.on('test', function(data) {
-			console.log('test: ', data)
+		socket.on('dist', function(data) {
+			console.log('dist: ', data)
 		})
 
 		socket.on('room', function(data) {

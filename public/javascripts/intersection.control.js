@@ -30,7 +30,7 @@ const controlLightSocket = io(window.location.host + '/socket/control-light');
 
 var idIntersection;
 
-/* mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -39,7 +39,7 @@ var map = new mapboxgl.Map({
     zoom: 12
 });
 
-axios.get('http://localhost:3000/api/intersection')
+axios.get(window.location.origin + '/api/intersection')
     .then(renderIntersection)
 
 function renderIntersection(res) {
@@ -70,18 +70,20 @@ function renderIntersection(res) {
         .setPopup(popup)
         .addTo(map);
     }
-} */
+}
 
-getInfoIntersection();
+// getInfoIntersection();
 
-function getInfoIntersection() {
+function getInfoIntersection(event) {
     // @params: event -------^
-    // idIntersection = event.currentTarget.params;
-    idIntersection = '5eb90fe69f1398273bba559a';
-
+    stateLightSocket.emit('leave-room', idIntersection)
+    controlLightSocket.emit('leave-room', idIntersection)
+    idIntersection = event.currentTarget.params;
+    // idIntersection = '5eb90fe69f1398273bba559a';
+    getStateLight()
     axios({
         method: 'get',
-        url: 'http://localhost:3000/api/intersection/' + idIntersection
+        url: window.location.origin + '/api/intersection/' + idIntersection
     })
     .then(renderInfoIntersection)
 }
@@ -124,7 +126,7 @@ function updateStateControl() {
 
         axios({
             method: 'put',
-            url: 'http://localhost:3000/intersection/mode-control/' + idIntersection,
+            url: window.location.origin + '/intersection/mode-control/' + idIntersection,
             data: {
                 modeControl: 'manual'
             }
@@ -136,14 +138,14 @@ function updateStateControl() {
 
         axios({
             method: 'put',
-            url: 'http://localhost:3000/intersection/mode-control/' + idIntersection,
+            url: window.location.origin + '/intersection/mode-control/' + idIntersection,
             data: {
                 modeControl: 'automatic'
             }
         })
         axios({
             method: 'get',
-            url: 'http://localhost:3000/api/intersection/' + idIntersection
+            url: window.location.origin + '/api/intersection/' + idIntersection
         })
         .then(function(res) {
             trafficLights = res.data.trafficLights;
@@ -225,8 +227,6 @@ function getStateLight() {
     stateLightSocket.on('[center]-time-light', renderTimeLight)
     stateLightSocket.on('[center]-light-state', renderStateLight)
 }
-getStateLight()
-
 
 function renderTimeLight(timeLight) {
     var timeLightArray = [rightStreetTime, bottomStreetTime, leftStreetTime, topStreetTime];
@@ -286,7 +286,7 @@ function updateData(event) {
 
     axios({
         method: 'put',
-        url: 'http://localhost:3000/api/intersection/' + idIntersection,
+        url: window.location.origin + '/api/intersection/' + idIntersection,
         data: {
             delta: delta.value,
             timeReds: timeReds,

@@ -12,12 +12,16 @@ module.exports = function(io) {
 			socket.join(data)
 		});
 
+		socket.on('leave-room', function(data) {
+			socket.leave(data)
+		})
+
 		socket.on('[center]-change-light', function(data) {
-			controlLightPath.to(roomID).emit('[intersection]-change-light', data)			
+			controlLightPath.to(roomID).emit('[intersection]-change-light', data)		
 		});
 
 		socket.on('[center]-change-mode', function(data) {
-			controlLightPath.to(roomID).emit('[intersection]-change-mode', data)
+			controlLightPath.to(roomID).emit('[intersection]-change-mode', data)	
 		});
 
 		socket.on('disconnect', function(reason) {
@@ -33,11 +37,15 @@ module.exports = function(io) {
 			socket.join(data)
 		});
 
-		socket.on('[intersection]-time-light', function(timeLight) {
-			stateLightPath.to(roomID).emit('[center]-time-light', timeLight);
+		socket.on('leave-room', function(data) {
+			socket.leave(data)
+		});
+
+		socket.on('[intersection]-time-light', function(data) {
+			stateLightPath.to(data.room).emit('[center]-time-light', data.data);
 		})
-		socket.on('[intersection]-light-state', function(lightState) {
-			stateLightPath.to(roomID).emit('[center]-light-state', lightState);
+		socket.on('[intersection]-light-state', function(data) {
+			stateLightPath.to(data.room).emit('[center]-light-state', data.data);
 		})
 		socket.on('disconnect', function(reason) {
 			console.log('Reason of disconnection: ' + reason);
