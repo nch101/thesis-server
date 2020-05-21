@@ -30,7 +30,7 @@ const controlLightSocket = io(window.location.host + '/socket/control-light');
 
 var idIntersection;
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+/* mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -70,16 +70,16 @@ function renderIntersection(res) {
         .setPopup(popup)
         .addTo(map);
     }
-}
+} */
 
-// getInfoIntersection();
+getInfoIntersection();
 
-function getInfoIntersection(event) {
+function getInfoIntersection() {
     // @params: event -------^
-    stateLightSocket.emit('leave-room', idIntersection)
-    controlLightSocket.emit('leave-room', idIntersection)
-    idIntersection = event.currentTarget.params;
-    // idIntersection = '5eb90fe69f1398273bba559a';
+    // stateLightSocket.emit('leave-room', idIntersection)
+    // controlLightSocket.emit('leave-room', idIntersection)
+    // idIntersection = event.currentTarget.params;
+    idIntersection = '5eb90fe69f1398273bba559a';
     getStateLight()
     axios({
         method: 'get',

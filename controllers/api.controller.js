@@ -3,6 +3,9 @@ var trafficLightModel = require('../models/traffic-light.model');
 var vehicleModel = require('../models/vehicle.model');
 var userModel = require('../models/user.model');
 
+var log4js = require('log4js');
+var log = log4js.getLogger('api-controller');
+
 function preProcessLocationData(locationDataString) {
     var locationDataArray = locationDataString.split(',');
     var locationData = {
@@ -14,7 +17,7 @@ function preProcessLocationData(locationDataString) {
 
 module.exports = {
     createIntersection: function(req, res) {
-        console.log(req.body)
+        log.info('In createIntersection')
         var intersection = new intersectionModel({
             intersectionName: req.body.intersectionName,
             location: preProcessLocationData(req.body.locations[0]),
@@ -33,7 +36,7 @@ module.exports = {
             intersection.trafficLights.push(trafficLight._id);
             trafficLight.save()
             .catch(function(error) {
-                console.log(error)
+                log.error('trafficLightModel: ', error);
                 return res
                 .status(200)
                 .json({
@@ -44,6 +47,7 @@ module.exports = {
         }
         intersection.save()
         .then(function(results) {
+            log.debug('Successful');
             return res
             .status(200)
             .json({
@@ -52,7 +56,7 @@ module.exports = {
             })
         })
         .catch(function(error) {
-            console.log(error)
+            log.error('intersectionModel: ', error);
             return res
             .status(200)
             .json({
@@ -63,22 +67,26 @@ module.exports = {
     },
 
     getAllIntersections: function(req, res) {
+        log.info('In getAllIntersections');
         intersectionModel
         .find()
         .select('intersectionName location modeControl')
         .then(function(data) {
             if (data) {
+                log.debug('Successful');
                 return res
                 .status(200)
                 .json(data);
             }
             else {
+                log.debug('Not found');
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
             }
         })
         .catch(function(error) {
+            log.error('intersectionModel: ', error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -86,6 +94,7 @@ module.exports = {
     },
 
     getIntersection: function(req, res) {
+        log.info('In getIntersection');
         intersectionModel
         .findById(req.params.id)
         .select('intersectionName modeControl delta trafficLights')
@@ -93,17 +102,20 @@ module.exports = {
         select: 'streetName bearing timeRed timeYellow timeGreen camip ' })
         .then(function(data) {
             if (data) {
+                log.debug('Successful');
                 return res
                 .status(200)
                 .json(data);
             }
             else {
+                log.debug('Not found');
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
             }
         })
         .catch(function(error) {
+            log.error('intersectionModel', error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -111,6 +123,7 @@ module.exports = {
     },
 
     configTime: function(req, res) {
+        log.info('In configTime');
         intersectionModel
         .findById(req.params.id)
         .select('delta trafficLights -_id')
@@ -119,6 +132,7 @@ module.exports = {
                 intersectionModel
                 .findByIdAndUpdate(req.params.id, { $set: { delta: req.body.delta }})
                 .catch(function(error) {
+                    log.error('intersectionModel ', error);
                     return res
                     .status(200)
                     .json({
@@ -133,6 +147,7 @@ module.exports = {
                         timeGreen: req.body.timeGreens[i]
                     }})
                     .catch(function(error) {
+                        log.error('trafficLightModel', error);
                         return res
                         .status(200)
                         .json({
@@ -141,6 +156,7 @@ module.exports = {
                         })
                     })
                 }
+                log.debug('Successful');
                 return res
                 .status(200)
                 .json({
@@ -149,6 +165,7 @@ module.exports = {
                 })
             }
             else {
+                log.error('Not found intersection');
                 return res
                 .status(200)
                 .json({
@@ -158,6 +175,7 @@ module.exports = {
             }
         })
         .catch(function(error) {
+            log.error('intersectionModel', error);
             return res
             .status(200)
             .json({
@@ -168,6 +186,8 @@ module.exports = {
     },
 
     matchIntersection: function(req, res) {
+        log.info('In matchIntersection');
+        log4js.getLogger('data-received').info(req.body);
         var PromiseAllArray = []
         function matchIntersectionPromise(location, bearing) {
             return new Promise(function(resolve, reject) {
@@ -203,14 +223,20 @@ module.exports = {
                     idIntersection.push(data);
                 }
             }
+            log4js.getLogger('data-send').info(idIntersection);
+            log.debug('Successful')
             return res
             .status(200)
             .json(idIntersection)
         })
         .catch(function(error) {
+            log.error('trafficLightModel: ', error);
             return res
             .status(501)
-            .json(error)
+            .json({
+                status: 'error',
+                message: 'Lỗi'
+            })
         })
     }
 }

@@ -1,14 +1,16 @@
 require('dotenv').config();
+var log4js = require('log4js');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require('cors');
 
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, 
 	useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true});
+
+var log = log4js.getLogger('app');
 
 var pageRouter = require('./routes/page.route');
 var userRouter = require('./routes/user.route');
@@ -25,7 +27,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
+app.use(log4js.connectLogger(log4js.getLogger('http'), { level: 'auto' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -62,15 +64,30 @@ app.use(function(req, res, next) {
 	next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+/// error handlers
 
-	// render the error page
-	res.status(err.status || 500);
-	res.render('error');
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        log.error("Something went wrong:", err);
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    log.error("Something went wrong:", err);
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
 module.exports = app;
