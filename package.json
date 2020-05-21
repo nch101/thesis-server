@@ -12,13 +12,11 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
-    "express-cluster": "0.0.5",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.2.1",
     "mongoose": "^5.9.5",
     "mongoose-unique-validator": "^2.0.3",
-    "morgan": "~1.9.1",
     "pug": "^2.0.4",
     "shortid": "^2.2.15",
     "socket.io": "^2.3.0"

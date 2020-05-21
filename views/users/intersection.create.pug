@@ -22,7 +22,7 @@ block content
                 input#intersectionName.form-control(type='text', name='intersectionName', required='', style='text-transform: uppercase;')
                 label(for='intersectionName') Tên giao lộ
                 .line
-            .form-group(style='width: 200px')
+            .form-group(style='width: 80%')
                 input#delta.form-control(type='number', name='delta', required='')
                 label(for='delta') Thời gian lệch
                 .line
@@ -36,5 +36,5 @@ block content
         #info-street.i-form-container
 
 block addFile
-    script(src='/javascripts/intersection.mapbox.js')
+    //- script(src='/javascripts/intersection.mapbox.js')
     script(src='/javascripts/intersection.create.js')

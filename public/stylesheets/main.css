@@ -186,7 +186,7 @@ li > a:hover {
 
 .form-group {
     width: 100%;
-    margin: 0 1.5rem;
+    margin: 0 1rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -311,7 +311,7 @@ li > a:hover {
 }
 
 .i-form-container button {
-    width: 7rem;
+    width: 50%;
     height: 2.2rem;
     margin: 0 1rem;
     padding: 0.5rem 1.5rem;
@@ -442,6 +442,7 @@ li > a:hover {
 }
 
 .select-list-group {
+    width: 100%;
     display: flex;
     flex-direction: column;
     margin: 0 1rem;
@@ -454,7 +455,7 @@ li > a:hover {
 }
 
 .select-list-group > select {
-    width: 130px;
+    width: 100%;
     padding: 0.5rem 0.1rem;
     border: none;
     border-bottom: 1px solid #CCC;
@@ -797,9 +798,8 @@ li > a:hover {
 }
 
 #delta {
-    margin: 0 1rem;
-    padding: 0.2rem 0.1rem;
-    width: 60px;
+    padding: 0.5rem 0.1rem;
+    width: 100%;
     border: none;
     border-bottom: 1px solid #CCC;
     outline: none;
@@ -928,23 +928,23 @@ li > a:hover {
     font-size: 0.8rem;
 }
 
-.ambulance {
+.ambulance-badge {
     background-color: #DFBBB1;
 }
 
-.fire-truck {
+.fire-truck-badge {
     background-color: #F56476;
 }
 
-.police {
+.police-badge {
     background-color: #008DD5;
 }
 
-.military {
+.military-badge {
     background-color: #73AB84;
 }
 
-.online {
+.online-status {
     background-color: #00c88b;
 }
 

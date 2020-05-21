@@ -20,7 +20,7 @@ var journeySchema = new Schema({
     properties: {
         name: {
             type: String,
-            enum: ['Departure', 'Current position', 'Destination'],
+            enum: ['Departure', 'Destination'],
             require: true
         }
     }
@@ -35,6 +35,11 @@ var vehicleSchema = new Schema({
     },
     password: {
         type: String,
+        required: true
+    },
+    vehicleType: {
+        type: String,
+        enum: ['ambulance', 'fire-truck', 'police', 'military'],
         required: true
     },
     phone: String,
@@ -53,7 +58,10 @@ var vehicleSchema = new Schema({
     },
     journey: [{
         type: journeySchema,
-    }]
+    }],
+    timeOn: {
+        type: Number
+    }
 });
 
 vehicleSchema.plugin(uniqueValidator, { message: 'Error, {VALUE} already exists' });

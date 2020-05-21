@@ -1,5 +1,7 @@
 var bcrypt = require('bcryptjs');
 var vehicleModel = require('../models/vehicle.model');
+var log4js = require('log4js');
+var log = log4js.getLogger('vehicle-controller');
 
 module.exports = {
     //For admin user
@@ -30,6 +32,31 @@ module.exports = {
         vehicleModel
         .find()
         .select('license_plate status blocked')
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
+    },
+
+    trackingVehicle: function(req, res) {
+        log.info('In trackingVehicle');
+        vehicleModel
+        .find()
+        .select('license_plate vehicleType status journey timeOn')
         .then(function(data) {
             if (data) {
                 return res

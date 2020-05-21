@@ -13,7 +13,7 @@ module.exports = function(io) {
 		});
 
 		socket.on('leave-room', function(data) {
-			socket.leave(data)
+			socket.leave(data);
 		})
 
 		socket.on('[center]-change-light', function(data) {

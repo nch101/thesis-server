@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var debug = require('debug')('project:server');
-var cluster = require('express-cluster');
 
 /**
  * Make a log directory
@@ -35,25 +34,23 @@ var log = log4js.getLogger('startup');
  * Normalize a port into a number, string, or false.
  */
 
-cluster(function() {
-	var app = require('../app');
-	var https = require('https');
+var app = require('../app');
+var https = require('https');
 
-	var certOptions = {
-		key: fs.readFileSync('ssl/key.pem'),
-		cert: fs.readFileSync('ssl/cert.pem')
-	}	
+var certOptions = {
+	key: fs.readFileSync('ssl/key.pem'),
+	cert: fs.readFileSync('ssl/cert.pem')
+}	
 
-	app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000);
 
-	var server = https.createServer(certOptions, app);
+var server = https.createServer(certOptions, app);
 
-	var io = require('socket.io')(server);
-	require('../socket.io/trafficLight.socket')(io);
-	require('../socket.io/trackingVehicle.socket')(io);
+var io = require('socket.io')(server);
+require('../socket.io/trafficLight.socket')(io);
+require('../socket.io/trackingVehicle.socket')(io);
 
-	server.listen(app.get('port'));
-	server.on('listening', function() {
-		log.info('Express server listening on port ', server.address().port)
-	});
-})
+server.listen(app.get('port'));
+server.on('listening', function() {
+	log.info('Express server listening on port ', server.address().port)
+});

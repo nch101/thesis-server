@@ -1,3 +1,24 @@
+mixin infoVehicle(item, index)
+    tr
+        td #{ index }
+        td.license_plate #{ item.license_plate }
+        td
+            if item.vehicleType == 'ambulance'
+                label.badge.ambulance-badge Xe cấp cứu
+            else if item.vehicleType == 'fire-truck'
+                label.badge.fire-truck-badge Xe cứu hỏa
+            else if item.vehicleType == 'police'
+                label.badge.police-badge Xe cảnh sát
+            else if item.vehicleType == 'military'
+                label.badge.military-badge Xe quân đội
+            else
+        td
+            if item.status == 'online'
+                label.badge.online-status Đang hoạt động
+            else
+                label.badge.offline-status Không hoạt động
+        td #{ item.uptime }
+
 extends layout
 
 block navbar
@@ -19,12 +40,5 @@ block content
                             th Trạng thái hoạt động
                             th Thời gian hoạt động
                     tbody
-                        tr
-                            td 
-                            td 
-                            td
-                                label.badge 
-                            td
-                                label.badge 
-                            td 
-                            td
+                        - each item, index in nVehicle
+                        +infoVehicle(item, index)
