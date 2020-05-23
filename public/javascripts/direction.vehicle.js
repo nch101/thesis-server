@@ -2,6 +2,7 @@ var menu = document.getElementById('menu-container');
 var menuIcon = document.getElementById('menu-icon');
 var menuBox = document.getElementById('menu-box')
 
+
 menu.addEventListener('click', function() {
     menuIcon.classList.toggle('menu-icon-active');
     menuBox.classList.toggle('menu-box-active');
@@ -10,28 +11,58 @@ menu.addEventListener('click', function() {
 const trackingVehiclePath = io(window.location.origin + '/socket/tracking-vehicle');
 const controlLightPath = io(window.location.origin + '/socket/control-light');
 
-var idVehicle = "5ec239e9ea7819180537472e"
+var idVehicle = "5ec7347810544b26da694606";
+var idLocation = "5ec7e0f52913da1974a3c481";
 
 var RTLocation;
 var isPriority = false;
 var idIntersections = [];
 var locIntersections = [];
 
-/** Repeat again with every 5 seconds **/
+/**
+ * Fake realtime location
+ */
+
+var locationArray = [[106.65619066882232, 10.77705004421442], 
+                    [106.6571227257113, 10.774058481530545], 
+                    [106.65799127244799, 10.770915860631249],
+                    [106.65835270769622, 10.769392066316485],
+                    [106.65918808208619, 10.766333652596884], 
+                    [106.659768951236, 10.764320224086276], 
+                    [106.66038521117173, 10.762196568282349],
+                    [106.66102103491181, 10.760015125290167],
+                    [106.66098239291574, 10.758314301738267]]
+
+var i = 0;
+
+/** 
+ * Repeat again with every 5 seconds 
+ */
 
 setInterval(function() {
-    getGeoLocation()
+    // getGeoLocation()
+    
+    if (locationArray[i] !== undefined) {
+        axios({
+            method: 'put',
+            url: window.location.origin + '/vehicle/' + idVehicle + '/location/' + idLocation,
+            data: {
+                coordinates: locationArray[i++]
+            }
+        })
+    }
 
-    trackingVehiclePath.emit('test', 'Socket is running')
     if (isPriority) {
         onPriority()
     }
 }, 5000)
 
 
-/** Get the geolocation of vehicle in realtime **/
+/** 
+ * Get the geolocation of vehicle in realtime 
+ */
 
-function getGeoLocation() {
+/* function getGeoLocation() {
     var options = {
         enableHighAccuracy: true,
         timeout: 5000,
@@ -42,8 +73,8 @@ function getGeoLocation() {
 
 function emitLocation(position) {
     RTLocation = [ position.coords.longitude, position.coords.latitude ];
-    trackingVehiclePath.emit('room', idVehicle)
-    trackingVehiclePath.emit('[vehicle]-realtime-location', RTLocation)
+
+    trackingVehiclePath.emit('[vehicle]-realtime-location', { idVehicle: idVehicle, location: RTLocation, vehicleType: vehicleType })
 }
 
 function onGeoError(error) {
@@ -59,8 +90,7 @@ function onGeoError(error) {
     else if (error.code === error.UNKNOWN_ERROR) {
         detailError = "An unknown error occurred."
     }
-}
-
+} */
 
 /** This function will run when the vehicle get a navigation **/
 

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var uniqueValidator = require('mongoose-unique-validator');
 
 var journeySchema = new Schema({
     type: {
@@ -20,7 +19,7 @@ var journeySchema = new Schema({
     properties: {
         name: {
             type: String,
-            enum: ['Departure', 'Destination'],
+            enum: ['Departure', 'Current-position','Destination'],
             require: true
         }
     }
@@ -39,7 +38,7 @@ var vehicleSchema = new Schema({
     },
     vehicleType: {
         type: String,
-        enum: ['ambulance', 'fire-truck', 'police', 'military'],
+        enum: ['ambulance', 'firetruck', 'police', 'military'],
         required: true
     },
     phone: String,
@@ -64,6 +63,4 @@ var vehicleSchema = new Schema({
     }
 });
 
-vehicleSchema.plugin(uniqueValidator, { message: 'Error, {VALUE} already exists' });
-
-module.exports = mongoose.model('Device', vehicleSchema);
+module.exports = mongoose.model('Vehicle', vehicleSchema);

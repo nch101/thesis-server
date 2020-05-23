@@ -238,5 +238,32 @@ module.exports = {
                 message: 'Lỗi'
             })
         })
-    }
+    },
+
+    getAllVehicles: function(req, res) {
+        log.info('In getAllVehicles');
+        vehicleModel
+        .find()
+        .select('license_plate status vehicleType')
+        .then(function(data) {
+            if (data) {
+                log.debug('Success');
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                log.debug('Not found');
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            log.error('vehicleModel: ', error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
+    },
 }

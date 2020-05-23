@@ -9,12 +9,12 @@ block content
     form.create-container(action='/admin/vehicle', method='post')
         .create-item
             .form-group
-                input#license_plate.form-control(type='text', name='license_plate', required='', style='text-transform:uppercase;')
+                input#license_plate.form-control(type='text', name='license_plate', required='', style='text-transform:uppercase;', value=values ? values.license_plate : '')
                 label(for='license_plate') Biển kiểm soát
                 .line
             .select-list-group
-                label(for='vehicleType', name='vehicleType') Loại phương tiện
-                select#vehicleType
+                label(for='vehicleType') Loại phương tiện
+                select#vehicleType(name='vehicleType', value=values ? values.vehicleType : '')
                     option(value='ambulance', selected) Xe cấp cứu
                     option(value='fire-truck') Xe cứu hỏa
                     option(value='police') Xe cảnh sát
@@ -30,16 +30,16 @@ block content
                 .line
         .create-item
             .form-group
-                input#phone.form-control(type='text', name='phone', required='')
+                input#phone.form-control(type='text', name='phone', required='', value=values ? values.phone : '')
                 label(for='phone') Số điện thoại
                 .line
             .form-group
-                input#address.form-control(type='text', name='address', required='')
+                input#address.form-control(type='text', name='address', required='', value=values ? values.address : '')
                 label(for='address') Địa chỉ
                 .line
         .create-item
             .form-group
-                input#company.form-control(type='text', name='company', required='')
+                input#company.form-control(type='text', name='company', required='', value=values ? values.company : '')
                 label(for='company') Tổ chức
                 .line
             .form-group

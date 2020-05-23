@@ -33,16 +33,10 @@ module.exports = function(io) {
 	// });
 
 	trackingVehiclePath.on('connect', function(socket) {
-		var roomID = ''
-		
-		socket.on('room', function(data) {
-			roomID = data;
-			socket.join(data);
-		});
-
 		socket.on('[vehicle]-realtime-location', function(data) {
-			trackingVehiclePath.to(roomID).emit('[center]-tracking-vehicle', data);
-			log.debug('Location of vehicle: ', data);			
+			trackingVehiclePath.emit('[center]-tracking-vehicle', data);
+			log.debug('Vehicle: ', data.idVehicle);
+			log.debug('Location: ', data.location);			
 		});
 
 		socket.on('[vehicle]-set-priority', function(data) {

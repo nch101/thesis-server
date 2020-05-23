@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var pageController = require('../controllers/page.controller');
 var mainValidate = require('../validates/main.validate');
+var vehicleController = require('../controllers/vehicle.controller');
 
 router.get('/', function(req, res) {
 	return res
@@ -17,13 +18,15 @@ router.post('/center-control/login', mainValidate.userValidate);
 
 router.get('/vehicle/direction', pageController.directionPage);
 
-router.get('/vehicle/tracking', pageController.trackingPage);
+// router.get('/vehicle/tracking', pageController.trackingPage);
 
 router.get('/vehicle/create', pageController.createVehiclePage);
 router.get('/center-control/create', pageController.createCenterControlPage);
 router.get('/intersection/create', pageController.createIntersectionPage);
 
 router.get('/intersection/control', pageController.controlPage);
+
+router.get('/vehicle/tracking', vehicleController.trackingVehicle);
 
 router.post('/intersection/test', function(req, res) {
 	return res

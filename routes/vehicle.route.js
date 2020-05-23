@@ -11,6 +11,6 @@ router.put('/change-password/:id', vehicleController.changePassword);
 router.get('/location/:id', vehicleController.getLocation);
 router.put('/location/:id', vehicleController.updateLocation);
 
-
+router.put('/:vehicleID/location/:locationID', vehicleController.updateCurrentLocation);
 
 module.exports = router;

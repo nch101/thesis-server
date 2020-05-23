@@ -6,23 +6,27 @@ var log = log4js.getLogger('vehicle-controller');
 module.exports = {
     //For admin user
     createVehicle: function(req, res) {
+        log.info('In createVehicle');
+        // log4js.getLogger('data-received').debug('Create vehicle', req.body);
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var vehicle = new vehicleModel(req.body);
         vehicle.save()
         .then(function(data) {
+            log.debug('Successful');
             return res
             .status(200)
-            .render('users/center.create.pug', {
+            .render('users/vehicle.create.pug', {
                 success: true,
                 message: 'Tạo tài khoản thành công!'
             });
         })
         .catch(function(error) {
-            console.log(error);
+            log.error('vehicleModel: ', error);
             return res
             .status(501)
-            .render('users/center.create.pug', {
+            .render('users/vehicle.create.pug', {
                 error: true,
+                values: req.body,
                 message: 'Tạo tài khoản KHÔNG thành công!'
             });
         });
@@ -56,12 +60,16 @@ module.exports = {
         log.info('In trackingVehicle');
         vehicleModel
         .find()
-        .select('license_plate vehicleType status journey timeOn')
+        .select('license_plate vehicleType phone status journey timeOn')
         .then(function(data) {
+            log4js.getLogger('data-send').debug('trackingVehicle: ', data);
             if (data) {
+                log.debug('Success')
                 return res
                 .status(200)
-                .json(data);
+                .render('users/tracking-vehicles.pug', {
+                    nVehicle: data
+                })
             }
             else {
                 return res
@@ -70,7 +78,7 @@ module.exports = {
             }
         })
         .catch(function(error) {
-            console.log(error);
+            log.error('vehicleModel: ', error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -217,13 +225,13 @@ module.exports = {
                     .then(function(results) {
                         return res
                         .status(301)
-                        .json({ message: 'Change password successed!' })
+                        .json({ message: 'Success!' })
                     })
                     .catch(function(error) {
                         console.log(error)
                         return res
                         .status(501)
-                        .json({ message: 'Change password unsuccessed!' })
+                        .json({ message: 'Failed!' })
                     })
                 }
                 else {
@@ -295,4 +303,46 @@ module.exports = {
             .json({ message: 'Error!' });
         })
     },
+
+    updateCurrentLocation: function(req,res) {
+        console.log(req.body)
+        vehicleModel
+        .findOneAndUpdate(
+            { '_id': req.params['vehicleID'], 'journey._id': req.params['locationID']},
+            { 
+                '$set': {
+                    'journey.$.geometry.coordinates': req.body.coordinates
+                }
+            })
+        .select('_id')
+        .then(function(data) {
+            if (data) {
+                return res
+                .status(200)
+                .json({ message: 'Updated!' });
+            }
+            else {
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        })
+    },
+
+    getAllCurrentLocation: function(req, res) {
+        vehicleModel
+        .find()
+        .select('_id license_plate vehicleType journey')
+        .then(function(data) {
+            return res
+            .status(200)
+            .json(data)
+        })
+    }
 }

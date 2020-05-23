@@ -1,6 +1,7 @@
-mixin infoVehicle(item, index)
+extends layout
+
+mixin infoVehicle(item)
     tr
-        td #{ index }
         td.license_plate #{ item.license_plate }
         td
             if item.vehicleType == 'ambulance'
@@ -12,14 +13,18 @@ mixin infoVehicle(item, index)
             else if item.vehicleType == 'military'
                 label.badge.military-badge Xe quân đội
             else
+        td #{ item.phone}
         td
             if item.status == 'online'
                 label.badge.online-status Đang hoạt động
             else
                 label.badge.offline-status Không hoạt động
         td #{ item.uptime }
+        //- td #{ item.journey[0].geometry.coordinates }
+        //- td #{ item.journey[1].geometry.coordinates }
 
-extends layout
+block head 
+    include map.head.pug
 
 block navbar
     - var isActive = 'tracking'
@@ -34,11 +39,18 @@ block content
                 table.vehicles-info-table
                     thead
                         tr
-                            th STT
                             th Biển kiểm soát
                             th Loại phương tiện
+                            th Số điện thoại
                             th Trạng thái hoạt động
                             th Thời gian hoạt động
+                            th Điểm xuất phát 
+                            th Điểm đến
+
                     tbody
-                        - each item, index in nVehicle
-                        +infoVehicle(item, index)
+                        each item in nVehicle
+                            +infoVehicle(item)
+
+block addFile
+    script(src='/javascripts/tracking-vehicle.map.js')
+    script(src='/javascripts/tracking-vehicle.js')
