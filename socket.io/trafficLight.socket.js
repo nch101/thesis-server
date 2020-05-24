@@ -1,4 +1,8 @@
 var intersectionModel = require('../models/intersection.model');
+var trafficLightModel = require('../models/traffic-light.model');
+
+var log4js = require('log4js');
+var log = log4js.getLogger('traffic-light socket');
 
 module.exports = function(io) {
 	const stateLightPath = io.of('/socket/state-light');
@@ -17,11 +21,33 @@ module.exports = function(io) {
 		})
 
 		socket.on('[center]-change-light', function(data) {
-			controlLightPath.to(roomID).emit('[intersection]-change-light', data)		
+			controlLightPath.to(roomID).emit('[intersection]-change-light', data);		
 		});
 
 		socket.on('[center]-change-mode', function(data) {
-			controlLightPath.to(roomID).emit('[intersection]-change-mode', data)	
+			controlLightPath.to(roomID).emit('[intersection]-change-mode', data);	
+		});
+
+		socket.on('[vehicle]-set-priority', function(data) {
+			controlLightPath.to(roomID).emit('[intersection]-change-mode', data.mode);
+			log.debug('[vehicle] ', data);
+			intersectionModel
+			.findByIdAndUpdate(roomID, { $set: { modeControl: data.mode }})
+			.then(function(result) {
+				log.debug('Update mode control: ', data.mode);
+			})
+			.catch(function(error) {
+				log.error('Update mode control: ', error);
+			});
+
+			trafficLightModel
+			.findByIdAndUpdate(data.id, { $set: { priority: data.priority }})
+			.then(function(result) {
+				log.debug('Priority: ', data.priority);
+			})
+			.catch(function(error) {
+				log.error('Priority: ', error);
+			})
 		});
 
 		socket.on('disconnect', function(reason) {

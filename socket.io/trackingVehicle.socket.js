@@ -23,29 +23,28 @@ var log = log4js.getLogger('tracking-vehicle');
 // 	})
 // }
 
-module.exports = function(io) {
-	const trackingVehiclePath = io.of('/socket/tracking-vehicle');
-	const controlLightPath = io.of('/socket/control-light');
+// module.exports = function(io) {
+// 	const trackingVehiclePath = io.of('/socket/tracking-vehicle');
+// 	const controlLightPath = io.of('/socket/control-light');
 
-	// trackingVehiclePath.use(function(socket, next) {
-	// 	let clientId = socket.handshake.headers['client-id'];
-	// 	isValid(clientId, next);
-	// });
+// 	// trackingVehiclePath.use(function(socket, next) {
+// 	// 	let clientId = socket.handshake.headers['client-id'];
+// 	// 	isValid(clientId, next);
+// 	// });
 
-	trackingVehiclePath.on('connect', function(socket) {
-		socket.on('[vehicle]-realtime-location', function(data) {
-			trackingVehiclePath.emit('[center]-tracking-vehicle', data);
-			log.debug('Vehicle: ', data.idVehicle);
-			log.debug('Location: ', data.location);			
-		});
+// 	trackingVehiclePath.on('connect', function(socket) {
+// 		socket.on('distance', function(data) {
+// 			log.debug('Distance: ', data);	
+// 		});
+// 		socket.on('disconnect', function() {
+// 			console.log('One client disconnected: ' + socket.id);
+// 		});
+// 	});
 
-		socket.on('[vehicle]-set-priority', function(data) {
-			controlLightPath.to(data.id).emit('[intersection]-change-mode', data.mode);
-			log.debug('Change mode of traffic light: ', data);
-		});
-
-		socket.on('disconnect', function() {
-			console.log('One client disconnected: ' + socket.id);
-		});
-	});
-}
+// 	controlLightPath.on('connect', function(socket) {
+// 		socket.on('[vehicle]-set-priority', function(data) {
+// 			controlLightPath.to(data.id).emit('[intersection]-change-mode', data.mode);
+// 			log.debug('Change mode of traffic light: ', data);
+// 		});
+// 	});
+// }

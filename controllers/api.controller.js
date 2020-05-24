@@ -197,7 +197,7 @@ module.exports = {
                 .intersects()
                 .geometry({ type: 'Point', coordinates: location })
                 .where('bearing', bearing)
-                .select('_id location')
+                .select('_id intersectionId location')
                 .exec(function(err, data) {
                     if (err) {
                         reject(err);
@@ -217,17 +217,17 @@ module.exports = {
         Promise
         .all(PromiseAllArray)
         .then(function(preProcessData) {
-            var idIntersection = []
+            var idTrafficLight = []
             for (var data of preProcessData) {
                 if (data != null) {
-                    idIntersection.push(data);
+                    idTrafficLight.push(data);
                 }
             }
-            log4js.getLogger('data-send').info(idIntersection);
+            log4js.getLogger('data-send').info(idTrafficLight);
             log.debug('Successful')
             return res
             .status(200)
-            .json(idIntersection)
+            .json(idTrafficLight)
         })
         .catch(function(error) {
             log.error('trafficLightModel: ', error);

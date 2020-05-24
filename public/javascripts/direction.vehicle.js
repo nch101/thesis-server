@@ -8,22 +8,34 @@ menu.addEventListener('click', function() {
     menuBox.classList.toggle('menu-box-active');
 });
 
-const trackingVehiclePath = io(window.location.origin + '/socket/tracking-vehicle');
 const controlLightPath = io(window.location.origin + '/socket/control-light');
+const trackingVehiclePath = io(window.location.origin + '/socket/tracking-vehicle');
 
 var idVehicle = "5ec7347810544b26da694606";
 var idLocation = "5ec7e0f52913da1974a3c481";
 
+const stateMachine = {
+    'approaching': 0,
+    'passed': 1
+}
+
 var RTLocation;
-var isPriority = false;
-var idIntersections = [];
-var locIntersections = [];
+var isPriority = true;
+var state = 'passed';
+var dist = 1.5;
+
+var idIntersections = ["5eb90fe69f1398273bba559a", "5ec4a21420768c3fcd9b1665", "5ec4a35020768c3fcd9b166f"]
+var idTrafficLights = ["5eb90fe69f1398273bba55a3", "5ec4a21420768c3fcd9b166d", "5ec4a35020768c3fcd9b1677"];
+var locIntersections = [[ 106.658104, 10.770378 ], [ 106.659889, 10.763996 ], [ 106.660973, 10.760356 ] ];
 
 /**
  * Fake realtime location
  */
 
-var locationArray = [[106.65619066882232, 10.77705004421442], 
+var locationArray = [[106.654468139664, 10.783468490755808],
+                    [106.65570689756106, 10.779379680688479],
+                    [106.65619066882232, 10.77705004421442], 
+                    [106.6567738552294, 10.775544662709436],
                     [106.6571227257113, 10.774058481530545], 
                     [106.65799127244799, 10.770915860631249],
                     [106.65835270769622, 10.769392066316485],
@@ -42,18 +54,18 @@ var i = 0;
 setInterval(function() {
     // getGeoLocation()
     
-    if (locationArray[i] !== undefined) {
+    if (locationArray[i] !== undefined && isPriority) {
         axios({
             method: 'put',
             url: window.location.origin + '/vehicle/' + idVehicle + '/location/' + idLocation,
             data: {
-                coordinates: locationArray[i++]
+                coordinates: locationArray[i]
             }
         })
-    }
-
-    if (isPriority) {
-        onPriority()
+        if (isPriority) {
+            onPriority()
+        }
+        i++;
     }
 }, 5000)
 
@@ -92,9 +104,11 @@ function onGeoError(error) {
     }
 } */
 
-/** This function will run when the vehicle get a navigation **/
+/** 
+ * This function will run when the vehicle get a navigation 
+ */
 
-function extraFunction(steps) {
+/* function extraFunction(steps) {
     var data = [];
     console.log(steps)
     for (var step of steps) {
@@ -115,39 +129,68 @@ function extraFunction(steps) {
     })
     .then(function(res) {
         isPriority = true;
-        for (var intersection of res.data) {
-            idIntersections.push(intersection._id);
-            locIntersections.push(intersection.location.coordinates)
+        for (var trafficLight of res.data) {
+            idTrafficLights.push(trafficLight._id);
+            idIntersections.push(trafficLight.intersectionId)
+            locIntersections.push(trafficLight.location.coordinates);
         }
     })
-}
+} */
 
-/** Check whether the vehicle is approaching intersection or not **/
+/** 
+ * Check whether the vehicle is approaching intersection or not 
+ */
 
 function onPriority() {
     console.log('On priority...')
-    var isApproach = false;
-    var idIntersection = idIntersections[0]
-    var locIntersection = locIntersections[0]
-    var dist = distanceCalculation(locIntersection[0], locIntersection[1],
-                                    RTLocation[0], RTLocation[1]);
-    
-    console.log(dist);
-    trackingVehiclePath.emit('distance', dist);
-    if (0.5 >= dist) {
-        isApproach = true;
-        controlLightPath.emit('[vehicle]-set-priority', { id: idIntersection, mode: 'emergency' });
+    if (idTrafficLights.length > 0) {
+        var idTrafficLight = idTrafficLights[0];
+        var idIntersection = idIntersections[0];
+        var locIntersection = locIntersections[0];
+        var preDist = dist;
+        dist = distanceCalculation(locIntersection[0], locIntersection[1],
+                                        locationArray[i][0], locationArray[i][1]);
+            
+        trackingVehiclePath.emit('distance', dist);
     }
-    else if ((0.2 < dist) && isApproach) {
-        isApproach = false;
-        controlLightPath.emit('[vehicle]-set-priority', { id: idIntersection, mode: 'automatic' });
-        idIntersections.shift();
-        locIntersections.shift();
+    else {
+        isPriority = false;
     }
-    else;
+
+    switch (stateMachine[state]) {
+        case stateMachine['passed']:
+            if ((0.28 >= dist) && (preDist > dist)) {
+                state = 'approaching';
+                controlLightPath.emit('room', idIntersection)
+                controlLightPath.emit('[vehicle]-set-priority', { 
+                    id: idTrafficLight,
+                    mode: 'emergency',
+                    priority: true
+                });
+            }
+            break;
+        case stateMachine['approaching']:
+            if ((0.08 < dist) && (preDist < dist)) {
+                state = 'passed';
+                controlLightPath.emit('[vehicle]-set-priority', {
+                    id: idTrafficLight,
+                    mode: 'automatic',
+                    priority: false
+                });
+                controlLightPath.emit('leave-room', idIntersection);
+                idTrafficLights.shift();
+                idIntersections.shift();
+                locIntersections.shift();
+            }
+            break;
+        default:
+            break;
+    }
 }
 
-/** Calculate the distance between vehicle and intersection equipped smart traffic light system **/
+/** 
+ * Calculate the distance between vehicle and intersection equipped smart traffic light system 
+ */
 
 function distanceCalculation(lon1, lat1, lon2, lat2) {
     var dLat = deg2rad((lat2 - lat1)/2);
