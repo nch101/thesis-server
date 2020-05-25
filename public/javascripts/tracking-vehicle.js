@@ -80,3 +80,15 @@ function processLocationData(vehicles) {
         }
     }
 }
+
+function focusVehicle(license_plate) {
+    for (var vehicle of features) {
+        if (vehicle.properties.license_plate == license_plate) {
+            map.flyTo({
+                center: vehicle.geometry.coordinates,
+                speed: 0.8
+            })
+            break;
+        }
+    }
+}

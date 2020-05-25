@@ -67,7 +67,7 @@ module.exports = {
                 log.debug('Success')
                 return res
                 .status(200)
-                .render('users/tracking-vehicles.pug', {
+                .render('center-control/tracking-vehicles.pug', {
                     nVehicle: data
                 })
             }

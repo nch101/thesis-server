@@ -5,23 +5,23 @@ mixin infoVehicle(item)
         td.license_plate #{ item.license_plate }
         td
             if item.vehicleType == 'ambulance'
-                label.badge.ambulance-badge Xe cấp cứu
+                span.badge.ambulance-badge Xe cấp cứu
             else if item.vehicleType == 'fire-truck'
-                label.badge.fire-truck-badge Xe cứu hỏa
+                span.badge.fire-truck-badge Xe cứu hỏa
             else if item.vehicleType == 'police'
-                label.badge.police-badge Xe cảnh sát
+                span.badge.police-badge Xe cảnh sát
             else if item.vehicleType == 'military'
-                label.badge.military-badge Xe quân đội
+                span.badge.military-badge Xe quân đội
             else
         td #{ item.phone}
         td
             if item.status == 'online'
-                label.badge.online-status Đang hoạt động
+                span.badge.online-status Đang hoạt động
             else
-                label.badge.offline-status Không hoạt động
+                span.badge.offline-status Không hoạt động
         td #{ item.uptime }
-        //- td #{ item.journey[0].geometry.coordinates }
-        //- td #{ item.journey[1].geometry.coordinates }
+        td 
+            button(id= item.license_plate).btn-tracking(onclick='focusVehicle(this.id)') định vị 
 
 block head 
     include map.head.pug
@@ -44,13 +44,12 @@ block content
                             th Số điện thoại
                             th Trạng thái hoạt động
                             th Thời gian hoạt động
-                            th Điểm xuất phát 
-                            th Điểm đến
+                            th Vị trí
 
                     tbody
                         each item in nVehicle
                             +infoVehicle(item)
 
 block addFile
-    script(src='/javascripts/tracking-vehicle.map.js')
+    //- script(src='/javascripts/tracking-vehicle.map.js')
     script(src='/javascripts/tracking-vehicle.js')

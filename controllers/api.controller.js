@@ -93,13 +93,17 @@ module.exports = {
         });
     },
 
+    /**
+     * Get intersection data including idIntersection, modeControl, delta, times, priorityStreet
+     * for raspberry pi
+     */
     getIntersection: function(req, res) {
         log.info('In getIntersection');
         intersectionModel
         .findById(req.params.id)
         .select('intersectionName modeControl delta trafficLights')
         .populate({ path: 'trafficLights', 
-        select: 'streetName bearing timeRed timeYellow timeGreen camip ' })
+        select: 'streetName priority timeRed timeYellow timeGreen camip ' })
         .then(function(data) {
             if (data) {
                 log.debug('Successful');

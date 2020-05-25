@@ -1,0 +1,99 @@
+extends layout
+
+mixin infoIntersections(item, index)
+    tr
+        td #{ index }
+        td #{ item.intersectionName }
+        td
+            if item.modeControl == 'automatic'
+                span.badge.automatic-control automatic
+            else if item.modeControl == 'manual'
+                span.badge.manual-control manual
+            else if item.modeControl == 'emergency'
+                span.badge.emergency-control emergency
+        td
+            a(href='#') Xem
+
+mixin infoVehicles(item, index)
+    tr
+        td #{ index }
+        td.license_plate #{ item.license_plate }
+        td
+            if item.vehicleType == 'ambulance'
+                span.badge.ambulance-badge Xe cấp cứu
+            else if item.vehicleType == 'firetruck'
+                span.badge.fire-truck-badge Xe cứu hỏa
+            else if item.vehicleType == 'police'
+                span.badge.police-badge Xe cảnh sát
+            else if item.vehicleType == 'military'
+                span.badge.military-badge Xe quân đội
+            else
+        td
+            if item.status == 'online'
+                span.badge.online-status Đang hoạt động
+            else
+                span.badge.offline-status Không hoạt động
+        td #{ item.uptime }
+        td 
+
+        
+
+block navbar
+    - var isActive = 'home'
+    include navbar
+
+block content
+    .overview-info
+        span.list-item
+            span.icon(style='background-color: #00B2CA;')
+                i.fas.fa-ambulance
+            .list-content
+                div
+                    span#nPriorityVehicle.number 
+                    span.species Phương tiện ưu tiên
+                span.state(style='color: #00c88b;') Đang hoạt động
+        span.list-item
+            span.icon(style='background-color: #9F9FED;')
+                i.fas.fa-traffic-light
+            .list-content
+                div
+                    span#nInterAuto.number 
+                    span.species Giao lộ
+                span.state(style='color: #736CED;') trong chế độ automatic
+        span.list-item
+            span.icon(style='background-color: #D9B26F;')
+                i.fas.fa-traffic-light
+            .list-content
+                div
+                    span#nInterManual.number 
+                    span.species Giao lộ
+                span.state(style='color: #D9B26F;') trong chế độ manual
+        span.list-item
+            span.icon(style='background-color: #FF1B1C;')
+                i.fas.fa-traffic-light
+            .list-content
+                div
+                    span#nInterEmergency.number 
+                    span.species Giao lộ
+                span.state(style='color: #E05263;') trong chế độ emergency
+    .table-info
+        table#intersections
+            tr
+                th STT
+                th Tên giao lộ
+                th Trạng thái điều khiển
+                th Hành động
+            each item, index in intersectionsData
+                +infoIntersections(item, index)
+            
+    .table-info
+        table#vehicles
+            tr
+                th STT
+                th Biển kiểm soát
+                th Loại phương tiện
+                th Trạng thái hoạt động
+                th Thời gian hoạt động
+                th Hành động
+            each item, index in vehiclesData
+                +infoVehicles(item, index)
