@@ -14,13 +14,11 @@ router.get('/vehicle/location', vehicleController.getAllCurrentLocation);
 router.put('/vehicle/journey', apiController.matchIntersection);
 router.get('/vehicle', apiController.getAllVehicles);
 
-router.put('/test', function(req, res) {
+router.get('/test', function(req, res) {
     console.log(req.body)
     return res
     .status(200)
-    .json({ 
-        status: 'success',
-        message: 'Đã nhận!' })
+    .render('center-control/test-cam.pug')
 })
 
 module.exports = router;

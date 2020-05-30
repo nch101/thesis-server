@@ -7,6 +7,7 @@ var log = log4js.getLogger('traffic-light socket');
 module.exports = function(io) {
 	const stateLightPath = io.of('/socket/state-light');
 	const controlLightPath = io.of('/socket/control-light');
+	const cameraPath = io.of('/socket/camera');
 
 	controlLightPath.on('connect', function(socket) {
 		var roomID = ''
@@ -78,4 +79,9 @@ module.exports = function(io) {
 		})
 	})
 	
+	cameraPath.on('connect', function(socket) {
+		socket.on('[intersection]-camera', function(data) {
+			cameraPath.emit('[center]-camera', data);
+		})
+	})
 }

@@ -43,11 +43,6 @@ app.use('/traffic-light', trafficLightRouter);
 app.use('/map', cors(), mapRouter);
 
 //Test socketIO
-app.use('/test', function(req, res) {
-	return res
-	.status(200)
-	.render('test');
-});
 app.use('/upload-location', function(req, res) {
 	return res
 	.status(200)
