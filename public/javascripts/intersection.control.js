@@ -122,27 +122,11 @@ function renderInfoIntersection(res) {
 
 function updateStateControl() {
     if (isManual.checked) {
-        controlLightSocket.emit('[center]-change-mode', 'manual');
-
-        axios({
-            method: 'put',
-            url: window.location.origin + '/intersection/mode-control/' + idIntersection,
-            data: {
-                modeControl: 'manual'
-            }
-        });
+        controlLightSocket.emit('[center]-change-mode', { mode: 'manual' });
         manualControl()
     }
     else {
-        controlLightSocket.emit('[center]-change-mode', 'automatic');
-
-        axios({
-            method: 'put',
-            url: window.location.origin + '/intersection/mode-control/' + idIntersection,
-            data: {
-                modeControl: 'automatic'
-            }
-        })
+        controlLightSocket.emit('[center]-change-mode', { mode: 'automatic' });
         axios({
             method: 'get',
             url: window.location.origin + '/api/intersection/' + idIntersection
