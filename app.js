@@ -67,9 +67,9 @@ if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         log.error("Something went wrong:", err);
         res.status(err.status || 500);
-        res.render('error', {
+        res.render('error/index.pug', {
             message: err.message,
-            error: err
+            code: err.status
         });
     });
 }
@@ -79,9 +79,9 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
     log.error("Something went wrong:", err);
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('error/index.pug', {
         message: err.message,
-        error: {}
+        code: err.status
     });
 });
 

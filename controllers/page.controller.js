@@ -5,27 +5,34 @@ var logger = log4js.getLogger('controllers.page');
 
 module.exports = {
 
-    /** Login page controller **/
+    /**
+     * Login page
+     */
 
     loginOption: function(req, res) {
+        logger.info('Render login option page');
         return res
         .status(200)
-        .render('auth/main-login');
+        .render('login/selection.pug');
     },
 
     vehicleLogin: function(req, res) {
+        logger.info('Render vehicle login page');
         return res
         .status(200)
-        .render('auth/vehicle-login')
+        .render('login/vehicle.pug');
     },
 
     centerLogin: function(req, res) {
+        logger.info('Render control center login page');
         return res
         .status(200)
-        .render('auth/center-login');
+        .render('login/control-center.pug');
     },
 
-    /** End of login page controller **/
+    /**
+     * Control center side
+     */
 
     overviewPage: function(req, res) {
         var vehicle = vehicleModel
@@ -38,40 +45,44 @@ module.exports = {
         Promise
         .all([vehicle, intersection])
         .then(function(data) {
-            logger.info('In overviewPage function: success');
+            logger.info('Render overview page');
             return res
             .status(200)
-            .render('center-control/overview.pug', {
+            .render('control-center/overview.pug', {
                 vehiclesData: data[0],
                 intersectionsData: data[1]
             })
         })
         .catch(function(error) {
-            logger.error('In overviewPage function: ', error);
+            logger.error('Render overview page error: ', error);
             return res
             .status(501)
-            .json('error');
+            .render('error/index.pug', {
+                message: 'Not Implemented',
+                code: 501
+            });
         })
     },
 
-    /** Create page controller **/
-
     createVehiclePage: function(req, res) {
+        logger.info('Render create vehicle page');
         return res
         .status(200)
-        .render('center-control/vehicle.create.pug');
+        .render('control-center/vehicle.create.pug');
     },
 
     createCenterControlPage: function(req, res) {
+        logger.info('Render create control center page');
         return res
         .status(200)
-        .render('center-control/center.create.pug')
+        .render('control-center/center.create.pug')
     },
 
     createIntersectionPage: function(req, res) {
+        logger.info('Render create intersection page');
         return res
         .status(200)
-        .render('center-control/intersection.create.pug')
+        .render('control-center/intersection.create.pug')
     },
 
     /** End of create page controller **/
@@ -81,7 +92,7 @@ module.exports = {
     controlPage: function(req, res) {
         return res
         .status(200)
-        .render('center-control/intersection.control.pug')
+        .render('control-center/intersection.control.pug')
     },
 
     /** End of control page controller **/
@@ -103,7 +114,7 @@ module.exports = {
     trackingPage: function(req, res) {
         return res
         .status(200)
-        .render('center-control/tracking-vehicles.pug')
+        .render('control-center/tracking-vehicles.pug')
     },
 
 }
