@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
 
 var userSchema = new Schema({
-    _id: String,
     firstname: {
         type: String,
         required: true

@@ -23,7 +23,8 @@ module.exports = {
             .status(501)
             .render('control-center/create.control-center.pug', {
                 error: true,
-                message: 'Tạo tài khoản KHÔNG thành công!'
+                values: req.body,
+                message: 'Tạo tài khoản thất bại!'
             });
         });
     },

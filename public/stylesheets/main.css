@@ -189,18 +189,16 @@ li > a:hover {
     margin: 0 1rem;
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
 }
 
 .form-group > label {
-    order: 1;
     font-size: 0.875rem;
     font-weight: 500;
     color: #555;
 }
 
 .form-group > input {
-    order: 2;
     width: 100%;
     border: none;
     border-bottom: 1px solid #CCC;

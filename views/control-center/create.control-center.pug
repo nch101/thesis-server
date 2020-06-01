@@ -6,23 +6,23 @@ block navbar
 
 block content
     span.create-header Tạo tài khoản quản lý
-    form.create-container(action='/admin/user', method='post', style='height:380px;')
+    form.create-container(action='/user', method='post', style='height:380px;')
         .create-item
             .form-group
-                input#lastname.form-control(type='text', name='lastname', required='')
+                input#lastname.form-control(type='text', name='lastname', required='', value=values ? values.lastname : '')
                 label(for='lastname') Họ
                 .line
             .form-group
-                input#firstname.form-control(type='text', name='firstname', required='')
+                input#firstname.form-control(type='text', name='firstname', required='', value=values ? values.firstname : '')
                 label(for='firstname') Tên
                 .line
         .create-item
             .form-group
-                input#email.form-control(type='text', name='email', required='', onchange='validEmail()')
+                input#email.form-control(type='text', name='email', required='', onchange='validEmail()', value=values ? values.email : '')
                 label(for='email') Email
                 .line
             .form-group
-                input#username.form-control(type='text', name='username', required='')
+                input#username.form-control(type='text', name='username', required='', value=values ? values.username : '')
                 label(for='username') Tên đăng nhập
                 .line
         .create-item
@@ -36,7 +36,7 @@ block content
                 .line
         .create-item
             .form-group
-                input#phone.form-control(type='text', name='phone', required='')
+                input#phone.form-control(type='text', name='phone', required='', value=values ? values.phone : '')
                 label(for='phone') Số điện thoại
                 .line
             .form-group
