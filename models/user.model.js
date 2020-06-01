@@ -22,6 +22,12 @@ var userSchema = new Schema({
     },
     phone: String,
     email: String,
+    status: {
+        type: String,
+        enum: ['online', 'offline'],
+        default: 'offline',
+        require: true
+    },
     admin: {
         type: Boolean,
         default: false,

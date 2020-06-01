@@ -43,12 +43,12 @@ ul.navbar
 			span Tạo mới
 			i.fas.fa-chevron-up.spin-arrow
 		+submenu('/center/create-control-center', '/center/create-vehicle', '/center/create-intersection')
-	li.navbar-item.has-sub
+	li.navbar-item.has-sub(class= (isActive === 'list' ? 'active' : undefined))
 		a(href='#')
 			i.fas.fa-list-ul
 			span Danh sách
 			i.fas.fa-chevron-up.spin-arrow
-		+submenu('#', '#', '#')
+		+submenu('/center/list/managers', '/center/list/vehicles', '#')
 	li.navbar-item.has-sub
 		a(href='#')
 			i.fas.fa-cog

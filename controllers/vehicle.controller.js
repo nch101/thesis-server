@@ -89,45 +89,60 @@ module.exports = {
         .select('_id')
         .then(function(data) {
             if (data) {
+                logger.info('Blocked vehicle id: %s', req.params.id);
                 return res
                 .status(200)
-                .json({ message: 'Blocked!' });
+                .json({
+                    status: 'success', 
+                    message: 'Đã block!' 
+                });
             }
             else {
+                logger.warn('Vehicle not found to block, id: %s', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
             }
         })
         .catch(function (error) {
-            console.log(error);
+            logger.error('Blocked vehicle: %s , error: %s', req.params.id, error);
             return res
-            .status(501)
-            .json({ message: 'Error!' });
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Đã xảy ra lỗi, không thể block!' 
+            });
         })
     },
 
-    unBlockedVehicle: function(req, res) {
+    unlockedVehicle: function(req, res) {
         vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: {blocked: false}})
-        .select('_id')
         .then(function(data) {
             if (data) {
+                logger.info('Unlocked vehicle id: %s', req.params.id);
                 return res
                 .status(200)
-                .json({ message: 'Unblocked!' });
+                .json({
+                    status: 'success', 
+                    message: 'Đã mở block!' 
+                });
             }
             else {
+                logger.warn('Vehicle not found to unlock, id: %s', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
             }
         })
         .catch(function (error) {
-            console.log(error);
+            logger.error('Unlocked user: %s , error: %s', req.params.id, error);
             return res
-            .status(501)
-            .json({ message: 'Error!' });
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Đã xảy ra lỗi, không thể mở block!' 
+            });
         })
     },
 
@@ -137,21 +152,29 @@ module.exports = {
         .select('_id')
         .then(function(data) {
             if (data) {
+                logger.info('Deleted vehicle id: %s', req.params.id);
                 return res
                 .status(200)
-                .json({ message: 'Deleted!' });
+                .json({
+                    status: 'success', 
+                    message: 'Đã xóa!' 
+                });
             }
             else {
+                logger.warn('Vehicle not found to delete, id: %s', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
             }
         })
         .catch(function(error) {
-            console.log(error);
+            logger.error('Deleted vehicle: %s , error: %s', req.params.id, error);
             return res
-            .status(501)
-            .json({ message: 'Error!' });
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Xóa phương tiện thất bại!' 
+            });
         });
     },
 
@@ -338,9 +361,16 @@ module.exports = {
         .find()
         .select('_id license_plate vehicleType journey')
         .then(function(data) {
+            logger.info('Get location data of all vehicles')
             return res
             .status(200)
             .json(data)
+        })
+        .catch(function(error) {
+            logger.error('Get location data of all vehicles error %s', error)
+            return res
+            .status(501)
+            .json({ message: 'Error' });
         })
     }
 }

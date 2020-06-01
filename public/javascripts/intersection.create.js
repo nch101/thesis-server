@@ -108,7 +108,7 @@ function postData() {
 
     axios({
         method: 'post',
-        url: window.location.origin + '/api/intersection',
+        url: window.location.origin + '/intersection',
         data: {
             intersectionName: intersectionName,
             delta: delta,

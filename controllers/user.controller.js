@@ -29,34 +29,6 @@ module.exports = {
         });
     },
 
-    // Be not used yet
-    getAllUsers: function(req, res) {
-        userModel
-        .find()
-        .select('firstname lastname username admin blocked ')
-        .then(function(data) {
-            if (data) {
-                logger.info('Response all users data');
-                return res
-                .status(200)
-                .json(data);
-            }
-            else {
-                logger.info('Response users data not found');
-                return res
-                .status(404)
-                .json({ message: 'Not found!' });
-            }
-        })
-        .catch(function(error) {
-            logger.error('Get all users error ', error);
-            return res
-            .status(501)
-            .json({ message: 'Error!' });
-        });
-    },
-
-    //Be not used yet
     blockedUser: function(req, res) {
         userModel
         .findByIdAndUpdate(req.params.id, { $set: { blocked: true } })
@@ -66,10 +38,13 @@ module.exports = {
                 logger.info('Blocked user id: %s', req.params.id);
                 return res
                 .status(200)
-                .json({ message: 'Blocked!' });
+                .json({
+                    status: 'success', 
+                    message: 'Đã block!' 
+                });
             }
             else {
-                logger.info('User not found to block, id: %s', req.params.id);
+                logger.warn('User not found to block, id: %s', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
@@ -78,12 +53,14 @@ module.exports = {
         .catch(function (error) {
             logger.error('Blocked user: %s , error: %s', req.params.id, error);
             return res
-            .status(501)
-            .json({ message: 'Error!' });
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Đã xảy ra lỗi, không thể block!' 
+            });
         });
     },
 
-    //Be not used yet
     unlockedUser: function(req, res) {
         userModel
         .findByIdAndUpdate(req.params.id, { $set: { blocked: false }}).select('_id')
@@ -92,10 +69,13 @@ module.exports = {
                 logger.info('Unlocked user id: %s', req.params.id);
                 return res
                 .status(200)
-                .json({ message: 'Unblocked!' });
+                .json({
+                    status: 'success', 
+                    message: 'Đã mở block!' 
+                });
             }
             else {
-                logger.info('User not found to unlock, id: %s', req.params.id);
+                logger.warn('User not found to unlock, id: %s', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
@@ -104,12 +84,14 @@ module.exports = {
         .catch(function (error) {
             logger.error('Unlocked user: %s , error: %s', req.params.id, error);
             return res
-            .status(501)
-            .json({ message: 'Error!' });
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Đã xảy ra lỗi, không thể mở block!' 
+            });
         })
     },
 
-    //Be not used yet
     deleteUser: function(req, res) {
         userModel
         .findByIdAndRemove(req.params.id)
@@ -119,10 +101,13 @@ module.exports = {
                 logger.info('Deleted user id: %', req.params.id);
                 return res
                 .status(200)
-                .json({ message: 'Deleted!' });
+                .json({
+                    status: 'success', 
+                    message: 'Đã xóa!' 
+                });
             }
             else {
-                logger.info('User not found to delete, id: %s', req.params.id);
+                logger.warn('User not found to delete, id: %s', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
@@ -131,8 +116,11 @@ module.exports = {
         .catch(function(error) {
             logger.error('Deleted user: %s , error: %s', req.params.id, error);
             return res
-            .status(501)
-            .json({ message: 'Error!' });
+            .status(200)
+            .json({
+                status: 'error', 
+                message: 'Xóa người dùng thất bại!' 
+            });
         });
     },
 

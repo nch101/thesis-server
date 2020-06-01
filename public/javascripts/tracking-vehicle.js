@@ -1,6 +1,6 @@
 var features = [];
 var popupArray = [];
-var url = window.location.origin + '/api/vehicle/location';
+var url = window.location.origin + '/vehicle/location';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
 

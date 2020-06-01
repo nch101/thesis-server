@@ -1,3 +1,4 @@
+var userModel = require('../models/user.model');
 var vehicleModel = require('../models/vehicle.model');
 var intersectionModel = require('../models/intersection.model');
 var log4js = require('log4js');
@@ -97,6 +98,74 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/tracking-vehicles.pug')
+    },
+
+    listManagers: function(req, res) {
+        userModel
+        .find()
+        .select('firstname lastname phone email status blocked')
+        .then(function(data) {
+            if (data) {
+                logger.info('Render list managers page');
+                return res
+                .status(200)
+                .render('control-center/list.managers.pug', {
+                    managers: data
+                });
+            }
+            else {
+                logger.warn('Managers data not found');
+                return res
+                .status(404)
+                .render('error/index.pug', {
+                    code: 404,
+                    message: 'Not found'
+                });
+            }
+        })
+        .catch(function(error) {
+            logger.error('Render list managers page error ', error);
+            return res
+            .status(501)
+            .render('error/index.pug', {
+                code: 501,
+                message: 'Not Implemented'
+            });
+        });
+    },
+
+    listVehicles: function(req, res) {
+        vehicleModel
+        .find()
+        .select('license_plate vehicleType phone address company status blocked')
+        .then(function(data) {
+            if (data) {
+                logger.info('Render list vehicles page');
+                return res
+                .status(200)
+                .render('control-center/list.vehicles.pug', {
+                    vehicles: data
+                });
+            }
+            else {
+                logger.warn('Vehicles data not found');
+                return res
+                .status(404)
+                .render('error/index.pug', {
+                    code: 404,
+                    message: 'Not found'
+                });
+            }
+        })
+        .catch(function(error) {
+            logger.error('Render list vehicles page error ', error);
+            return res
+            .status(501)
+            .render('error/index.pug', {
+                code: 501,
+                message: 'Not Implemented'
+            });
+        });
     },
 
     /**

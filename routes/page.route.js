@@ -29,6 +29,8 @@ router.get('/center/control/', pageController.controlLightPage);
 router.get('/center/create-control-center/', pageController.createControlCenterPage);
 router.get('/center/create-vehicle/', pageController.createVehiclePage);
 router.get('/center/create-intersection/', pageController.createIntersectionPage);
+router.get('/center/list/managers', pageController.listManagers);
+router.get('/center/list/vehicles', pageController.listVehicles);
 
 /**
  * Vehicle side

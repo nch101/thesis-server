@@ -181,7 +181,7 @@ module.exports = {
                 })
             }
             else {
-                logger.info('Intersection not found to update time, id: %s', req.params.id);
+                logger.warn('Intersection not found to update time, id: %s', req.params.id);
                 return res
                 .status(200)
                 .json({
@@ -213,7 +213,7 @@ module.exports = {
                 .json(data);
             }
             else {
-                logger.info('Not found intersections data');
+                logger.warn('Not found intersections data');
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
@@ -241,7 +241,7 @@ module.exports = {
                 .json(data);
             }
             else {
-                logger.info('Intersection id: %s not found to get', req.params.id);
+                logger.warn('Intersection id: %s not found to get', req.params.id);
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });

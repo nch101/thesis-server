@@ -39,7 +39,7 @@ var map = new mapboxgl.Map({
     zoom: 12
 });
 
-axios.get(window.location.origin + '/api/intersection')
+axios.get(window.location.origin + '/intersection')
     .then(renderIntersection)
 
 function renderIntersection(res) {
@@ -83,7 +83,7 @@ function getInfoIntersection() {
     getStateLight()
     axios({
         method: 'get',
-        url: window.location.origin + '/api/intersection/' + idIntersection
+        url: window.location.origin + '/intersection/' + idIntersection
     })
     .then(renderInfoIntersection)
 }
@@ -129,7 +129,7 @@ function updateStateControl() {
         controlLightSocket.emit('[center]-change-mode', { mode: 'automatic' });
         axios({
             method: 'get',
-            url: window.location.origin + '/api/intersection/' + idIntersection
+            url: window.location.origin + '/intersection/' + idIntersection
         })
         .then(function(res) {
             trafficLights = res.data.trafficLights;
@@ -270,7 +270,7 @@ function updateData(event) {
 
     axios({
         method: 'put',
-        url: window.location.origin + '/api/intersection/' + idIntersection,
+        url: window.location.origin + '/intersection/' + idIntersection,
         data: {
             delta: delta.value,
             timeReds: timeReds,
