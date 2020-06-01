@@ -57,7 +57,7 @@ setInterval(function() {
     if (locationArray[i] !== undefined && isPriority) {
         axios({
             method: 'put',
-            url: window.location.origin + '/vehicle/' + idVehicle + '/location/' + idLocation,
+            url: window.location.origin + '/api/vehicle/' + idVehicle + '/location/' + idLocation,
             data: {
                 coordinates: locationArray[i]
             }

@@ -68,53 +68,46 @@ module.exports = {
         logger.info('Render create vehicle page');
         return res
         .status(200)
-        .render('control-center/vehicle.create.pug');
+        .render('control-center/create.vehicle.pug');
     },
 
-    createCenterControlPage: function(req, res) {
+    createControlCenterPage: function(req, res) {
         logger.info('Render create control center page');
         return res
         .status(200)
-        .render('control-center/center.create.pug')
+        .render('control-center/create.control-center.pug')
     },
 
     createIntersectionPage: function(req, res) {
         logger.info('Render create intersection page');
         return res
         .status(200)
-        .render('control-center/intersection.create.pug')
+        .render('control-center/create.intersection.pug')
     },
 
-    /** End of create page controller **/
-
-    /** Control page controller **/
-
-    controlPage: function(req, res) {
+    controlLightPage: function(req, res) {
+        logger.info('Render control light page');
         return res
         .status(200)
-        .render('control-center/intersection.control.pug')
+        .render('control-center/control.intersection.pug')
     },
-
-    /** End of control page controller **/
-
-    /** Direction page **/
-
-    directionPage: function(req, res) {
-        return res
-        .status(200)
-        .render('vehicle/direction.pug')
-    },
-
-    /** End of direction page **/
-
-    /**
-     * Tracking vehicles page
-     */
 
     trackingPage: function(req, res) {
+        logger.info('Render tracking vehicle page');
         return res
         .status(200)
         .render('control-center/tracking-vehicles.pug')
+    },
+
+    /**
+     * Vehicle side
+     */
+
+    directionPage: function(req, res) {
+        logger.info('Render direction page');
+        return res
+        .status(200)
+        .render('vehicle/direction.pug')
     },
 
 }

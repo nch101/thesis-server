@@ -21,7 +21,7 @@ mixin infoVehicle(item)
                 span.badge.offline-status Không hoạt động
         td #{ item.uptime }
         td 
-            button(id= item.license_plate).btn-tracking(onclick='focusVehicle(this.id)') định vị 
+            button.btn-tracking(id = item.license_plate, onclick='focusVehicle(this.id)') định vị 
 
 block head 
     include map.head.pug
@@ -51,5 +51,4 @@ block content
                             +infoVehicle(item)
 
 block addFile
-    //- script(src='/javascripts/tracking-vehicle.map.js')
     script(src='/javascripts/tracking-vehicle.js')

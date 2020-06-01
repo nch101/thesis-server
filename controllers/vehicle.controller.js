@@ -1,37 +1,35 @@
 var bcrypt = require('bcryptjs');
 var vehicleModel = require('../models/vehicle.model');
 var log4js = require('log4js');
-var log = log4js.getLogger('vehicle-controller');
+var logger = log4js.getLogger('controllers.vehicle');
 
 module.exports = {
-    //For admin user
     createVehicle: function(req, res) {
-        log.info('In createVehicle');
-        // log4js.getLogger('data-received').debug('Create vehicle', req.body);
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var vehicle = new vehicleModel(req.body);
         vehicle.save()
         .then(function(data) {
-            log.debug('Successful');
+            logger.info('Create vehicle id %s successful', data._id);
             return res
             .status(200)
-            .render('users/vehicle.create.pug', {
+            .render('control-center/create.vehicle.pug', {
                 success: true,
                 message: 'Tạo tài khoản thành công!'
             });
         })
         .catch(function(error) {
-            log.error('vehicleModel: ', error);
+            logger.error('Create vehicle failed, error: %s', error);
             return res
             .status(501)
-            .render('users/vehicle.create.pug', {
+            .render('control-center/create.vehicle.pug', {
                 error: true,
                 values: req.body,
-                message: 'Tạo tài khoản KHÔNG thành công!'
+                message: 'Tạo tài khoản thất bại!'
             });
         });
     },
 
+    //
     getAllVehicles: function(req, res) {
         vehicleModel
         .find()
@@ -57,28 +55,28 @@ module.exports = {
     },
 
     trackingVehicle: function(req, res) {
-        log.info('In trackingVehicle');
         vehicleModel
         .find()
         .select('license_plate vehicleType phone status journey timeOn')
         .then(function(data) {
-            log4js.getLogger('data-send').debug('trackingVehicle: ', data);
+            // log4js.getLogger('data-send').debug('trackingVehicle: ', data);
             if (data) {
-                log.debug('Success')
+                logger.info('Render tracking vehicle page');
                 return res
                 .status(200)
-                .render('center-control/tracking-vehicles.pug', {
+                .render('control-center/tracking-vehicles.pug', {
                     nVehicle: data
                 })
             }
             else {
+                logger.warn('Vehicles not found to tracking');
                 return res
                 .status(404)
                 .json({ message: 'Not found!' });
             }
         })
         .catch(function(error) {
-            log.error('vehicleModel: ', error);
+            logger.error('Render tracking vehicle error: %s', error);
             return res
             .status(501)
             .json({ message: 'Error!' });

@@ -244,6 +244,7 @@ module.exports = {
         })
     },
 
+    //
     getAllVehicles: function(req, res) {
         log.info('In getAllVehicles');
         vehicleModel

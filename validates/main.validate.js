@@ -11,12 +11,12 @@ module.exports = {
             if (bcrypt.compareSync(req.body.password, data.password)) {
                 return res
                 .status(304)
-                .redirect('/overview');
+                .redirect('/center/overview');
             }
             else {
                 return res
                 .status(200)
-                .render('auth/center-login', {
+                .render('login/control-center.pug', {
                     error: true,
                     values: req.body
                 });
@@ -26,7 +26,7 @@ module.exports = {
             console.log(error);
             return res
             .status(200)
-            .render('auth/center-login', {
+            .render('login/control-center.pug', {
                 error: true,
                 values: req.body
             });
@@ -46,7 +46,7 @@ module.exports = {
             else {
                 return res
                 .status(200)
-                .render('auth/vehicle-login', {
+                .render('login/vehicle.pug', {
                     error: true,
                     values: req.body
                 });
@@ -56,7 +56,7 @@ module.exports = {
             console.log(error);
             return res
             .status(200)
-            .render('auth/vehicle-login', {
+            .render('login/vehicle.pug', {
                 error: true,
                 values: req.body
             });

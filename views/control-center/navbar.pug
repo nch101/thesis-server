@@ -8,7 +8,7 @@ mixin submenu(manager, vehicle, trafficLight)
 			a(href=trafficLight) Đèn giao thông
 
 .top-navbar
-	a.brand(href='/overview')
+	a.brand(href='/center/overview')
 		span.brand-logo
 		span.brand-name hệ thống đèn giao thông thông minh
 	.user-info.has-sub
@@ -26,15 +26,15 @@ mixin submenu(manager, vehicle, trafficLight)
 					span Đăng xuất
 ul.navbar
 	li.navbar-item(class= (isActive === 'home' ? 'active' : undefined))
-		a(href='/overview')
+		a(href='/center/overview')
 			i.fas.fa-home
 			span Tổng quan
 	li.navbar-item(class= (isActive === 'tracking' ? 'active' : undefined))
-		a(href='/vehicle/tracking')
+		a(href='/center/tracking-vehicle')
 			i.fas.fa-search-location
 			span Giám sát
 	li.navbar-item(class= (isActive === 'control' ? 'active' : undefined))
-		a(href='/intersection/control')
+		a(href='/center/control')
 			i.fas.fa-traffic-light
 			span Điều khiển
 	li.navbar-item.has-sub(class= (isActive === 'create' ? 'active' : undefined))
@@ -42,7 +42,7 @@ ul.navbar
 			i.far.fa-plus-square
 			span Tạo mới
 			i.fas.fa-chevron-up.spin-arrow
-		+submenu('/center-control/create/', '/vehicle/create/', '/intersection/create')
+		+submenu('/center/create-control-center', '/center/create-vehicle', '/center/create-intersection')
 	li.navbar-item.has-sub
 		a(href='#')
 			i.fas.fa-list-ul
