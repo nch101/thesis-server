@@ -21,7 +21,7 @@ module.exports = function(io) {
 
 		socket.on('[center]-change-light', function(data) {
             controlLightPath.to(roomID).emit('[intersection]-change-light', data);
-            logger.info('Change light state');
+            logger.info('Change light state at intersection %s', roomID);
 		});
 
 		socket.on('[center]-change-mode', function(data) {
@@ -29,10 +29,10 @@ module.exports = function(io) {
             intersectionModel
             .findByIdAndUpdate(roomID, { $set: { modeControl: data.mode }})
 			.then(function(result) {
-				logger.info('Change mode control: ', data.mode);
+				logger.info('Change mode control: %s at intersection %s', data.mode, roomID);
 			})
 			.catch(function(error) {
-				logger.error('Change mode control error: ', error);
+				logger.error('Change mode control error: %s at intersection %s', error, roomID);
 			});
 		});
 
@@ -42,19 +42,19 @@ module.exports = function(io) {
 			intersectionModel
 			.findByIdAndUpdate(roomID, { $set: { modeControl: data.mode }})
 			.then(function(result) {
-				logger.info('Change mode control: ', data.mode);
+				logger.info('Change mode control: %s at intersection %s', data.mode, roomID);
 			})
 			.catch(function(error) {
-				logger.error('Change mode control error: ', error);
+				logger.error('Change mode control error: %s at intersection %s', error, roomID);
 			});
 
 			trafficLightModel
 			.findByIdAndUpdate(data.id, { $set: { priority: data.priority }})
 			.then(function(result) {
-				logger.info('Set priority: ', data.priority);
+				logger.info('Set priority: %s at traffic light %s', data.priority, data.id);
 			})
 			.catch(function(error) {
-				logger.error('Set priority error: ', error);
+				logger.error('Set priority error: %s at traffic light %s', error, data.id);
 			})
 		});
 	});

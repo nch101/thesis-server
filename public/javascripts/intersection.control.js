@@ -27,10 +27,11 @@ var btnUpdate = document.getElementById('btn-update');
 
 const stateLightSocket = io(window.location.host + '/socket/state-light');
 const controlLightSocket = io(window.location.host + '/socket/control-light');
+const camSocket = io(window.location.host + '/socket/camera');
 
 var idIntersection;
 
-/* mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -70,17 +71,20 @@ function renderIntersection(res) {
         .setPopup(popup)
         .addTo(map);
     }
-} */
+}
 
-getInfoIntersection();
+// getInfoIntersection();
 
-function getInfoIntersection() {
+function getInfoIntersection(event) {
     // @params: event -------^
-    // stateLightSocket.emit('leave-room', idIntersection)
-    // controlLightSocket.emit('leave-room', idIntersection)
-    // idIntersection = event.currentTarget.params;
-    idIntersection = '5eb90fe69f1398273bba559a';
-    getStateLight()
+
+    unsubscribeIntersection();
+    idIntersection = event.currentTarget.params;
+
+    // DEBUG
+    //idIntersection = '5eb90fe69f1398273bba559a';
+
+    subscribeIntersection();
     axios({
         method: 'get',
         url: window.location.origin + '/intersection/' + idIntersection
@@ -127,13 +131,13 @@ function updateStateControl() {
     }
     else {
         controlLightSocket.emit('[center]-change-mode', { mode: 'automatic' });
+        // Update time light
         axios({
             method: 'get',
             url: window.location.origin + '/intersection/' + idIntersection
         })
         .then(function(res) {
-            trafficLights = res.data.trafficLights;
-            automaticControl(trafficLights);
+            automaticControl(res.data.trafficLights);
         })
     }
 }
@@ -201,15 +205,8 @@ function automaticControl(streetInfo) {
     stateControl.innerText = '';
     stateControl.innerText = 'automatic';
     var btnUpdate = document.getElementById('btn-update');
-    btnUpdate.addEventListener('click', updateData)
-    btnUpdate.params = streetInfo
-}
-
-function getStateLight() {
-    stateLightSocket.emit('room', idIntersection)
-    controlLightSocket.emit('room', idIntersection)
-    stateLightSocket.on('[center]-time-light', renderTimeLight)
-    stateLightSocket.on('[center]-light-state', renderStateLight)
+    btnUpdate.addEventListener('click', updateData);
+    btnUpdate.params = streetInfo;
 }
 
 function renderTimeLight(timeLight) {
@@ -217,7 +214,6 @@ function renderTimeLight(timeLight) {
     for (var i in timeLight) {
         timeLightArray[i].innerHTML = timeLight[i]
     }
-
 }
 
 function renderStateLight(stateLight) {
@@ -225,35 +221,23 @@ function renderStateLight(stateLight) {
     var colorLightArray = [rightStreetLight, bottomStreetLight, leftStreetLight, topStreetLight];
 
     for (var i in stateLight) {
+        resetColor(timeLightArray[i], colorLightArray[i]);
         if (stateLight[i] == 'red') {
-            timeLightArray[i].classList.remove('yellow-number', 'green-number');
-            timeLightArray[i].classList.add('red-number');
-            
+            timeLightArray[i].classList.add('red-number');            
             colorLightArray[i].children[0].classList.add('red-light');
-            colorLightArray[i].children[1].classList.remove('yellow-light');
-            colorLightArray[i].children[2].classList.remove('green-light');
         }
         else if (stateLight[i] == 'yellow') {
-            timeLightArray[i].classList.remove('red-number', 'green-number');
             timeLightArray[i].classList.add('yellow-number');
-
-            colorLightArray[i].children[0].classList.remove('red-light');
             colorLightArray[i].children[1].classList.add('yellow-light');
-            colorLightArray[i].children[2].classList.remove('green-light')
         }
         else if (stateLight[i] == 'green') {
-            timeLightArray[i].classList.remove('yellow-number', 'red-number');
             timeLightArray[i].classList.add('green-number');
-
-            colorLightArray[i].children[0].classList.remove('red-light');
-            colorLightArray[i].children[1].classList.remove('yellow-light');
             colorLightArray[i].children[2].classList.add('green-light')
         }
     }
 }
 
 function changeLight() {
-    console.log('Change light')
     controlLightSocket.emit('[center]-change-light', 'change-light');
 }
 
@@ -297,4 +281,69 @@ function updateData(event) {
             renderAlert.innerHTML = res.data.message;
         }
     })
+}
+
+function renderCanvas(base64Image) {
+    parser = new JpegDecoder();
+    parser.parse(convertDataURIToUint8(base64Image));
+    width = parser.width;
+    height = parser.height;
+    numComponents = parser.numComponents;
+    decoded = parser.getData(width, height);
+
+    var canvas = document.getElementById('image');
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext('2d');
+    var imageData = ctx.createImageData(width, height);
+    var imageBytes = imageData.data;
+    for (var i = 0, j = 0, ii = width * height * 4; i < ii; ) {
+      imageBytes[i++] = decoded[j++];
+      imageBytes[i++] = numComponents === 3 ? decoded[j++] : decoded[j - 1];
+      imageBytes[i++] = numComponents === 3 ? decoded[j++] : decoded[j - 1];
+      imageBytes[i++] = 255;
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+function convertDataURIToUint8(dataURI) {
+    // Validate input data
+    if(!dataURI) return;
+
+    var raw = window.atob(dataURI);
+    var rawLength = raw.length;
+    var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for(i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+    }
+
+    // Return a array binary data
+    return array;
+}
+
+
+function unsubscribeIntersection() {
+    stateLightSocket.emit('leave-room', idIntersection);
+    controlLightSocket.emit('leave-room', idIntersection);
+    camSocket.emit('leave-room', idIntersection);
+}
+
+function subscribeIntersection() {
+    stateLightSocket.emit('room', idIntersection);
+    controlLightSocket.emit('room', idIntersection);
+    camSocket.emit('room', idIntersection);
+
+    stateLightSocket.on('[center]-time-light', renderTimeLight);
+    stateLightSocket.on('[center]-light-state', renderStateLight);
+
+    camSocket.on('[center]-camera', renderCanvas);
+}
+
+function resetColor(timeLightArray ,colorLightArray) {
+    timeLightArray.classList.remove('red-number', 'yellow-number', 'green-number');
+
+    colorLightArray.children[0].classList.remove('red-light');
+    colorLightArray.children[1].classList.remove('yellow-light');
+    colorLightArray.children[2].classList.remove('green-light');
 }

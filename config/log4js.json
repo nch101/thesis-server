@@ -4,6 +4,7 @@
 			"type": "dateFile",
 			"filename": "log/access.log",
 			"pattern": "-yyyy-MM-dd",
+			"daysToKeep": 3,
 			"category": "http"
 		},
 		"app": {

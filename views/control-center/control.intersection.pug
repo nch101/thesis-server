@@ -16,8 +16,8 @@ block content
             #map
         #render-interact.c-container
             .cam-container
-                .cam-item
-                .cam-item
+                canvas#image.cam-item
+                canvas#image.cam-item
             .interact-container
                 .animation-wrapper
                     .angle
@@ -75,4 +75,5 @@ block content
 
 block addFile
     script(src="/socket.io/socket.io.js")
+    script(src="/javascripts/lib/jpg.js")
     script(src="/javascripts/intersection.control.js")

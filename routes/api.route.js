@@ -12,10 +12,9 @@ router.put('/vehicle/journey', intersectionController.matchIntersection);
 router.put('/vehicle/:vehicleID/location/:locationID', vehicleController.updateCurrentLocation);
 
 router.get('/test', function(req, res) {
-    console.log(req.body)
     return res
     .status(200)
-    .render('center-control/test-cam.pug')
+    .render('control-center/test-cam.pug')
 })
 
 module.exports = router;
