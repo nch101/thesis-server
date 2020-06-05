@@ -3,7 +3,7 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('validates.user');
 var userModel = require('../models/user.model');
 var tokenModel = require('../models/token.model');
-var jwt = require('../helper/jwt');
+var jwtHelper = require('../helper/jwt');
 var key = require('../helper/key');
 
 module.exports = {
@@ -20,23 +20,23 @@ module.exports = {
                 };
 
                 Promise
-                .all([jwt.generateToken(user, key.secretKey, key.tokenLife), 
-                jwt.generateToken(user, key.refreshSecretKey, key.refreshTokenLife)])
+                .all([jwtHelper.generateToken(user, key.secretKey, key.tokenLife), 
+                jwtHelper.generateToken(user, key.refreshSecretKey, key.refreshTokenLife)])
                 .then(function(token) {
                     logger.info('Auth success, id: %s', data._id);
                     tokenModel.create({
-                        token: [0],
+                        userId: data._id,
                         refreshToken: token[1],
                     });
 
                     return res
                     .status(304)
-                    .cookie('token', token[0])
+                    .cookie('accessToken', token[0], { maxAge: 3600000 })
                     .cookie('refreshToken', token[1])
                     .redirect('/center/overview');
                 })
                 .catch(function(error) {
-                    logger.error('Generate token error, id: s%, error: %s', data._id, error);
+                    logger.error('Generate accessToken error, id: s%, error: %s', data._id, error);
                     return res
                     .status(501)
                     .render('error/index.pug', {
@@ -66,11 +66,4 @@ module.exports = {
         })
     },
 
-    refreshToken: function(req, res) {
-        tokenModel
-        .findOne({ refreshToken: req.cookie.refreshToken })
-        .then(function(data) {
-            
-        })
-    }
 }

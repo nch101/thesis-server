@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var pageController = require('../controllers/page.controller');
 var vehicleController = require('../controllers/vehicle.controller');
-var mainValidate = require('../validates/main.validate');
+var userValidate = require('../validates/user.validate');
+var userMiddleware = require('../middleware/user.middleware');
 
 /**
  * Login page
@@ -15,17 +16,17 @@ router.get('/', function(req, res) {
 });
 router.get('/login', pageController.loginOption);
 router.get('/vehicle/login', pageController.vehicleLogin);
-router.post('/vehicle/login', mainValidate.vehicleValidate);
+// router.post('/vehicle/login', userValidate.userValidate);
 router.get('/center-control/login', pageController.centerLogin);
-router.post('/center-control/login', mainValidate.userValidate);
+router.post('/center-control/login', userValidate.userValidate);
 
 /**
  * Control center side
  */
 
-router.get('/center/overview/', pageController.overviewPage);
-router.get('/center/tracking-vehicle/', vehicleController.trackingVehicle);
-router.get('/center/control/', pageController.controlLightPage);
+router.get('/center/overview/', userMiddleware.userMiddleware, pageController.overviewPage);
+router.get('/center/tracking-vehicle/', userMiddleware.userMiddleware, vehicleController.trackingVehicle);//
+router.get('/center/control/', userMiddleware.userMiddleware, pageController.controlLightPage);
 router.get('/center/create-control-center/', pageController.createControlCenterPage);
 router.get('/center/create-vehicle/', pageController.createVehiclePage);
 router.get('/center/create-intersection/', pageController.createIntersectionPage);
