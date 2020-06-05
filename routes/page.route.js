@@ -27,11 +27,11 @@ router.post('/center-control/login', userValidate.userValidate);
 router.get('/center/overview/', userMiddleware.userMiddleware, pageController.overviewPage);
 router.get('/center/tracking-vehicle/', userMiddleware.userMiddleware, vehicleController.trackingVehicle);//
 router.get('/center/control/', userMiddleware.userMiddleware, pageController.controlLightPage);
-router.get('/center/create-control-center/', pageController.createControlCenterPage);
-router.get('/center/create-vehicle/', pageController.createVehiclePage);
-router.get('/center/create-intersection/', pageController.createIntersectionPage);
-router.get('/center/list/managers', pageController.listManagers);
-router.get('/center/list/vehicles', pageController.listVehicles);
+router.get('/center/create-control-center/', userMiddleware.userMiddleware, pageController.createControlCenterPage);
+router.get('/center/create-vehicle/', userMiddleware.userMiddleware, pageController.createVehiclePage);
+router.get('/center/create-intersection/', userMiddleware.userMiddleware, pageController.createIntersectionPage);
+router.get('/center/list/managers', userMiddleware.userMiddleware, pageController.listManagers);
+router.get('/center/list/vehicles', userMiddleware.userMiddleware, pageController.listVehicles);
 
 /**
  * Vehicle side

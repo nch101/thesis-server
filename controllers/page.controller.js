@@ -50,6 +50,7 @@ module.exports = {
             return res
             .status(200)
             .render('control-center/overview.pug', {
+                name: res.locals.name,
                 vehiclesData: data[0],
                 intersectionsData: data[1]
             })
@@ -69,35 +70,45 @@ module.exports = {
         logger.info('Render create vehicle page');
         return res
         .status(200)
-        .render('control-center/create.vehicle.pug');
+        .render('control-center/create.vehicle.pug', {
+            name: res.locals.name,
+        });
     },
 
     createControlCenterPage: function(req, res) {
         logger.info('Render create control center page');
         return res
         .status(200)
-        .render('control-center/create.control-center.pug')
+        .render('control-center/create.control-center.pug', {
+            name: res.locals.name,
+        })
     },
 
     createIntersectionPage: function(req, res) {
         logger.info('Render create intersection page');
         return res
         .status(200)
-        .render('control-center/create.intersection.pug')
+        .render('control-center/create.intersection.pug', {
+            name: res.locals.name,
+        })
     },
 
     controlLightPage: function(req, res) {
         logger.info('Render control light page');
         return res
         .status(200)
-        .render('control-center/control.intersection.pug')
+        .render('control-center/control.intersection.pug', {
+            name: res.locals.name,
+        })
     },
 
     trackingPage: function(req, res) {
         logger.info('Render tracking vehicle page');
         return res
         .status(200)
-        .render('control-center/tracking-vehicles.pug')
+        .render('control-center/tracking-vehicles.pug', {
+            name: res.locals.name,
+        })
     },
 
     listManagers: function(req, res) {
@@ -110,6 +121,7 @@ module.exports = {
                 return res
                 .status(200)
                 .render('control-center/list.managers.pug', {
+                    name: res.locals.name,
                     managers: data
                 });
             }
@@ -144,6 +156,7 @@ module.exports = {
                 return res
                 .status(200)
                 .render('control-center/list.vehicles.pug', {
+                    name: res.locals.name,
                     vehicles: data
                 });
             }

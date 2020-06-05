@@ -8,8 +8,10 @@ module.exports = {
     userMiddleware: async function(req, res, next) {
         if (req.cookies.accessToken) {
             try {
-                await jwt.verifyToken(req.cookies.accessToken, key.secretKey);
+                var decoded = await jwt.verifyToken(req.cookies.accessToken, key.secretKey);
                 logger.info('Verify token success');
+                res.locals.id = decoded.id;
+                res.locals.name = decoded.name;
                 next();
             }
             catch(error) {
