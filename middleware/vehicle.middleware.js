@@ -1,17 +1,17 @@
 var log4js = require('log4js');
-var logger = log4js.getLogger('middleware.user');
+var logger = log4js.getLogger('middleware.vehicle');
 var jwt = require('../helper/jwt');
 var key = require('../helper/key');
 var refreshTokenHelper = require('../middleware/refreshAccessToken');
 
 module.exports = {
-    userMiddleware: async function(req, res, next) {
+    vehicleMiddleware: async function(req, res, next) {
         if (req.cookies.accessToken) {
             try {
                 var decoded = await jwt.verifyToken(req.cookies.accessToken, key.secretKey);
                 logger.info('Verify token success');
                 res.locals.id = decoded.data.id;
-                res.locals.name = decoded.data.name;
+                res.locals.license_plate = decoded.data.license_plate;
                 next();
             }
             catch(error) {
@@ -23,7 +23,7 @@ module.exports = {
                     logger.error('Invalid token, error: %s', error);
                     return res
                     .status(304)
-                    .redirect('/center-control/login');
+                    .redirect('/vehicle/login');
                 }
             }
         }
@@ -31,7 +31,7 @@ module.exports = {
             logger.warn('No token provided');
             return res
             .status(304)
-            .redirect('/center-control/login');
+            .redirect('/vehicle/login');
         }
     }
 }

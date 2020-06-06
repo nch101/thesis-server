@@ -7,17 +7,17 @@ var tokenModel = require('../models/token.model');
 module.exports = {
     refreshAccessToken: function(req, res, next) {
         tokenModel
-        .findOne({ refreshToken: req.cookie.refreshToken })
+        .findOne({ refreshToken: req.cookies.refreshToken })
         .then(async function(data) {
             if(data) {
                 try {
-                    var decoded = await jwtHelper.verifyToken(req.cookie.refreshToken, key.refreshSecretKey);
-                    var accessToken =  await jwtHelper.generateToken(decoded, key.secretKey, key.tokenLife);
-    
-                    logger.info('Refresh access token for user id: %s', user.id);
+                    var decoded = await jwtHelper.verifyToken(req.cookies.refreshToken, key.refreshSecretKey);
+                    var accessToken =  await jwtHelper.generateToken({ data: decoded.data }, key.secretKey, key.tokenLife);
+                    
+                    logger.info('Refresh access token for user id: %s', decoded.data.id);
                     res
                     .status(200)
-                    .cookie('token', accessToken);
+                    .cookie('accessToken', accessToken);
 
                     next();
                 }

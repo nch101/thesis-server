@@ -1,6 +1,7 @@
 var userModel = require('../models/user.model');
 var vehicleModel = require('../models/vehicle.model');
 var intersectionModel = require('../models/intersection.model');
+var tokenModel = require('../models/token.model');
 var log4js = require('log4js');
 var logger = log4js.getLogger('controllers.page');
 
@@ -29,6 +30,80 @@ module.exports = {
         return res
         .status(200)
         .render('login/control-center.pug');
+    },
+
+    /**
+     * Logout
+     */
+
+    vehicleLogout: function(req, res) {
+        tokenModel
+        .findOneAndDelete({ refreshToken: req.cookies.refreshToken })
+        .then(function(data) {
+            vehicleModel
+            .findByIdAndUpdate(res.locals.id, { $set: { status: 'offline' }})
+            .catch(function(error) {
+                logger.error('Vehicle %s logout error: %s', res.locals.id, error);
+                return res
+                .status(501)
+                .render('error/index.pug', {
+                    code: 501,
+                    message: 'Not Implemented'
+                });
+            });
+            
+            logger.info('Vehicle %s logout', res.locals.id);
+            return res
+            .status(304)
+            .clearCookie('refreshToken')
+            .clearCookie('accessToken')
+            .clearCookie('io')
+            .redirect('/login');
+        })
+        .catch(function(error) {
+            logger.error('Vehicle %s logout error %s', res.locals.id, error);
+            return res
+            .status(501)
+            .render('error/index.pug', {
+                code: 501,
+                message: 'Not Implemented'
+            })
+        })
+    },
+
+    centerLogout: function(req, res) {
+        tokenModel
+        .findOneAndDelete({ refreshToken: req.cookies.refreshToken })
+        .then(function(data) {
+            userModel
+            .findByIdAndUpdate(res.locals.id, { $set: { status: 'offline' }})
+            .catch(function(error) {
+                logger.error('Control center %s logout error: %s', res.locals.id, error);
+                return res
+                .status(501)
+                .render('error/index.pug', {
+                    code: 501,
+                    message: 'Not Implemented'
+                });
+            });
+            
+            logger.info('User %s logout', res.locals.id);
+            return res
+            .status(304)
+            .clearCookie('refreshToken')
+            .clearCookie('accessToken')
+            .clearCookie('io')
+            .redirect('/login');
+        })
+        .catch(function(error) {
+            logger.error('User %s logout error %s', res.locals.id, error);
+            return res
+            .status(501)
+            .render('error/index.pug', {
+                code: 501,
+                message: 'Not Implemented'
+            })
+        })
     },
 
     /**

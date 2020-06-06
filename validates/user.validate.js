@@ -9,7 +9,7 @@ var key = require('../helper/key');
 module.exports = {
     userValidate: function(req, res) {
         userModel
-        .findOne({ username: req.body.username })
+        .findOneAndUpdate({ username: req.body.username }, { $set: { status: 'online' }})
         .select('firstname password admin')
         .then(function(data) {
             if (bcrypt.compareSync(req.body.password, data.password)) {
@@ -20,8 +20,8 @@ module.exports = {
                 };
 
                 Promise
-                .all([jwtHelper.generateToken(user, key.secretKey, key.tokenLife), 
-                jwtHelper.generateToken(user, key.refreshSecretKey, key.refreshTokenLife)])
+                .all([jwtHelper.generateToken({ data: user }, key.secretKey, key.tokenLife), 
+                jwtHelper.generateToken({ data: user }, key.refreshSecretKey, key.refreshTokenLife)])
                 .then(function(token) {
                     logger.info('Auth success, id: %s', data._id);
                     tokenModel.create({
@@ -31,8 +31,8 @@ module.exports = {
 
                     return res
                     .status(304)
-                    .cookie('accessToken', token[0], { maxAge: 3600000 })
-                    .cookie('refreshToken', token[1])
+                    .cookie('accessToken', token[0])
+                    .cookie('refreshToken', token[1], { maxAge: 3600000 * 24 * 3650 })
                     .redirect('/center/overview');
                 })
                 .catch(function(error) {

@@ -25,9 +25,9 @@ var leftStreetLight = document.getElementById('left-street-light');
 var btnChange = document.getElementById('btn-change');
 var btnUpdate = document.getElementById('btn-update');
 
-const stateLightSocket = io(window.location.host + '/socket/state-light');
-const controlLightSocket = io(window.location.host + '/socket/control-light');
-const camSocket = io(window.location.host + '/socket/camera');
+const stateLightSocket = io(window.location.origin + '/socket/state-light');
+const controlLightSocket = io(window.location.origin + '/socket/control-light');
+const camSocket = io(window.location.origin + '/socket/camera');
 
 var idIntersection;
 

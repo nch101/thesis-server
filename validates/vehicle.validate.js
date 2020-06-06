@@ -3,13 +3,13 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('validates.vehicle');
 var vehicleModel = require('../models/vehicle.model');
 var tokenModel = require('../models/token.model');
-var jwt = require('../helper/jwt');
+var jwtHelper = require('../helper/jwt');
 var key = require('../helper/key');
 
 module.exports = {
     vehicleValidate: function(req, res) {
         vehicleModel
-        .findOne({ license_plate: req.body.license_plate })
+        .findOneAndUpdate({ license_plate: req.body.license_plate }, { $set: { status: 'online' }})
         .select('license_plate password')
         .then(function(data) {
             if (bcrypt.compareSync(req.body.password, data.password)) {
@@ -19,23 +19,23 @@ module.exports = {
                 };
 
                 Promise
-                .all([jwt.generateToken(vehicle, key.secretKey, key.tokenLife), 
-                jwt.generateToken(vehicle, key.refreshSecretKey, key.refreshTokenLife)])
+                .all([jwtHelper.generateToken({ data:vehicle }, key.secretKey, key.tokenLife), 
+                jwtHelper.generateToken({ data: vehicle }, key.refreshSecretKey, key.refreshTokenLife)])
                 .then(function(token) {
                     logger.info('Auth success, id: %s', data._id);
                     tokenModel.create({
-                        token: [0],
+                        userId: data._id,
                         refreshToken: token[1],
                     });
                     
                     return res
                     .status(304)
-                    .cookie('token', token[0])
-                    .cookie('refreshToken', token[1])
+                    .cookie('accessToken', token[0])
+                    .cookie('refreshToken', token[1], { maxAge: 3600000 * 24 * 3650 })
                     .redirect('/vehicle/direction');
                 })
                 .catch(function(error) {
-                    logger.error('Generate token error, id: s%, error: %s', data._id, error);
+                    logger.error('Generate accessToken error, id: s%, error: %s', data._id, error);
                     return res
                     .status(501)
                     .render('error/index.pug', {

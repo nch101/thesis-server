@@ -5,6 +5,9 @@ var vehicleController = require('../controllers/vehicle.controller');
 var userValidate = require('../validates/user.validate');
 var userMiddleware = require('../middleware/user.middleware');
 
+var vehicleValidate = require('../validates/vehicle.validate');
+var vehicleMiddleware = require('../middleware/vehicle.middleware');
+
 /**
  * Login page
  */
@@ -16,9 +19,16 @@ router.get('/', function(req, res) {
 });
 router.get('/login', pageController.loginOption);
 router.get('/vehicle/login', pageController.vehicleLogin);
-// router.post('/vehicle/login', userValidate.userValidate);
+router.post('/vehicle/login', vehicleValidate.vehicleValidate);
 router.get('/center-control/login', pageController.centerLogin);
 router.post('/center-control/login', userValidate.userValidate);
+
+/**
+ * Logout
+ */
+
+router.get('/vehicle/logout', vehicleMiddleware.vehicleMiddleware, pageController.vehicleLogout);
+router.get('/center/logout', userMiddleware.userMiddleware, pageController.centerLogout);
 
 /**
  * Control center side
@@ -32,6 +42,7 @@ router.get('/center/create-vehicle/', userMiddleware.userMiddleware, pageControl
 router.get('/center/create-intersection/', userMiddleware.userMiddleware, pageController.createIntersectionPage);
 router.get('/center/list/managers', userMiddleware.userMiddleware, pageController.listManagers);
 router.get('/center/list/vehicles', userMiddleware.userMiddleware, pageController.listVehicles);
+
 
 /**
  * Vehicle side
