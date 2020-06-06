@@ -57,7 +57,10 @@ module.exports = {
             .status(304)
             .clearCookie('refreshToken')
             .clearCookie('accessToken')
+            .clearCookie('vehicleId')
+            .clearCookie('locId')
             .clearCookie('io')
+            .clearCookie('mapToken')
             .redirect('/login');
         })
         .catch(function(error) {

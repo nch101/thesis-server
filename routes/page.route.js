@@ -48,6 +48,6 @@ router.get('/center/list/vehicles', userMiddleware.userMiddleware, pageControlle
  * Vehicle side
  */
 
-router.get('/vehicle/direction', pageController.directionPage);
+router.get('/vehicle/direction', vehicleMiddleware.vehicleMiddleware, pageController.directionPage);
 
 module.exports = router;

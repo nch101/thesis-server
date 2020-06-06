@@ -1,6 +1,20 @@
+//Interactive menu
 var menu = document.getElementById('menu-container');
 var menuIcon = document.getElementById('menu-icon');
 var menuBox = document.getElementById('menu-box')
+
+//ID
+var idVehicle = cookiesParser('vehicleId');
+var idLocation = cookiesParser('locId');
+mapboxgl.accessToken = cookiesParser('mapToken');
+
+
+const controlLightPath = io(window.location.origin + '/socket/control-light');
+const trackingVehiclePath = io(window.location.origin + '/socket/tracking-vehicle');
+const stateMachine = {
+    'approaching': 0,
+    'passed': 1
+}
 
 
 menu.addEventListener('click', function() {
@@ -8,16 +22,25 @@ menu.addEventListener('click', function() {
     menuBox.classList.toggle('menu-box-active');
 });
 
-const controlLightPath = io(window.location.origin + '/socket/control-light');
-const trackingVehiclePath = io(window.location.origin + '/socket/tracking-vehicle');
+// var map = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/streets-v11',
+//     center: [106.658188, 10.770398],
+//     zoom: 13
+// });
 
-var idVehicle = "5ec7347810544b26da694606";
-var idLocation = "5ec7e0f52913da1974a3c481";
-
-const stateMachine = {
-    'approaching': 0,
-    'passed': 1
-}
+// var directions = new MapboxDirections({
+//     accessToken: mapboxgl.accessToken,
+//     profile: 'mapbox/driving',
+//     controls: {
+//         profileSwitcher: false,
+//     },
+//     unit: 'metric',
+//     placeholderOrigin: 'Điểm đi',
+//     placeholderDestination: 'Điểm đến',
+//     language: 'vi',
+// })
+// map.addControl(directions, 'top-left');
 
 var RTLocation;
 var isPriority = true;
@@ -217,4 +240,19 @@ function distanceCalculation(lon1, lat1, lon2, lat2) {
 
 function deg2rad(deg) {
     return deg * (Math.PI/180)
+}
+
+/**
+ * Cookies parser
+ */
+
+function cookiesParser(cookieName) {
+    var cookieName = cookieName + "=";
+    var cookiesArray = document.cookie.split('; ');
+    for (var cookie of cookiesArray) {
+        if (cookie.indexOf(cookieName) == 0) {
+            return cookie.substring(cookieName.length, cookie.length);
+        }
+    }
+    return "";
 }

@@ -8,7 +8,7 @@ module.exports = {
     vehicleMiddleware: async function(req, res, next) {
         if (req.cookies.accessToken) {
             try {
-                var decoded = await jwt.verifyToken(req.cookies.accessToken, key.secretKey);
+                var decoded = await jwt.verifyToken(req.cookies.accessToken, key.secretKeyForVehicle);
                 logger.info('Verify token success');
                 res.locals.id = decoded.data.id;
                 res.locals.license_plate = decoded.data.license_plate;
@@ -17,7 +17,7 @@ module.exports = {
             catch(error) {
                 if (error.name === 'TokenExpiredError') {
                     logger.info('refresh accessToken');
-                    refreshTokenHelper.refreshAccessToken(req, res, next);
+                    refreshTokenHelper.vehicle(req, res, next);
                 }
                 else {
                     logger.error('Invalid token, error: %s', error);

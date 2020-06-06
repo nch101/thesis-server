@@ -3,8 +3,8 @@ extends layout
 block head
 	script(src='/javascripts/lib/axios.min.js')
 	script(src='/javascripts/lib/mapbox-gl.js')
-	link(rel='stylesheet', href='/stylesheets/mapbox-gl.css')
 	script(src='/javascripts/lib/mapbox-gl-directions.js')
+	link(rel='stylesheet', href='/stylesheets/mapbox-gl.css')
 	link(rel='stylesheet', href='/stylesheets/mapbox-gl-directions.css')
 
 block content
@@ -26,5 +26,4 @@ block content
 
 block addFile 
 	script(src="/socket.io/socket.io.js")
-	//- script(src='/javascripts/mapbox-vehicle.js')
 	script(src='/javascripts/direction.vehicle.js')

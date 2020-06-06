@@ -10,8 +10,9 @@ module.exports = {
     vehicleValidate: function(req, res) {
         vehicleModel
         .findOneAndUpdate({ license_plate: req.body.license_plate }, { $set: { status: 'online' }})
-        .select('license_plate password')
+        .select('license_plate password journey')
         .then(function(data) {
+            console.log(data)
             if (bcrypt.compareSync(req.body.password, data.password)) {
                 var vehicle = {
                     id: data._id,
@@ -19,8 +20,8 @@ module.exports = {
                 };
 
                 Promise
-                .all([jwtHelper.generateToken({ data:vehicle }, key.secretKey, key.tokenLife), 
-                jwtHelper.generateToken({ data: vehicle }, key.refreshSecretKey, key.refreshTokenLife)])
+                .all([jwtHelper.generateToken({ data:vehicle }, key.secretKeyForVehicle, key.tokenLife), 
+                jwtHelper.generateToken({ data: vehicle }, key.refreshSecretKeyForVehicle, key.refreshTokenLife)])
                 .then(function(token) {
                     logger.info('Auth success, id: %s', data._id);
                     tokenModel.create({
@@ -28,10 +29,14 @@ module.exports = {
                         refreshToken: token[1],
                     });
                     
+                    console.log(data);
                     return res
                     .status(304)
                     .cookie('accessToken', token[0])
                     .cookie('refreshToken', token[1], { maxAge: 3600000 * 24 * 3650 })
+                    .cookie('vehicleId', String(data._id))
+                    .cookie('locId', String(data.journey[1]._id))
+                    .cookie('mapToken', key.mapToken)
                     .redirect('/vehicle/direction');
                 })
                 .catch(function(error) {

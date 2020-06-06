@@ -20,8 +20,8 @@ module.exports = {
                 };
 
                 Promise
-                .all([jwtHelper.generateToken({ data: user }, key.secretKey, key.tokenLife), 
-                jwtHelper.generateToken({ data: user }, key.refreshSecretKey, key.refreshTokenLife)])
+                .all([jwtHelper.generateToken({ data: user }, key.secretKeyForCenter, key.tokenLife), 
+                jwtHelper.generateToken({ data: user }, key.refreshSecretKeyForCenter, key.refreshTokenLife)])
                 .then(function(token) {
                     logger.info('Auth success, id: %s', data._id);
                     tokenModel.create({

@@ -8,7 +8,7 @@ module.exports = {
     userMiddleware: async function(req, res, next) {
         if (req.cookies.accessToken) {
             try {
-                var decoded = await jwt.verifyToken(req.cookies.accessToken, key.secretKey);
+                var decoded = await jwt.verifyToken(req.cookies.accessToken, key.secretKeyForCenter);
                 logger.info('Verify token success');
                 res.locals.id = decoded.data.id;
                 res.locals.name = decoded.data.name;
@@ -17,7 +17,7 @@ module.exports = {
             catch(error) {
                 if (error.name === 'TokenExpiredError') {
                     logger.info('refresh accessToken');
-                    refreshTokenHelper.refreshAccessToken(req, res, next);
+                    refreshTokenHelper.user(req, res, next);
                 }
                 else {
                     logger.error('Invalid token, error: %s', error);
