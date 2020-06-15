@@ -24,10 +24,16 @@ var intersectionSchema = new Schema({
         type: pointSchema,
         required: true
     },
+    trafficDensity: {
+        type: String,
+        enum: ['very-low', 'low', 'medium', 'high', 'very-high'],
+        default: 'very-low',
+        require: true
+    },
     modeControl: {
         type: String,
-        enum: ['automatic', 'manual', 'emergency'],
-        default: 'automatic',
+        enum: ['automatic-fixed-time', 'automatic-flexible-time', 'manual', 'emergency'],
+        default: 'automatic-fixed-time',
         required: true
     },
     delta: {

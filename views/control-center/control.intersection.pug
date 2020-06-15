@@ -63,11 +63,23 @@ block content
                         label Tên giao lộ
                         label#intersection-name
                     .info-item
-                        label Trạng thái điều khiển
-                        label#state-control.badge
+                        label Mật độ giao thông
+                        label#traffic-density-state.badge
                     .info-item
-                        label(for='isManual') Điều khiển từ xa
-                        input#isManual.switch(type='checkbox', onchange='updateStateControl()')
+                        label Chế độ điều khiển
+                        #mode-control.circle-btn-container
+                            button#flexible-time.circle-btn
+                                span.icon
+                                    i.fas.fa-history
+                                span.circle-btn-note Chế độ tự động sử dụng fuzzy control
+                            button#fixed-time.circle-btn
+                                span.icon
+                                    i.far.fa-clock
+                                span.circle-btn-note Chế độ tự động sử dụng thời gian định sẵn
+                            button#manual.circle-btn
+                                span.icon
+                                    i.fas.fa-hand-paper
+                                span.circle-btn-note Chế độ điều khiển bằng tay
                     .info-item
                         label(for='delta') Thời gian lệch
                         input#delta(type='number', name='delta', required='', style='width: 50%; margin-left: 1rem;')

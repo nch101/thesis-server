@@ -3,9 +3,13 @@ var renderControl = document.getElementById('render-control');
 var renderAlert = document.getElementById('render-alert');
 
 var intersectionNameHTML = document.getElementById('intersection-name');
+var trafficDensityEle = document.getElementById('traffic-density-state');
 var delta = document.getElementById('delta');
-var stateControl = document.getElementById('state-control');
-var isManual = document.getElementById('isManual');
+
+var modeBtn = document.getElementById('mode-control');
+var flexibleTime = document.getElementById('flexible-time');
+var fixedTime = document.getElementById('fixed-time');
+var manual = document.getElementById('manual');
 
 var topStreet = document.getElementById('top-street');
 var rightStreet = document.getElementById('right-street');
@@ -29,9 +33,12 @@ const stateLightSocket = io(window.location.origin + '/socket/state-light');
 const controlLightSocket = io(window.location.origin + '/socket/control-light');
 const camSocket = io(window.location.origin + '/socket/camera');
 
+axios.defaults.baseURL = window.location.origin;
+// axios.defaults.headers.common['Authorization'] = ;
+
 var idIntersection;
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+mapboxgl.accessToken = cookiesParser('mapToken');
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -40,64 +47,88 @@ var map = new mapboxgl.Map({
     zoom: 12
 });
 
-axios.get(window.location.origin + '/intersection')
-    .then(renderIntersection)
+axios.get('/intersection')
+.then(renderIntersectionsOnMap)
 
-function renderIntersection(res) {
+function renderIntersectionsOnMap(res) {
     var intersectionsData = res.data;
+
     for (var intersectionData of intersectionsData) {
-        var popupContent = '';
-        var popupInfos = {
-            'Tên giao lộ': intersectionData.intersectionName,
-            'Trạng thái điều khiển': intersectionData.modeControl
-        }
-
-        for (var popupInfo in popupInfos) {
-            popupContent += '<strong>' + popupInfo + '</strong>' 
-                            + '<p style="text-transform: capitalize;">' + popupInfos[popupInfo] + '</p>'
-        };
-
-        var popup = new mapboxgl.Popup({ closeOnClick: false })
-                                .setLngLat(intersectionData.location.coordinates)
-                                .setHTML(popupContent)
-                                .addTo(map);
-
         var el = document.createElement('div');
         el.className = 'intersection';
         el.addEventListener('click', getInfoIntersection);
-        el.params = intersectionData._id;
+        el.id = intersectionData._id;
+        el.coordinates = intersectionData.location.coordinates;
+
         new mapboxgl.Marker(el)
         .setLngLat(intersectionData.location.coordinates)
-        .setPopup(popup)
         .addTo(map);
     }
 }
 
 // getInfoIntersection();
 
-function getInfoIntersection(event) {
-    // @params: event -------^
+async function getInfoIntersection(event) {
+    // @params: event --------------^
 
+    /**
+     * Fly to intersection has been clicked
+     */
+
+    var coordinates = event.currentTarget.coordinates;
+    map.flyTo({
+        center: coordinates,
+        speed: 0.8,
+        zoom: 17
+    })
+    
+    /**
+     * Unsubscribe intersection was clicked before and subscribe new intersection
+     */
+    
     unsubscribeIntersection();
-    idIntersection = event.currentTarget.params;
+    idIntersection = event.currentTarget.id;
+    subscribeIntersection();
 
     // DEBUG
     //idIntersection = '5eb90fe69f1398273bba559a';
 
-    subscribeIntersection();
-    axios({
+    /**
+     * Get and render information of intersection
+     */
+
+    var res = await axios.get({
         method: 'get',
         url: window.location.origin + '/intersection/' + idIntersection
     })
     .then(renderInfoIntersection)
 }
 
+function unsubscribeIntersection() {
+    stateLightSocket.emit('leave-room', idIntersection);
+    controlLightSocket.emit('leave-room', idIntersection);
+    camSocket.emit('leave-room', idIntersection);
+}
+
+function subscribeIntersection() {
+    stateLightSocket.emit('room', idIntersection);
+    controlLightSocket.emit('room', idIntersection);
+    camSocket.emit('room', idIntersection);
+
+    stateLightSocket.on('[center]-time-light', renderTimeLight);
+    stateLightSocket.on('[center]-light-state', renderStateLight);
+
+    camSocket.on('[center]-camera', renderCanvas);
+}
+
 function renderInfoIntersection(res) {
     var intersectionName = res.data.intersectionName;
+    var trafficDensity = res.data.trafficDensity;
     var modeControl = res.data.modeControl;
     var deltaTime = res.data.delta;
     var streetInfo = res.data.trafficLights;
     var streetArray = [rightStreet, bottomStreet, leftStreet, topStreet];
+    var trafficDensityClass = trafficDensityEle.classList;
 
     renderInteract.style.display = 'flex';
 
@@ -106,12 +137,40 @@ function renderInfoIntersection(res) {
     }
 
     intersectionNameHTML.innerHTML = intersectionName;
-    stateControl.innerHTML = modeControl;
     delta.value = deltaTime;
 
-    if (modeControl === 'automatic') {
-        isManual.checked = false;
+    if (trafficDensity === 'very-low') {
+        trafficDensityEle.innerHTML = 'Rất thấp';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('vl-badge');
+    }
+    else if (trafficDensity === 'low') {
+        trafficDensityEle.innerHTML = 'Thấp';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('l-badge');
+    }
+    else if (trafficDensity === 'medium') {
+        trafficDensityEle.innerHTML = 'Trung bình';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('m-badge');
+    }
+    else if (trafficDensity === 'high') {
+        trafficDensityEle.innerHTML = 'Cao';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('h-badge');
+    }
+    else if (trafficDensity === 'very-high') {
+        trafficDensityEle.innerHTML = 'Rất cao';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('vh-badge');
+    }
+
+    if (modeControl === 'automatic-fixed-time') {
+        
         automaticControl(streetInfo);
+    }
+    else if (modeControl === 'automatic-flexible-time') {
+
     }
     else if (modeControl === 'manual') {
         isManual.checked = true;
@@ -123,6 +182,8 @@ function renderInfoIntersection(res) {
     else;
 
 }
+
+function trafficDensity()
 
 function updateStateControl() {
     if (isManual.checked) {
@@ -156,7 +217,7 @@ function manualControl() {
     var btnChange = document.getElementById('btn-change');
     stateControl.classList.remove('automatic-control');
     stateControl.classList.add('manual-control');
-    stateControl.innerText = '';
+    // stateControl.innerText = '';
     stateControl.innerText = 'manual';
 
     btnChange.addEventListener('click', changeLight);
@@ -323,22 +384,6 @@ function convertDataURIToUint8(dataURI) {
 }
 
 
-function unsubscribeIntersection() {
-    stateLightSocket.emit('leave-room', idIntersection);
-    controlLightSocket.emit('leave-room', idIntersection);
-    camSocket.emit('leave-room', idIntersection);
-}
-
-function subscribeIntersection() {
-    stateLightSocket.emit('room', idIntersection);
-    controlLightSocket.emit('room', idIntersection);
-    camSocket.emit('room', idIntersection);
-
-    stateLightSocket.on('[center]-time-light', renderTimeLight);
-    stateLightSocket.on('[center]-light-state', renderStateLight);
-
-    camSocket.on('[center]-camera', renderCanvas);
-}
 
 function resetColor(timeLightArray ,colorLightArray) {
     timeLightArray.classList.remove('red-number', 'yellow-number', 'green-number');
@@ -346,4 +391,16 @@ function resetColor(timeLightArray ,colorLightArray) {
     colorLightArray.children[0].classList.remove('red-light');
     colorLightArray.children[1].classList.remove('yellow-light');
     colorLightArray.children[2].classList.remove('green-light');
+}
+
+
+function cookiesParser(cookieName) {
+    var cookieName = cookieName + "=";
+    var cookiesArray = document.cookie.split('; ');
+    for (var cookie of cookiesArray) {
+        if (cookie.indexOf(cookieName) == 0) {
+            return cookie.substring(cookieName.length, cookie.length);
+        }
+    }
+    return "";
 }

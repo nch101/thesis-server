@@ -2,6 +2,8 @@ var userModel = require('../models/user.model');
 var vehicleModel = require('../models/vehicle.model');
 var intersectionModel = require('../models/intersection.model');
 var tokenModel = require('../models/token.model');
+var key = require('../helper/key');
+
 var log4js = require('log4js');
 var logger = log4js.getLogger('controllers.page');
 
@@ -95,6 +97,7 @@ module.exports = {
             .status(304)
             .clearCookie('refreshToken')
             .clearCookie('accessToken')
+            .clearCookie('mapToken')
             .clearCookie('io')
             .redirect('/login');
         })
@@ -166,6 +169,7 @@ module.exports = {
         logger.info('Render create intersection page');
         return res
         .status(200)
+        .cookie('mapToken', key.mapToken)
         .render('control-center/create.intersection.pug', {
             name: res.locals.name,
         })
@@ -175,6 +179,7 @@ module.exports = {
         logger.info('Render control light page');
         return res
         .status(200)
+        .cookie('mapToken', key.mapToken)
         .render('control-center/control.intersection.pug', {
             name: res.locals.name,
         })
@@ -184,6 +189,7 @@ module.exports = {
         logger.info('Render tracking vehicle page');
         return res
         .status(200)
+        .cookie('mapToken', key.mapToken)
         .render('control-center/tracking-vehicles.pug', {
             name: res.locals.name,
         })
