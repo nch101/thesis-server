@@ -10,6 +10,7 @@ var modeBtn = document.getElementById('mode-control');
 var flexibleTime = document.getElementById('flexible-time');
 var fixedTime = document.getElementById('fixed-time');
 var manual = document.getElementById('manual');
+var emergency = document.getElementById('emergency');
 
 var topStreet = document.getElementById('top-street');
 var rightStreet = document.getElementById('right-street');
@@ -38,69 +39,65 @@ axios.defaults.baseURL = window.location.origin;
 
 var idIntersection;
 
-mapboxgl.accessToken = cookiesParser('mapToken');
+// mapboxgl.accessToken = cookiesParser('mapToken');
 
-var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [106.66008, 10.763512],
-    zoom: 12
-});
+// var map = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/streets-v11',
+//     center: [106.66008, 10.763512],
+//     zoom: 12
+// });
 
-axios.get('/intersection')
-.then(renderIntersectionsOnMap)
+// axios.get('/intersection')
+// .then(renderIntersectionsOnMap)
 
-function renderIntersectionsOnMap(res) {
-    var intersectionsData = res.data;
+// function renderIntersectionsOnMap(res) {
+//     var intersectionsData = res.data;
 
-    for (var intersectionData of intersectionsData) {
-        var el = document.createElement('div');
-        el.className = 'intersection';
-        el.addEventListener('click', getInfoIntersection);
-        el.id = intersectionData._id;
-        el.coordinates = intersectionData.location.coordinates;
+//     for (var intersectionData of intersectionsData) {
+//         var el = document.createElement('div');
+//         el.className = 'intersection';
+//         el.addEventListener('click', getInfoIntersection);
+//         el.id = intersectionData._id;
+//         el.coordinates = intersectionData.location.coordinates;
 
-        new mapboxgl.Marker(el)
-        .setLngLat(intersectionData.location.coordinates)
-        .addTo(map);
-    }
-}
+//         new mapboxgl.Marker(el)
+//         .setLngLat(intersectionData.location.coordinates)
+//         .addTo(map);
+//     }
+// }
 
-// getInfoIntersection();
+getInfoIntersection();
 
-async function getInfoIntersection(event) {
-    // @params: event --------------^
+function getInfoIntersection() {
+    // @params: event --------^
 
     /**
      * Fly to intersection has been clicked
      */
 
-    var coordinates = event.currentTarget.coordinates;
-    map.flyTo({
-        center: coordinates,
-        speed: 0.8,
-        zoom: 17
-    })
+    // var coordinates = event.currentTarget.coordinates;
+    // map.flyTo({
+    //     center: coordinates,
+    //     speed: 0.8,
+    //     zoom: 17
+    // })
     
-    /**
-     * Unsubscribe intersection was clicked before and subscribe new intersection
-     */
+    // /**
+    //  * Unsubscribe intersection was clicked before and subscribe new intersection
+    //  */
     
-    unsubscribeIntersection();
-    idIntersection = event.currentTarget.id;
-    subscribeIntersection();
-
+    // unsubscribeIntersection();
+    // idIntersection = event.currentTarget.id;
     // DEBUG
-    //idIntersection = '5eb90fe69f1398273bba559a';
-
+    idIntersection = '5eb90fe69f1398273bba559a';
+    subscribeIntersection();
+    
     /**
      * Get and render information of intersection
      */
 
-    var res = await axios.get({
-        method: 'get',
-        url: window.location.origin + '/intersection/' + idIntersection
-    })
+    axios.get('/intersection/' + idIntersection)
     .then(renderInfoIntersection)
 }
 
@@ -117,8 +114,8 @@ function subscribeIntersection() {
 
     stateLightSocket.on('[center]-time-light', renderTimeLight);
     stateLightSocket.on('[center]-light-state', renderStateLight);
-
-    camSocket.on('[center]-camera', renderCanvas);
+    camSocket.on('[center]-west-street', renderCameraAtWestStreet);
+    camSocket.on('[center]-north-street', renderCameraAtNorthStreet);
 }
 
 function renderInfoIntersection(res) {
@@ -165,65 +162,52 @@ function renderInfoIntersection(res) {
         trafficDensityClass.add('vh-badge');
     }
 
-    if (modeControl === 'automatic-fixed-time') {
-        
-        automaticControl(streetInfo);
+    if (modeControl === 'automatic-flexible-time') {
+        flexibleTime.classList.add('btn-active');
+        automaticFlexibleTime()
     }
-    else if (modeControl === 'automatic-flexible-time') {
-
+    else if (modeControl === 'automatic-fixed-time') {
+        fixedTime.classList.add('btn-active');
+        automaticFixedTime(streetInfo);
     }
     else if (modeControl === 'manual') {
-        isManual.checked = true;
+        manual.classList.add('btn-active');
         manualControl();
     }
     else if (modeControl === 'emergency') {
-        isManual.disabled = true;
+        emergency.classList.add('btn-active');
     }
     else;
 
+    flexibleTime.addEventListener('click', automaticFlexibleTime);
+    manual.addEventListener('click', manualControl);
+    fixedTime.addEventListener('click', async function() {
+        var res = await axios.get('/intersection/' + idIntersection);
+        automaticFixedTime(res.data.trafficLights);
+    });
+
 }
 
-function trafficDensity()
-
-function updateStateControl() {
-    if (isManual.checked) {
-        controlLightSocket.emit('[center]-change-mode', { mode: 'manual' });
-        manualControl()
-    }
-    else {
-        controlLightSocket.emit('[center]-change-mode', { mode: 'automatic' });
-        // Update time light
-        axios({
-            method: 'get',
-            url: window.location.origin + '/intersection/' + idIntersection
-        })
-        .then(function(res) {
-            automaticControl(res.data.trafficLights);
-        })
-    }
+async function updateTrafficDensity() {
+    var res = await axios.get('/intersection/' + idIntersection);
+    
 }
 
-function manualControl() {
-    var manualControlHTML = '<div class="control-item">' +
-                                '<label for="btn-change">Thay đổi trạng thái</label>' +
-                                '<button id="btn-change" class="btn-change">' +
-                                    '<i class="fas fa-sync-alt"></i>Thay đổi' +
-                                '</button>' +
-                            '</div>'
+function automaticFlexibleTime() {
+    controlLightSocket.emit('[center]-change-mode', { mode: 'automatic-flexible-time' });
+    var btnActive = document.getElementsByClassName('btn-active');
+    btnActive[0].classList.remove('btn-active');
+    flexibleTime.classList.add('btn-active');
 
     renderControl.innerHTML = '';
-    renderControl.innerHTML = manualControlHTML;
-
-    var btnChange = document.getElementById('btn-change');
-    stateControl.classList.remove('automatic-control');
-    stateControl.classList.add('manual-control');
-    // stateControl.innerText = '';
-    stateControl.innerText = 'manual';
-
-    btnChange.addEventListener('click', changeLight);
 }
 
-function automaticControl(streetInfo) {
+function automaticFixedTime(streetInfo) {
+    controlLightSocket.emit('[center]-change-mode', { mode: 'automatic-fixed-time' });
+    var btnActive = document.getElementsByClassName('btn-active');
+    btnActive[0].classList.remove('btn-active');
+    fixedTime.classList.add('btn-active');
+
     var btnUpdateHTML = '<button id="btn-update" class="btn-change btn-update">' +
                             '<i class="fas fa-sync-alt"></i>Cập nhật dữ liệu' +
                         '</button>';
@@ -258,16 +242,31 @@ function automaticControl(streetInfo) {
                             '</div>';
     }
 
-    renderControl.innerHTML = '';
     renderControl.innerHTML = trafficLightHTML + btnUpdateHTML;
 
-    stateControl.classList.remove('manual-control');
-    stateControl.classList.add('automatic-control');
-    stateControl.innerText = '';
-    stateControl.innerText = 'automatic';
     var btnUpdate = document.getElementById('btn-update');
     btnUpdate.addEventListener('click', updateData);
-    btnUpdate.params = streetInfo;
+    btnUpdate.streetInfo = streetInfo;
+}
+
+function manualControl() {
+    controlLightSocket.emit('[center]-change-mode', { mode: 'manual' });
+    var btnActive = document.getElementsByClassName('btn-active');
+    btnActive[0].classList.remove('btn-active');
+    manual.classList.add('btn-active');
+
+    var manualControlHTML = '<div class="control-item">' +
+                                '<label for="btn-change">Thay đổi trạng thái</label>' +
+                                '<button id="btn-change" class="btn-change">' +
+                                    '<i class="fas fa-sync-alt"></i>Thay đổi' +
+                                '</button>' +
+                            '</div>'
+
+    renderControl.innerHTML = manualControlHTML;
+    var btnChange = document.getElementById('btn-change');
+    btnChange.addEventListener('click', function() {
+        controlLightSocket.emit('[center]-change-light', 'change-light');
+    });
 }
 
 function renderTimeLight(timeLight) {
@@ -298,61 +297,63 @@ function renderStateLight(stateLight) {
     }
 }
 
-function changeLight() {
-    controlLightSocket.emit('[center]-change-light', 'change-light');
+function resetColor(timeLightArray ,colorLightArray) {
+    timeLightArray.classList.remove('red-number', 'yellow-number', 'green-number');
+
+    colorLightArray.children[0].classList.remove('red-light');
+    colorLightArray.children[1].classList.remove('yellow-light');
+    colorLightArray.children[2].classList.remove('green-light');
 }
 
-function updateData(event) {
+async function updateData(event) {
     var timeReds = []
     var timeYellows = []
     var timeGreens = []
 
-    for (let index = 0; index < event.currentTarget.params.length; index++) {
+    for (let index = 0; index < event.currentTarget.streetInfo.length; index++) {
         timeReds.push(document.getElementsByName('timeReds')[index].value);
         timeYellows.push(document.getElementsByName('timeYellows')[index].value);
         timeGreens.push(document.getElementsByName('timeGreens')[index].value);
     }
 
-    axios({
-        method: 'put',
-        url: window.location.origin + '/intersection/' + idIntersection,
+    var res = await axios.put('/intersection/' + idIntersection, {
         data: {
             delta: delta.value,
             timeReds: timeReds,
             timeYellows: timeYellows,
             timeGreens: timeGreens
         }
-    })
-    .then(function(res) {
-        if (res.data.status == 'success') {
-            setTimeout(function() {
-                renderAlert.classList.remove('alert', 'alert-success');
-                renderAlert.innerHTML = '';
-            }, 4800)
-            renderAlert.classList.add('alert', 'alert-success');
-            renderAlert.innerHTML = res.data.message;
+    });
+    
+    if (res.data.status == 'success') {
+        setTimeout(function() {
+            renderAlert.classList.remove('alert', 'alert-success');
+            renderAlert.innerHTML = '';
+        }, 4800)
+        renderAlert.classList.add('alert', 'alert-success');
+        renderAlert.innerHTML = res.data.message;
 
-        }
-        else if (res.data.status == 'error') {
-            setTimeout(function() {
-                renderAlert.classList.remove('alert', 'alert-error');
-                renderAlert.innerHTML = '';
-            }, 4800)
-            renderAlert.classList.add('alert', 'alert-error');
-            renderAlert.innerHTML = res.data.message;
-        }
-    })
+    }
+    else if (res.data.status == 'error') {
+        setTimeout(function() {
+            renderAlert.classList.remove('alert', 'alert-error');
+            renderAlert.innerHTML = '';
+        }, 4800)
+        renderAlert.classList.add('alert', 'alert-error');
+        renderAlert.innerHTML = res.data.message;
+    }
 }
 
-function renderCanvas(base64Image) {
+
+function renderCameraAtNorthStreet(base64Image) {
     parser = new JpegDecoder();
-    parser.parse(convertDataURIToUint8(base64Image));
+    parser.parse(convertDataURIToUint81(base64Image));
     width = parser.width;
     height = parser.height;
     numComponents = parser.numComponents;
     decoded = parser.getData(width, height);
 
-    var canvas = document.getElementById('image');
+    var canvas = document.getElementById('image1');
     canvas.width = width;
     canvas.height = height;
     var ctx = canvas.getContext('2d');
@@ -367,7 +368,30 @@ function renderCanvas(base64Image) {
     ctx.putImageData(imageData, 0, 0);
 }
 
-function convertDataURIToUint8(dataURI) {
+function renderCameraAtWestStreet(base64Image) {
+    parser = new JpegDecoder();
+    parser.parse(convertDataURIToUint82(base64Image));
+    width = parser.width;
+    height = parser.height;
+    numComponents = parser.numComponents;
+    decoded = parser.getData(width, height);
+
+    var canvas = document.getElementById('image2');
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext('2d');
+    var imageData = ctx.createImageData(width, height);
+    var imageBytes = imageData.data;
+    for (var i = 0, j = 0, ii = width * height * 4; i < ii; ) {
+      imageBytes[i++] = decoded[j++];
+      imageBytes[i++] = numComponents === 3 ? decoded[j++] : decoded[j - 1];
+      imageBytes[i++] = numComponents === 3 ? decoded[j++] : decoded[j - 1];
+      imageBytes[i++] = 255;
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+function convertDataURIToUint81(dataURI) {
     // Validate input data
     if(!dataURI) return;
 
@@ -383,16 +407,21 @@ function convertDataURIToUint8(dataURI) {
     return array;
 }
 
+function convertDataURIToUint82(dataURI) {
+    // Validate input data
+    if(!dataURI) return;
 
+    var raw = window.atob(dataURI);
+    var rawLength = raw.length;
+    var array = new Uint8Array(new ArrayBuffer(rawLength));
 
-function resetColor(timeLightArray ,colorLightArray) {
-    timeLightArray.classList.remove('red-number', 'yellow-number', 'green-number');
+    for(i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+    }
 
-    colorLightArray.children[0].classList.remove('red-light');
-    colorLightArray.children[1].classList.remove('yellow-light');
-    colorLightArray.children[2].classList.remove('green-light');
+    // Return a array binary data
+    return array;
 }
-
 
 function cookiesParser(cookieName) {
     var cookieName = cookieName + "=";

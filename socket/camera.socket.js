@@ -17,8 +17,12 @@ module.exports = function(io) {
             logger.info('Socket ID %s leaves room %s', socket.id, roomID);
         });
         
-		socket.on('[intersection]-camera', function(data) {
-			cameraPath.to(data.room).emit('[center]-camera', data.data);
+        socket.on('[intersection]-north-street', function(data) {
+			cameraPath.to(data.room).emit('[center]-north-street', data.data);
+		});
+
+		socket.on('[intersection]-west-street', function(data) {
+			cameraPath.to(data.room).emit('[center]-west-street', data.data);
 		});
 	});
 }
