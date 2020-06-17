@@ -12,6 +12,11 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+@font-face {
+    font-family: '7SegmentFont';
+    src: url('Segment7Standard.otf')
+}
+
 body {
     background-color: #f3f6f9;
 }
@@ -846,7 +851,7 @@ li > a:hover {
 }
 
 .time {
-    font-family: 'Segment7Standard';
+    font-family: '7SegmentFont';
 }
 
 #delta {
