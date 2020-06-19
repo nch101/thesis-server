@@ -39,58 +39,58 @@ axios.defaults.baseURL = window.location.origin;
 
 var idIntersection;
 
-// mapboxgl.accessToken = cookiesParser('mapToken');
+mapboxgl.accessToken = cookiesParser('mapToken');
 
-// var map = new mapboxgl.Map({
-//     container: 'map',
-//     style: 'mapbox://styles/mapbox/streets-v11',
-//     center: [106.66008, 10.763512],
-//     zoom: 12
-// });
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [106.66008, 10.763512],
+    zoom: 12
+});
 
-// axios.get('/intersection')
-// .then(renderIntersectionsOnMap)
+axios.get('/intersection')
+.then(renderIntersectionsOnMap)
 
-// function renderIntersectionsOnMap(res) {
-//     var intersectionsData = res.data;
+function renderIntersectionsOnMap(res) {
+    var intersectionsData = res.data;
 
-//     for (var intersectionData of intersectionsData) {
-//         var el = document.createElement('div');
-//         el.className = 'intersection';
-//         el.addEventListener('click', getInfoIntersection);
-//         el.id = intersectionData._id;
-//         el.coordinates = intersectionData.location.coordinates;
+    for (var intersectionData of intersectionsData) {
+        var el = document.createElement('div');
+        el.className = 'intersection';
+        el.addEventListener('click', getInfoIntersection);
+        el.id = intersectionData._id;
+        el.coordinates = intersectionData.location.coordinates;
 
-//         new mapboxgl.Marker(el)
-//         .setLngLat(intersectionData.location.coordinates)
-//         .addTo(map);
-//     }
-// }
+        new mapboxgl.Marker(el)
+        .setLngLat(intersectionData.location.coordinates)
+        .addTo(map);
+    }
+}
 
-getInfoIntersection();
+// getInfoIntersection();
 
-function getInfoIntersection() {
+function getInfoIntersection(event) {
     // @params: event --------^
 
     /**
      * Fly to intersection has been clicked
      */
 
-    // var coordinates = event.currentTarget.coordinates;
-    // map.flyTo({
-    //     center: coordinates,
-    //     speed: 0.8,
-    //     zoom: 17
-    // })
+    var coordinates = event.currentTarget.coordinates;
+    map.flyTo({
+        center: coordinates,
+        speed: 0.8,
+        zoom: 17
+    })
     
-    // /**
-    //  * Unsubscribe intersection was clicked before and subscribe new intersection
-    //  */
+    /**
+     * Unsubscribe intersection was clicked before and subscribe new intersection
+     */
     
-    // unsubscribeIntersection();
-    // idIntersection = event.currentTarget.id;
+    unsubscribeIntersection();
+    idIntersection = event.currentTarget.id;
     // DEBUG
-    idIntersection = '5eb90fe69f1398273bba559a';
+    // idIntersection = '5eb90fe69f1398273bba559a';
     subscribeIntersection();
     
     /**
@@ -317,12 +317,10 @@ async function updateData(event) {
     }
 
     var res = await axios.put('/intersection/' + idIntersection, {
-        data: {
-            delta: delta.value,
-            timeReds: timeReds,
-            timeYellows: timeYellows,
-            timeGreens: timeGreens
-        }
+        delta: delta.value,
+        timeReds: timeReds,
+        timeYellows: timeYellows,
+        timeGreens: timeGreens
     });
     
     if (res.data.status == 'success') {
@@ -344,16 +342,15 @@ async function updateData(event) {
     }
 }
 
-
 function renderCameraAtNorthStreet(base64Image) {
     parser = new JpegDecoder();
-    parser.parse(convertDataURIToUint81(base64Image));
+    parser.parse(convertDataURIToUint8(base64Image));
     width = parser.width;
     height = parser.height;
     numComponents = parser.numComponents;
     decoded = parser.getData(width, height);
 
-    var canvas = document.getElementById('image1');
+    var canvas = document.getElementById('north-cam');
     canvas.width = width;
     canvas.height = height;
     var ctx = canvas.getContext('2d');
@@ -370,13 +367,13 @@ function renderCameraAtNorthStreet(base64Image) {
 
 function renderCameraAtWestStreet(base64Image) {
     parser = new JpegDecoder();
-    parser.parse(convertDataURIToUint82(base64Image));
+    parser.parse(convertDataURIToUint8(base64Image));
     width = parser.width;
     height = parser.height;
     numComponents = parser.numComponents;
     decoded = parser.getData(width, height);
 
-    var canvas = document.getElementById('image2');
+    var canvas = document.getElementById('west-cam');
     canvas.width = width;
     canvas.height = height;
     var ctx = canvas.getContext('2d');
@@ -391,23 +388,7 @@ function renderCameraAtWestStreet(base64Image) {
     ctx.putImageData(imageData, 0, 0);
 }
 
-function convertDataURIToUint81(dataURI) {
-    // Validate input data
-    if(!dataURI) return;
-
-    var raw = window.atob(dataURI);
-    var rawLength = raw.length;
-    var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-    for(i = 0; i < rawLength; i++) {
-        array[i] = raw.charCodeAt(i);
-    }
-
-    // Return a array binary data
-    return array;
-}
-
-function convertDataURIToUint82(dataURI) {
+function convertDataURIToUint8(dataURI) {
     // Validate input data
     if(!dataURI) return;
 

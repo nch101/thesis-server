@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var intersectionModel = require('../models/intersection.model');
 var trafficLightModel = require('../models/traffic-light.model');
 var log4js = require('log4js');
@@ -139,6 +138,35 @@ module.exports = {
         });
     },
 
+    updateTrafficDensity: function(req, res) {
+        intersectionModel
+        .findByIdAndUpdate(req.params.id, { $push: {
+            trafficDensity: {
+                state: req.body.state,
+                rate: req.body.rate
+            }
+        }})
+        .then(function(data) {
+            if (data) {
+                logger.info('Updated traffic density at %s: state %s',
+                req.params.id, req.body.state);
+                return res
+                .status(200)
+                .json({ message: 'Updated!' });
+            }
+            logger.info('Cannot find intersection id: %s', req.params.id);
+            return res
+            .status(404)
+            .json({ message: 'Not found!' });
+        })
+        .catch(function(error) {
+            logger.error('Update failed, id: %s, error: %s', req.params.id, error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        })
+    },
+
     configTime: function(req, res) {
         intersectionModel
         .findById(req.params.id)
@@ -230,12 +258,13 @@ module.exports = {
     getIntersection: function(req, res) {
         intersectionModel
         .findById(req.params.id)
-        .select('intersectionName modeControl delta trafficLights')
+        .select('intersectionName modeControl delta trafficLights trafficDensity')
         .populate({ path: 'trafficLights', 
-        select: 'streetName priority timeRed timeYellow timeGreen camip ' })
+        select: 'streetName priority timeRed timeYellow timeGreen camip' })
         .then(function(data) {
             if (data) {
                 logger.info('Get data intersection id: %s', req.params.id);
+                data.trafficDensity = data.trafficDensity[data.trafficDensity.length - 1];
                 return res
                 .status(200)
                 .json(data);

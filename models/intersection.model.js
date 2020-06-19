@@ -13,6 +13,23 @@ var pointSchema = new Schema({
     }
 });
 
+var densitySchema = new Schema({
+    state: {
+        type: String,
+        enum: ['very-low', 'low', 'medium', 'high', 'very-high'],
+        default: 'very-low',
+        require: true
+    },
+    rate: {
+        type: Number,
+        require: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 var intersectionSchema = new Schema({
     intersectionName: {
         type: String,
@@ -24,12 +41,9 @@ var intersectionSchema = new Schema({
         type: pointSchema,
         required: true
     },
-    trafficDensity: {
-        type: String,
-        enum: ['very-low', 'low', 'medium', 'high', 'very-high'],
-        default: 'very-low',
-        require: true
-    },
+    trafficDensity: [{
+        type: densitySchema,
+    }],
     modeControl: {
         type: String,
         enum: ['automatic-fixed-time', 'automatic-flexible-time', 'manual', 'emergency'],

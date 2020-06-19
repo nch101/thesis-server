@@ -8,4 +8,6 @@ router.get('/', intersectionController.getAllIntersections);
 router.get('/:id', intersectionController.getIntersection);
 router.put('/:id', intersectionController.configTime);
 
+router.post('/traffic-density/:id', intersectionController.updateTrafficDensity);
+
 module.exports = router
