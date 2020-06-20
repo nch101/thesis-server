@@ -66,30 +66,81 @@ block content
                     span.number #{ nVehiclesActive } 
                     span.species Phương tiện ưu tiên
                 span.state.online-text Đang hoạt động
+    .overview-info
         span.list-item
-            span.icon(style='background-color: #9F9FED;')
+            span.icon.automatic-flexible
                 i.fas.fa-traffic-light
             .list-content
                 div
-                    span#nInterAuto.number 
+                    span.number #{ nMode[0] }
                     span.species Giao lộ
-                span.state(style='color: #736CED;') trong chế độ automatic
+                span.state.automatic-flexible-text trong chế độ thời gian linh hoạt
         span.list-item
-            span.icon(style='background-color: #D9B26F;')
+            span.icon.automatic-fixed
                 i.fas.fa-traffic-light
             .list-content
                 div
-                    span#nInterManual.number 
+                    span.number #{ nMode[1] }
                     span.species Giao lộ
-                span.state(style='color: #D9B26F;') trong chế độ manual
+                span.state.automatic-fixed-text trong chế độ thời gian định sẵn
         span.list-item
-            span.icon(style='background-color: #FF1B1C;')
+            span.icon.manual-control
                 i.fas.fa-traffic-light
             .list-content
                 div
-                    span#nInterEmergency.number 
+                    span.number #{ nMode[2] }
                     span.species Giao lộ
-                span.state(style='color: #E05263;') trong chế độ emergency
+                span.state.manual-control-text trong chế độ điều khiển từ xa
+        span.list-item
+            span.icon.emergency-control
+                i.fas.fa-traffic-light
+            .list-content
+                div
+                    span.number #{ nMode[3] }
+                    span.species Giao lộ
+                span.state.emergency-control-text trong chế độ khẩn cấp
+    .overview-info
+        span.list-item
+            span.icon.vl-badge
+                i.fas.fa-space-shuttle
+            .list-content
+                div
+                    span.number #{ nState[0] }
+                    span.species Giao lộ
+                span.state.vl-text mật độ giao thông rất thấp
+        span.list-item
+            span.icon.l-badge
+                i.fas.fa-helicopter
+            .list-content
+                div
+                    span.number #{ nState[1] }
+                    span.species Giao lộ
+                span.state.l-text mật độ giao thông thấp
+    .overview-info
+        span.list-item
+            span.icon.m-badge
+                i.fas.fa-car-side
+            .list-content
+                div
+                    span.number #{ nState[2] }
+                    span.species Giao lộ
+                span.state.m-text mật độ giao thông trung bình
+        span.list-item
+            span.icon.h-badge
+                i.fas.fa-bicycle
+            .list-content
+                div
+                    span.number #{ nState[3] }
+                    span.species Giao lộ
+                span.state.h-text mật độ giao thông cao
+        span.list-item
+            span.icon.vh-badge
+                i.fas.fa-walking
+            .list-content
+                div
+                    span.number #{ nState[4] }
+                    span.species Giao lộ
+                span.state.vh-text mật độ giao thông rất cao
     .table-info
         table#intersections
             tr

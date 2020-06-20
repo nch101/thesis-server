@@ -17,22 +17,48 @@ function timeGMT7(time) {
 function processVehiclesData(vehicles) {
     let nVehiclesActive = 0;
     for (let vehicle of vehicles) {
-        if (vehicle.status == 'online') {
-            nVehiclesActive++;
-        }
+        if (vehicle.status == 'online') nVehiclesActive++;
     }
     return nVehiclesActive;
 };
 
 function processIntersectionData(intersections) {
     let interArr = [];
+    let nAutoFixed = 0;
+    let nAutoFlexible = 0;
+    let nManual = 0;
+    let nEmergency = 0;
+
+    let nVL = 0;
+    let nL =0;
+    let nM = 0;
+    let nH = 0;
+    let nVH = 0;
+
+    let stateArr = [];
+    let modeArr = [];
+
     for (let interData of intersections) {
         interData = interData.toObject();
         interData.trafficDensity = interData.trafficDensity[interData.trafficDensity.length - 1];
         interData.trafficDensity.date = timeGMT7(interData.trafficDensity.date);
         interArr.push(interData);
+
+        if (interData.trafficDensity.state === 'very-low') nVL++;
+        else if (interData.trafficDensity.state === 'low') nL++;
+        else if (interData.trafficDensity.state === 'medium') nM++;
+        else if (interData.trafficDensity.state === 'high') nH++;
+        else if (interData.trafficDensity.state === 'very-high') nVH++;
+
+        if (interData.modeControl === 'automatic-flexible-time') nAutoFlexible++;
+        else if (interData.modeControl === 'automatic-fixed-time') nAutoFixed++;
+        else if (interData.modeControl === 'manual') nManual++;
+        else if (interData.modeControl === 'emergency') nEmergency++;
     }
-    return interArr;
+
+    stateArr.push(nVL, nL, nM, nH, nVH);
+    modeArr.push(nAutoFlexible, nAutoFixed, nManual, nEmergency);
+    return [interArr, stateArr, modeArr];
 };
 
 module.exports = {
@@ -155,17 +181,17 @@ module.exports = {
         Promise
         .all([vehicle, intersection])
         .then(function(data) {
-            let processData = [];
-            processData.push(data[0]);
-            processData.push(processIntersectionData(data[1]));
+            let processInterData = processIntersectionData(data[1]);
             logger.info('Render overview page');
             return res
             .status(200)
             .render('control-center/overview.pug', {
                 name: res.locals.name,
-                vehiclesData: processData[0],
-                intersectionsData: processData[1],
-                nVehiclesActive: processVehiclesData(data[0])
+                vehiclesData: data[0],
+                intersectionsData: processInterData[0],
+                nVehiclesActive: processVehiclesData(data[0]),
+                nState: processInterData[1],
+                nMode: processInterData[2]
             })
         })
         .catch(function(error) {
