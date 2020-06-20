@@ -10,7 +10,14 @@ function preProcessLocationData(locationDataString) {
         'coordinates': [locationDataArray[0], locationDataArray[1]]
     }
     return locationData;
-}
+};
+
+function timeGMT7(time) {
+    let localTime = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate()
+    + ' ' + time.getHours() + 'h' + time.getMinutes() + 'm' + time.getSeconds() + 's';
+
+    return localTime;
+};
 
 module.exports = {
     createIntersection: function(req, res) {
@@ -264,7 +271,9 @@ module.exports = {
         .then(function(data) {
             if (data) {
                 logger.info('Get data intersection id: %s', req.params.id);
+                data = data.toObject();
                 data.trafficDensity = data.trafficDensity[data.trafficDensity.length - 1];
+                data.trafficDensity.date = timeGMT7(data.trafficDensity.date);
                 return res
                 .status(200)
                 .json(data);

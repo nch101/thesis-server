@@ -59,33 +59,35 @@ block content
                     .angle
                 #render-info.info-container
                     .info-item
-                        label Tên giao lộ
-                        label#intersection-name
+                        span Tên giao lộ
+                        span#intersection-name
                     .info-item
-                        label Mật độ giao thông
-                        label#traffic-density-state.badge
+                        span Mật độ giao thông
+                        .has-note
+                            span#traffic-density-state.badge
+                            span#updateTime.note
                     .info-item
-                        label Chế độ điều khiển
+                        span Chế độ điều khiển
                         #mode-control.btn-container-row
-                            button#flexible-time.btn.show
+                            button#flexible-time.btn.has-note
                                 span.icon-btn
                                     i.fas.fa-history
-                                span.btn-note Chế độ tự động sử dụng fuzzy control
-                            button#fixed-time.btn.show
+                                span.note Chế độ tự động sử dụng fuzzy control
+                            button#fixed-time.btn.has-note
                                 span.icon-btn
                                     i.far.fa-clock
-                                span.btn-note Chế độ tự động sử dụng thời gian định sẵn
-                            button#manual.btn.show
+                                span.note Chế độ tự động sử dụng thời gian định sẵn
+                            button#manual.btn.has-note
                                 span.icon-btn
                                     i.fas.fa-hand-paper
-                                span.btn-note Chế độ điều khiển bằng tay
-                            button#emergency.btn.show(disabled='')
+                                span.note Chế độ điều khiển bằng tay
+                            button#emergency.btn.has-note(disabled='')
                                 span.icon-btn
                                     i.fas.fa-plus-square
-                                span.btn-note Chế độ khẩn cấp
+                                span.note Chế độ khẩn cấp
                     .info-item
-                        label(for='delta') Thời gian lệch
-                        input#delta(type='number', name='delta', required='', style='width: 50%; margin-left: 1rem;')
+                        span(for='delta') Thời gian lệch
+                        input#delta(type='number', name='delta', required='', style='width: 50%;')
                 #render-control.control-container
 
 block addFile

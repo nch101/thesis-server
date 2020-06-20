@@ -4,6 +4,7 @@ var renderAlert = document.getElementById('render-alert');
 
 var intersectionNameHTML = document.getElementById('intersection-name');
 var trafficDensityEle = document.getElementById('traffic-density-state');
+var updateTime = document.getElementById('updateTime');
 var delta = document.getElementById('delta');
 
 var modeBtn = document.getElementById('mode-control');
@@ -39,58 +40,58 @@ axios.defaults.baseURL = window.location.origin;
 
 var idIntersection;
 
-mapboxgl.accessToken = cookiesParser('mapToken');
+// mapboxgl.accessToken = cookiesParser('mapToken');
 
-var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [106.66008, 10.763512],
-    zoom: 12
-});
+// var map = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/streets-v11',
+//     center: [106.66008, 10.763512],
+//     zoom: 12
+// });
 
-axios.get('/intersection')
-.then(renderIntersectionsOnMap)
+// axios.get('/intersection')
+// .then(renderIntersectionsOnMap)
 
-function renderIntersectionsOnMap(res) {
-    var intersectionsData = res.data;
+// function renderIntersectionsOnMap(res) {
+//     var intersectionsData = res.data;
 
-    for (var intersectionData of intersectionsData) {
-        var el = document.createElement('div');
-        el.className = 'intersection';
-        el.addEventListener('click', getInfoIntersection);
-        el.id = intersectionData._id;
-        el.coordinates = intersectionData.location.coordinates;
+//     for (var intersectionData of intersectionsData) {
+//         var el = document.createElement('div');
+//         el.className = 'intersection';
+//         el.addEventListener('click', getInfoIntersection);
+//         el.id = intersectionData._id;
+//         el.coordinates = intersectionData.location.coordinates;
 
-        new mapboxgl.Marker(el)
-        .setLngLat(intersectionData.location.coordinates)
-        .addTo(map);
-    }
-}
+//         new mapboxgl.Marker(el)
+//         .setLngLat(intersectionData.location.coordinates)
+//         .addTo(map);
+//     }
+// }
 
-// getInfoIntersection();
+getInfoIntersection();
 
-function getInfoIntersection(event) {
+function getInfoIntersection() {
     // @params: event --------^
 
     /**
      * Fly to intersection has been clicked
      */
 
-    var coordinates = event.currentTarget.coordinates;
-    map.flyTo({
-        center: coordinates,
-        speed: 0.8,
-        zoom: 17
-    })
+    // var coordinates = event.currentTarget.coordinates;
+    // map.flyTo({
+    //     center: coordinates,
+    //     speed: 0.8,
+    //     zoom: 17
+    // })
     
-    /**
-     * Unsubscribe intersection was clicked before and subscribe new intersection
-     */
+    // /**
+    //  * Unsubscribe intersection was clicked before and subscribe new intersection
+    //  */
     
-    unsubscribeIntersection();
-    idIntersection = event.currentTarget.id;
+    // unsubscribeIntersection();
+    // idIntersection = event.currentTarget.id;
     // DEBUG
-    // idIntersection = '5eb90fe69f1398273bba559a';
+    idIntersection = '5ec4a21420768c3fcd9b1665';
     subscribeIntersection();
     
     /**
@@ -125,7 +126,6 @@ function renderInfoIntersection(res) {
     var deltaTime = res.data.delta;
     var streetInfo = res.data.trafficLights;
     var streetArray = [rightStreet, bottomStreet, leftStreet, topStreet];
-    var trafficDensityClass = trafficDensityEle.classList;
 
     renderInteract.style.display = 'flex';
 
@@ -136,31 +136,7 @@ function renderInfoIntersection(res) {
     intersectionNameHTML.innerHTML = intersectionName;
     delta.value = deltaTime;
 
-    if (trafficDensity === 'very-low') {
-        trafficDensityEle.innerHTML = 'Rất thấp';
-        trafficDensityClass.remove(trafficDensityClass.item(1));
-        trafficDensityClass.add('vl-badge');
-    }
-    else if (trafficDensity === 'low') {
-        trafficDensityEle.innerHTML = 'Thấp';
-        trafficDensityClass.remove(trafficDensityClass.item(1));
-        trafficDensityClass.add('l-badge');
-    }
-    else if (trafficDensity === 'medium') {
-        trafficDensityEle.innerHTML = 'Trung bình';
-        trafficDensityClass.remove(trafficDensityClass.item(1));
-        trafficDensityClass.add('m-badge');
-    }
-    else if (trafficDensity === 'high') {
-        trafficDensityEle.innerHTML = 'Cao';
-        trafficDensityClass.remove(trafficDensityClass.item(1));
-        trafficDensityClass.add('h-badge');
-    }
-    else if (trafficDensity === 'very-high') {
-        trafficDensityEle.innerHTML = 'Rất cao';
-        trafficDensityClass.remove(trafficDensityClass.item(1));
-        trafficDensityClass.add('vh-badge');
-    }
+    updateTrafficDensity(trafficDensity);
 
     if (modeControl === 'automatic-flexible-time') {
         flexibleTime.classList.add('btn-active');
@@ -188,9 +164,37 @@ function renderInfoIntersection(res) {
 
 }
 
-async function updateTrafficDensity() {
-    var res = await axios.get('/intersection/' + idIntersection);
-    
+function updateTrafficDensity(trafficDensity) {
+    var trafficDensityClass = trafficDensityEle.classList;
+
+    if (trafficDensity.state === 'very-low') {
+        trafficDensityEle.innerHTML = 'Rất thấp';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('vl-badge');
+    }
+    else if (trafficDensity.state === 'low') {
+        trafficDensityEle.innerHTML = 'Thấp';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('l-badge');
+    }
+    else if (trafficDensity.state === 'medium') {
+        trafficDensityEle.innerHTML = 'Trung bình';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('m-badge');
+    }
+    else if (trafficDensity.state === 'high') {
+        trafficDensityEle.innerHTML = 'Cao';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('h-badge');
+    }
+    else if (trafficDensity.state === 'very-high') {
+        trafficDensityEle.innerHTML = 'Rất cao';
+        trafficDensityClass.remove(trafficDensityClass.item(1));
+        trafficDensityClass.add('vh-badge');
+    }
+
+    console.log(typeof(trafficDensity.date));
+    updateTime.innerHTML = trafficDensity.date;
 }
 
 function automaticFlexibleTime() {

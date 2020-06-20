@@ -398,7 +398,6 @@ li > a:hover {
 }
 
 .btn-container-row {
-    margin-left: 1rem;
     box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     background-color: white;
@@ -424,10 +423,11 @@ li > a:hover {
     font-size: 1.1rem;
 }
 
-.btn-note {
+.note {
     position: absolute;
     top: 100%;
     left: 100%;
+    z-index: 1;
     padding: 0.2rem;
     width: 8.5rem;
     border-radius: 8px;
@@ -445,8 +445,12 @@ li > a:hover {
     border-radius: 0 0 4px 4px;
 }
 
-.btn-container-row .show {
+.has-note {
     position: relative;
+}
+
+.has-note:hover .note {
+    visibility: visible;
 }
 
 .btn-container-row .btn:first-child {
@@ -467,10 +471,6 @@ li > a:hover {
 
 .btn:hover {
     background-color: rgba(0, 0, 0, 0.05);
-}
-
-.btn:hover .btn-note {
-    visibility: visible;
 }
 
 #map {
@@ -714,22 +714,13 @@ li > a:hover {
     align-items: center;
 }
 
-.info-item label:first-child {
+.info-item > span:first-child {
+    margin-right: 1rem;
     font-weight: 600;
 }
 
-.info-item label:last-child {
-    margin-left: 1rem;
+.info-item > span:last-child {
     text-transform: capitalize;
-}
-
-.badge {
-    padding: 0.2rem 0.3rem;
-    border: none;
-    border-radius: 3px;
-    text-align: center;
-    color: white;
-    font-size: 0.8rem;
 }
 
 .switch {
@@ -1008,6 +999,26 @@ li > a:hover {
 
 .offline-status {
     background-color: #577399;
+}
+
+.vl-badge {
+    background-color: #46b781;
+}
+
+.l-badge {
+    background-color: #32855d;
+}
+
+.m-badge {
+    background-color: #fead34;
+}
+
+.h-badge {
+    background-color: #e66b4c;
+}
+
+.vh-badge {
+    background-color: #e04e29;
 }
 
 .btn-tracking {
