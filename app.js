@@ -18,7 +18,6 @@ var vehicleRouter = require('./routes/vehicle.route');
 var adminRouter = require('./routes/admin.route');
 var intersectionRouter = require('./routes/intersection.route');
 var trafficLightRouter = require('./routes/trafficLight.route');
-var mapRouter = require('./routes/map.route');
 var apiRouter = require('./routes/api.route');
 
 var app = express();
@@ -40,7 +39,6 @@ app.use('/admin', cors(), adminRouter);
 app.use('/intersection', cors(), intersectionRouter);
 app.use('/api', cors(), apiRouter);
 app.use('/traffic-light', trafficLightRouter);
-app.use('/map', cors(), mapRouter);
 
 //Test socketIO
 app.use('/upload-location', function(req, res) {

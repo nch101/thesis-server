@@ -79,7 +79,7 @@ module.exports = {
                         .json(error)
                     })
                 };
-                logger.info('Deleted intersection successful, id: %s', req.params.id);               
+                logger.info('Deleted intersection, id: %s', req.params.id);               
                 return res
                 .status(301)
                 .json({ message: 'Deleted!' });
