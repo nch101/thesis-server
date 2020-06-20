@@ -820,8 +820,12 @@ li > a:hover {
     background-color: transparent;
 }
 
-.automatic-control {
+.automatic-flexible {
     background-color: #736CED;
+}
+
+.automatic-fixed {
+    background-color: #49beaa;
 }
 
 .manual-control {
@@ -993,20 +997,24 @@ li > a:hover {
     background-color: #73AB84;
 }
 
-.online-status {
+.online-badge {
     background-color: #00c88b;
 }
 
-.offline-status {
+.online-text {
+    color: #00c88b;
+}
+
+.offline-badge {
     background-color: #577399;
 }
 
 .vl-badge {
-    background-color: #46b781;
+    background-color: #00c88b;
 }
 
 .l-badge {
-    background-color: #32855d;
+    background-color: #66c5f4;
 }
 
 .m-badge {

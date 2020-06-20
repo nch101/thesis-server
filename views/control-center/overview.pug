@@ -2,21 +2,35 @@ extends layout
 
 mixin infoIntersections(item, index)
     tr
-        td #{ index }
+        td #{ index + 1 }
         td #{ item.intersectionName }
         td
-            if item.modeControl == 'automatic'
-                span.badge.automatic-control automatic
+            if item.modeControl == 'automatic-flexible-time'
+                span.badge.automatic-flexible tự động - thời gian linh hoạt
+            else if item.modeControl == 'automatic-fixed-time'
+                span.badge.automatic-fixed tự động - thời gian định sẵn
             else if item.modeControl == 'manual'
-                span.badge.manual-control manual
+                span.badge.manual-control điều khiển từ xa
             else if item.modeControl == 'emergency'
-                span.badge.emergency-control emergency
+                span.badge.emergency-control khẩn cấp
+        td
+            if item.trafficDensity.state == 'very-low'
+                span.badge.vl-badge Rất thấp
+            else if item.trafficDensity.state == 'low'
+                span.badge.l-badge Thấp
+            else if item.trafficDensity.state == 'medium'
+                span.badge.m-badge Trung bình
+            else if item.trafficDensity.state == 'high'
+                span.badge.h-badge Cao
+            else if item.trafficDensity.state == 'very-high'
+                span.badge.vh-badge Rất cao
+        td #{ item.trafficDensity.date }
         td
             a(href='#') Xem
 
 mixin infoVehicles(item, index)
     tr
-        td #{ index }
+        td #{ index + 1 }
         td.license_plate #{ item.license_plate }
         td
             if item.vehicleType == 'ambulance'
@@ -49,9 +63,9 @@ block content
                 i.fas.fa-ambulance
             .list-content
                 div
-                    span#nPriorityVehicle.number 
+                    span.number #{ nVehiclesActive } 
                     span.species Phương tiện ưu tiên
-                span.state(style='color: #00c88b;') Đang hoạt động
+                span.state.online-text Đang hoạt động
         span.list-item
             span.icon(style='background-color: #9F9FED;')
                 i.fas.fa-traffic-light
@@ -82,6 +96,8 @@ block content
                 th STT
                 th Tên giao lộ
                 th Trạng thái điều khiển
+                th Mật độ giao thông
+                th Thời gian cập nhật
                 th Hành động
             each item, index in intersectionsData
                 +infoIntersections(item, index)

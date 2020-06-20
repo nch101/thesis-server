@@ -7,6 +7,34 @@ var key = require('../helper/key');
 var log4js = require('log4js');
 var logger = log4js.getLogger('controllers.page');
 
+function timeGMT7(time) {
+    let localTime = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate()
+    + ' ' + time.getHours() + 'h' + time.getMinutes() + 'm' + time.getSeconds() + 's';
+
+    return localTime;
+};
+
+function processVehiclesData(vehicles) {
+    let nVehiclesActive = 0;
+    for (let vehicle of vehicles) {
+        if (vehicle.status == 'online') {
+            nVehiclesActive++;
+        }
+    }
+    return nVehiclesActive;
+};
+
+function processIntersectionData(intersections) {
+    let interArr = [];
+    for (let interData of intersections) {
+        interData = interData.toObject();
+        interData.trafficDensity = interData.trafficDensity[interData.trafficDensity.length - 1];
+        interData.trafficDensity.date = timeGMT7(interData.trafficDensity.date);
+        interArr.push(interData);
+    }
+    return interArr;
+};
+
 module.exports = {
 
     /**
@@ -117,23 +145,27 @@ module.exports = {
      */
 
     overviewPage: function(req, res) {
-        var vehicle = vehicleModel
+        let vehicle = vehicleModel
         .find()
         .select('license_plate vehicleType status timeOn');
-        var intersection = intersectionModel
+        let intersection = intersectionModel
         .find()
-        .select('intersectionName modeControl');
+        .select('intersectionName modeControl trafficDensity');
 
         Promise
         .all([vehicle, intersection])
         .then(function(data) {
+            let processData = [];
+            processData.push(data[0]);
+            processData.push(processIntersectionData(data[1]));
             logger.info('Render overview page');
             return res
             .status(200)
             .render('control-center/overview.pug', {
                 name: res.locals.name,
-                vehiclesData: data[0],
-                intersectionsData: data[1]
+                vehiclesData: processData[0],
+                intersectionsData: processData[1],
+                nVehiclesActive: processVehiclesData(data[0])
             })
         })
         .catch(function(error) {
