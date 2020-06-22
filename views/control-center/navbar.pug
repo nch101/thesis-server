@@ -37,6 +37,10 @@ ul.navbar
 		a(href='/center/control')
 			i.fas.fa-traffic-light
 			span Điều khiển
+	li.navbar-item(class= (isActive === 'statistic' ? 'active' : undefined))
+		a(href='/center/statistic')
+			i.fas.fa-chart-bar
+			span Thống kê
 	li.navbar-item.has-sub(class= (isActive === 'create' ? 'active' : undefined))
 		a(href='#')
 			i.far.fa-plus-square
@@ -49,9 +53,3 @@ ul.navbar
 			span Danh sách
 			i.fas.fa-chevron-up.spin-arrow
 		+submenu('/center/list/managers', '/center/list/vehicles', '#')
-	li.navbar-item.has-sub
-		a(href='#')
-			i.fas.fa-cog
-			span Cài đặt
-			i.fas.fa-chevron-up.spin-arrow
-		+submenu('#', '#', '#')

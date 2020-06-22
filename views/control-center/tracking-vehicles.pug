@@ -16,9 +16,9 @@ mixin infoVehicle(item)
         td #{ item.phone}
         td
             if item.status == 'online'
-                span.badge.online-status Đang hoạt động
+                span.badge.online-badge Đang hoạt động
             else
-                span.badge.offline-status Không hoạt động
+                span.badge.offline-badge Không hoạt động
         td #{ item.uptime }
         td 
             button.btn-tracking(id = item.license_plate, onclick='focusVehicle(this.id)') định vị 

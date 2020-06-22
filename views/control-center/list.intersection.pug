@@ -1,0 +1,43 @@
+extends layout
+
+mixin infoIntersections(item, index)
+    tr
+        td #{ index + 1 }
+        td #{ item.intersectionName}
+        td
+            if item.modeControl == 'automatic-flexible-time'
+                span.badge.automatic-flexible tự động - thời gian linh hoạt
+            else if item.modeControl == 'automatic-fixed-time'
+                span.badge.automatic-fixed tự động - thời gian định sẵn
+            else if item.modeControl == 'manual'
+                span.badge.manual-control điều khiển từ xa
+            else if item.modeControl == 'emergency'
+                span.badge.emergency-control khẩn cấp
+        td token
+        td
+            button.btn-func.has-tooltip.btn-statistic(id = item._id, onclick='onStatistic(this.id)')
+                i.fas.fa-chart-bar
+                span.tool-tip Xem thống kê mật độ
+            button.btn-func.has-tooltip.btn-delete(id = item._id, onclick='onDelete(this.id)')
+                i.fas.fa-trash
+                span.tool-tip Xóa
+
+block navbar
+    - var isActive = 'list'
+    include navbar
+
+block content
+    span.create-header Danh sách ..
+    .list-container
+        .list-box.list-page
+            table.list-table
+                thead
+                    tr
+                        th STT
+                        th Tên giao lộ
+                        th Trạng thái điều khiển
+                        th Token
+                        th Hành động
+                tbody
+                    each item, index in vehicles
+                        +infoIntersections(item, index)

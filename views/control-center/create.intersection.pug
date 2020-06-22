@@ -22,7 +22,7 @@ block content
                 input#intersectionName.form-control(type='text', name='intersectionName', required='', style='text-transform: uppercase;')
                 label(for='intersectionName') Tên giao lộ
                 .line
-            .form-group(style='width: 80%')
+            .form-group(style='width: 50%')
                 input#delta.form-control(type='number', name='delta', required='')
                 label(for='delta') Thời gian lệch
                 .line
@@ -32,7 +32,10 @@ block content
                     option(value='0', selected) Chọn số ngã
                     option(value='3') 3
                     option(value='4') 4
-            button#btn-create Tạo
+            button#btn-create 
+                span.icon
+                    i.fas.fa-plus-circle
+                | Tạo
         #info-street.i-form-container
 
 block addFile

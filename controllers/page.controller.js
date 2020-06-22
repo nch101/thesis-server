@@ -253,6 +253,13 @@ module.exports = {
         })
     },
 
+    statisticPage: function(req, res) {
+        logger.info('Render statistic page');
+        return res
+        .status(200)
+        .render('control-center/statistic.pug');
+    },
+
     listManagers: function(req, res) {
         userModel
         .find()

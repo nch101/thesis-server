@@ -321,9 +321,8 @@ li > a:hover {
     width: 50%;
     height: 2.2rem;
     margin: 0 1rem;
-    padding: 0.5rem 1.5rem;
-    border: none;
-    border-radius: 30px;
+    border: 1px solid transparent;
+    border-radius: 4px;
     outline: none;
     background-color: #48A5EA;
     text-align: center;
@@ -331,7 +330,24 @@ li > a:hover {
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 1px 3px 22px rgba(0, 0, 0, 0.15);
+}
+
+.i-form-container button > .icon {
+    margin-right: 0.7rem;
+    color: white;
+    font-size: 1rem;
+}
+
+
+.i-form-container button:hover {
+    border: 1px solid #999;
+    background-color: white;
+    color: #48A5EA;
+    transition: 0.3s;
+}
+
+.i-form-container button:hover > .icon {
+    color: #48A5EA;
 }
 
 .input-container {
@@ -499,7 +515,7 @@ li > a:hover {
 }
 
 .select-list-group {
-    width: 100%;
+    width: 45%;
     display: flex;
     flex-direction: column;
     margin: 0 1rem;
