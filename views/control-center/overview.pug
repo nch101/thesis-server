@@ -58,18 +58,25 @@ block navbar
 
 block content
     .overview-info
-        span.list-item
-            span.icon(style='background-color: #00B2CA;')
+        .poster
+            span.poster-icon.emergency-text
                 i.fas.fa-ambulance
-            .list-content
-                div
-                    span.number #{ nVehiclesActive } 
-                    span.species Phương tiện ưu tiên
-                span.state.online-text Đang hoạt động
+            span.poster-title.emergency-text Phương tiện ưu tiên
+            span.poster-number #{ nVehiclesActive }
+            span.poster-content đang hoạt động
+        .poster
+            span.poster-icon.vh-text
+                i.fas.fa-road
+            span.poster-title.vh-text Giao lộ
+            span.poster-number #{ nState[4] }
+            span.poster-content mật độ giao thông rất cao
+        .pie-chart
+            canvas#trafficState
+
     .overview-info
         span.list-item
             span.icon.automatic-flexible
-                i.fas.fa-traffic-light
+                i.fas.fa-history
             .list-content
                 div
                     span.number #{ nMode[0] }
@@ -77,7 +84,7 @@ block content
                 span.state.automatic-flexible-text trong chế độ thời gian linh hoạt
         span.list-item
             span.icon.automatic-fixed
-                i.fas.fa-traffic-light
+                i.far.fa-clock
             .list-content
                 div
                     span.number #{ nMode[1] }
@@ -85,7 +92,7 @@ block content
                 span.state.automatic-fixed-text trong chế độ thời gian định sẵn
         span.list-item
             span.icon.manual-control
-                i.fas.fa-traffic-light
+                i.fas.fa-hand-paper
             .list-content
                 div
                     span.number #{ nMode[2] }
@@ -93,74 +100,45 @@ block content
                 span.state.manual-control-text trong chế độ điều khiển từ xa
         span.list-item
             span.icon.emergency-control
-                i.fas.fa-traffic-light
+                i.fas.fa-plus-square
             .list-content
                 div
                     span.number #{ nMode[3] }
                     span.species Giao lộ
                 span.state.emergency-control-text trong chế độ khẩn cấp
-    .overview-info
-        span.list-item
-            span.icon.vl-badge
-                i.fas.fa-space-shuttle
-            .list-content
-                div
-                    span.number #{ nState[0] }
-                    span.species Giao lộ
-                span.state.vl-text mật độ giao thông rất thấp
-        span.list-item
-            span.icon.l-badge
-                i.fas.fa-helicopter
-            .list-content
-                div
-                    span.number #{ nState[1] }
-                    span.species Giao lộ
-                span.state.l-text mật độ giao thông thấp
-    .overview-info
-        span.list-item
-            span.icon.m-badge
-                i.fas.fa-car-side
-            .list-content
-                div
-                    span.number #{ nState[2] }
-                    span.species Giao lộ
-                span.state.m-text mật độ giao thông trung bình
-        span.list-item
-            span.icon.h-badge
-                i.fas.fa-bicycle
-            .list-content
-                div
-                    span.number #{ nState[3] }
-                    span.species Giao lộ
-                span.state.h-text mật độ giao thông cao
-        span.list-item
-            span.icon.vh-badge
-                i.fas.fa-walking
-            .list-content
-                div
-                    span.number #{ nState[4] }
-                    span.species Giao lộ
-                span.state.vh-text mật độ giao thông rất cao
-    .table-info
-        table#intersections
-            tr
-                th STT
-                th Tên giao lộ
-                th Trạng thái điều khiển
-                th Mật độ giao thông
-                th Thời gian cập nhật
-                th Hành động
-            each item, index in intersectionsData
-                +infoIntersections(item, index)
+
+    .list-container
+        .list-box
+            table.list-table
+                thead
+                    tr
+                        th STT
+                        th Tên giao lộ
+                        th Trạng thái điều khiển
+                        th Mật độ giao thông
+                        th Thời gian cập nhật
+                        th Hành động
+                tbody
+                    each item, index in intersectionsData
+                        +infoIntersections(item, index)
             
-    .table-info
-        table#vehicles
-            tr
-                th STT
-                th Biển kiểm soát
-                th Loại phương tiện
-                th Trạng thái hoạt động
-                th Thời gian hoạt động
-                th Hành động
-            each item, index in vehiclesData
-                +infoVehicles(item, index)
+    .list-container
+        .list-box
+            table.list-table
+                thead
+                    tr
+                        th STT
+                        th Biển kiểm soát
+                        th Loại phương tiện
+                        th Trạng thái hoạt động
+                        th Thời gian hoạt động
+                        th Hành động
+                tbody
+                    each item, index in vehiclesData
+                        +infoVehicles(item, index)
+
+    script.
+        var state = !{JSON.stringify(nState)};
+block addFile
+    script(src="/javascripts/lib/Chart.min.js")
+    script(src="/javascripts/overview.js")
