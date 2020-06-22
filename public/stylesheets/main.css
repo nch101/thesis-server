@@ -34,7 +34,7 @@ a {
     padding: 0.5rem 1rem;
     border: none;
     background-color: #0070e2;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .brand {
@@ -169,6 +169,7 @@ li > a:hover {
     flex-basis: 1100px;
     justify-content: center;
     box-shadow: 0 0 1px rgba(0,0,0,.15);
+    font-size: 0.9rem;
 }
 
 .create-header {
@@ -426,10 +427,10 @@ li > a:hover {
     font-size: 1.1rem;
 }
 
-.note {
+.tool-tip {
     position: absolute;
     top: 100%;
-    left: 100%;
+    right: 50%;
     z-index: 1;
     padding: 0.2rem;
     width: 8.5rem;
@@ -437,6 +438,7 @@ li > a:hover {
     background-color: white;
     color: #333;
     visibility: hidden;
+    display: inline-block;
 }
 
 .btn-container .btn:first-child {
@@ -448,11 +450,11 @@ li > a:hover {
     border-radius: 0 0 4px 4px;
 }
 
-.has-note {
+.has-tooltip {
     position: relative;
 }
 
-.has-note:hover .note {
+.has-tooltip:hover .tool-tip {
     visibility: visible;
 }
 
@@ -1134,14 +1136,13 @@ li > a:hover {
 }
 
 .btn-func {
-    position: relative;
     width: 30px;
     height: 30px;
     margin: 0 0.5rem;
     padding: 0.5rem;
     border: none;
     border-radius: 4px;
-    font-size: 0rem;
+    font-size: 0.9rem;
     text-align: center;
 }
 
@@ -1160,7 +1161,7 @@ li > a:hover {
     color: white;
 }
 
-.tool-tip {
+/* .tool-tip {
     position: absolute;
     bottom: 20%;
     right: 100%;
@@ -1169,11 +1170,7 @@ li > a:hover {
     background-color: #FFF;
     color: #333;
     visibility: hidden;
-}
-
-.btn-func:hover .tool-tip {
-    visibility: visible;
-}
+} */
 
 .main-content {
     width: 180px;

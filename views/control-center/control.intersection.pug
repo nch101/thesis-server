@@ -63,28 +63,28 @@ block content
                         span#intersection-name
                     .info-item
                         span Mật độ giao thông
-                        .has-note
+                        .has-tooltip
                             span#traffic-density-state.badge
-                            span#updateTime.note
+                            span#updateTime.tool-tip
                     .info-item
                         span Chế độ điều khiển
                         #mode-control.btn-container-row
-                            button#flexible-time.btn.has-note
+                            button#flexible-time.btn.has-tooltip
                                 span.icon-btn
                                     i.fas.fa-history
-                                span.note Chế độ tự động sử dụng fuzzy control
-                            button#fixed-time.btn.has-note
+                                span.tool-tip Chế độ tự động sử dụng fuzzy control
+                            button#fixed-time.btn.has-tooltip
                                 span.icon-btn
                                     i.far.fa-clock
-                                span.note Chế độ tự động sử dụng thời gian định sẵn
-                            button#manual.btn.has-note
+                                span.tool-tip Chế độ tự động sử dụng thời gian định sẵn
+                            button#manual.btn.has-tooltip
                                 span.icon-btn
                                     i.fas.fa-hand-paper
-                                span.note Chế độ điều khiển bằng tay
-                            button#emergency.btn.has-note(disabled='')
+                                span.tool-tip Chế độ điều khiển bằng tay
+                            button#emergency.btn.has-tooltip(disabled='')
                                 span.icon-btn
                                     i.fas.fa-plus-square
-                                span.note Chế độ khẩn cấp
+                                span.tool-tip Chế độ khẩn cấp
                     .info-item
                         span(for='delta') Thời gian lệch
                         input#delta(type='number', name='delta', required='', style='width: 50%;')

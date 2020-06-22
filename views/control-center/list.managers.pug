@@ -9,16 +9,16 @@ mixin infoManager(item, index)
         td #{ item.email }
         td 
             if item.status == 'online'
-                span.badge.online-status Đang hoạt động
+                span.badge.online-badge Đang hoạt động
             else
-                span.badge.offline-status Không hoạt động
+                span.badge.offline-badge Không hoạt động
         td
             if item.blocked == false
-                button.btn-func.btn-block(id = item._id, onclick='onBlock(this.id)')
+                button.btn-func.has-tooltip.btn-block(id = item._id, onclick='onBlock(this.id)')
                     i.fas.fa-ban
                     span.tool-tip Block
             else 
-                button.btn-func.btn-unblock(id = item._id, onclick='onUnblock(this.id)')
+                button.btn-func.has-tooltip.btn-unblock(id = item._id, onclick='onUnblock(this.id)')
                     i.far.fa-circle
                     span.tool-tip Unblock
             button.btn-func.btn-delete(id = item._id, onclick='onDelete(this.id)')
