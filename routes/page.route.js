@@ -38,6 +38,7 @@ router.get('/center/overview/', userMiddleware.userMiddleware, pageController.ov
 router.get('/center/tracking-vehicle/', userMiddleware.userMiddleware, vehicleController.trackingVehicle);//
 router.get('/center/control/', userMiddleware.userMiddleware, pageController.controlLightPage);
 router.get('/center/statistic/', userMiddleware.userMiddleware, pageController.statisticPage);
+router.get('/center/statistic/:id', userMiddleware.userMiddleware, pageController.statisticIntersectionPage);
 router.get('/center/create-control-center/', userMiddleware.userMiddleware, pageController.createControlCenterPage);
 router.get('/center/create-vehicle/', userMiddleware.userMiddleware, pageController.createVehiclePage);
 router.get('/center/create-intersection/', userMiddleware.userMiddleware, pageController.createIntersectionPage);

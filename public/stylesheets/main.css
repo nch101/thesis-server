@@ -1244,5 +1244,6 @@ li > a:hover {
 }
 
 .chart {
+    margin-top: 3rem;
     width: 100%;
 }

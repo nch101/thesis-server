@@ -8,8 +8,8 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('controllers.page');
 
 function timeGMT7(time) {
-    let localTime = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate()
-    + ' ' + time.getHours() + 'h' + time.getMinutes() + 'm' + time.getSeconds() + 's';
+    let localTime = time.getDate() + '/' + (time.getMonth() + 1) + '/' + time.getFullYear()
+    + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
     return localTime;
 };
@@ -258,6 +258,34 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/statistic.pug');
+    },
+
+    statisticIntersectionPage: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .select('trafficDensity')
+        .then(function(data) {
+            logger.info('Render statistic traffic density page');
+            let trafficDensityArr = []
+            for (let item of data.trafficDensity) {
+                let processData = {
+                    rate: item.rate,
+                    date: timeGMT7(item.date)
+                };
+                trafficDensityArr.push(processData);
+            };
+            return res
+            .status(200)
+            .render('control-center/statistic.intersection.pug', {
+                data: trafficDensityArr
+            });
+        })
+        .catch((err) => {
+            logger.error('Statistic traffic density page, id: %d error: %s', req.params.id, err);
+            return res
+            .status(501)
+            .render('error/index.pug');
+        });
     },
 
     listManagers: function(req, res) {

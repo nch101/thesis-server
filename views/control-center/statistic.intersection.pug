@@ -1,0 +1,32 @@
+extends layout
+
+block navbar
+    - var isActive = 'statistic'
+    include navbar
+    script(src="/javascripts/lib/axios.min.js")
+    script(src="/javascripts/lib/moment.min.js")
+
+block content
+    .i-form-container
+        .form-group
+            input#intersectionName.form-control(type='text')
+            label(for='intersectionName') Tên giao lộ
+            .line
+        .form-group
+            input#fromTime.form-control(type='datetime-local')
+            label(for='fromTime') Từ
+        .form-group
+            input#toTime.form-control(type='datetime-local')
+            label(for='toTime') Đến
+        button#findInter
+            span.icon
+                i.fas.fa-search
+            |Tìm kiếm
+    .chart
+        canvas#intersection
+    script.
+        var trafficDensity = !{ JSON.stringify(data) };
+
+block addFile
+    script(src="/javascripts/lib/Chart.min.js")
+    script(src="/javascripts/statistic.js")

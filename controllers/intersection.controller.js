@@ -13,8 +13,8 @@ function preProcessLocationData(locationDataString) {
 };
 
 function timeGMT7(time) {
-    let localTime = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate()
-    + ' ' + time.getHours() + 'h' + time.getMinutes() + 'm' + time.getSeconds() + 's';
+    let localTime = time.getDate() + '/' + (time.getMonth() + 1) + '/' + time.getFullYear()
+    + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
     return localTime;
 };
