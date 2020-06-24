@@ -358,6 +358,30 @@ module.exports = {
         });
     },
 
+    listIntersections: function(req, res) {
+        intersectionModel
+        .find()
+        .select('intersectionName token')
+        .then(function(data) {
+            logger.info('Render list intersections page');
+            return res
+            .status(200)
+            .render('control-center/list.intersections.pug', {
+                name: res.locals.name,
+                intersections: data
+            });
+        })
+        .catch(function(error) {
+            logger.error('Render list intersections page error ', error);
+            return res
+            .status(501)
+            .render('error/index.pug', {
+                code: 501,
+                message: 'Not Implemented'
+            });
+        })
+    },
+
     /**
      * Vehicle side
      */

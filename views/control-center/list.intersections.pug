@@ -4,20 +4,25 @@ mixin infoIntersections(item, index)
     tr
         td #{ index + 1 }
         td #{ item.intersectionName}
+        td.has-limited
+            span.limited-text #{ item._id }
+            input(type="hidden", value=item._id)
+            button.btn-func.has-tooltip.btn-copy(onclick='copyValue()')
+                i.fas.fa-copy
+                span.tool-tip Copy
         td
-            if item.modeControl == 'automatic-flexible-time'
-                span.badge.automatic-flexible tự động - thời gian linh hoạt
-            else if item.modeControl == 'automatic-fixed-time'
-                span.badge.automatic-fixed tự động - thời gian định sẵn
-            else if item.modeControl == 'manual'
-                span.badge.manual-control điều khiển từ xa
-            else if item.modeControl == 'emergency'
-                span.badge.emergency-control khẩn cấp
-        td token
+            span.limited-text #{ item.token }
+            input(type="hidden", value=item.token)
+            button.btn-func.has-tooltip.btn-copy(onclick='copyValue()')
+                i.fas.fa-copy
+                span.tool-tip Copy
         td
-            button.btn-func.has-tooltip.btn-statistic(id = item._id, onclick='onStatistic(this.id)')
+            a(href="/center/statistic/" + item._id).btn-func.has-tooltip.btn-statistic
                 i.fas.fa-chart-bar
                 span.tool-tip Xem thống kê mật độ
+            a(href="/center/edit-intersection/" + item._id).btn-func.has-tooltip.btn-edit
+                i.fas.fa-edit
+                span.tool-tip Chỉnh sửa
             button.btn-func.has-tooltip.btn-delete(id = item._id, onclick='onDelete(this.id)')
                 i.fas.fa-trash
                 span.tool-tip Xóa
@@ -35,9 +40,9 @@ block content
                     tr
                         th STT
                         th Tên giao lộ
-                        th Trạng thái điều khiển
+                        th ID
                         th Token
                         th Hành động
                 tbody
-                    each item, index in vehicles
+                    each item, index in intersections
                         +infoIntersections(item, index)

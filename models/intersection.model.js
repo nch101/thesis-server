@@ -37,6 +37,10 @@ var intersectionSchema = new Schema({
         required: true,
         unique: true
     },
+    token: {
+        type: String,
+        required: true
+    },
     location: {
         type: pointSchema,
         required: true

@@ -44,7 +44,7 @@ router.get('/center/create-vehicle/', userMiddleware.userMiddleware, pageControl
 router.get('/center/create-intersection/', userMiddleware.userMiddleware, pageController.createIntersectionPage);
 router.get('/center/list/managers', userMiddleware.userMiddleware, pageController.listManagers);
 router.get('/center/list/vehicles', userMiddleware.userMiddleware, pageController.listVehicles);
-
+router.get('/center/list/intersections', userMiddleware.userMiddleware, pageController.listIntersections);
 
 /**
  * Vehicle side
