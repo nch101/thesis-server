@@ -69,6 +69,31 @@ module.exports = {
         });
     },
 
+    findIntersection: function(req, res) {
+        var regex = new RegExp(req.query['name']);
+        intersectionModel
+        .find({ intersectionName: regex }, { 'intersectionName': 1})
+        .select('intersectionName')
+        .sort({ 'updated_at': -1 })
+        .sort({ 'created_at': -1})
+        .limit(10)
+        .then(function(data) {
+            logger.info('Response intersection name');
+            return res
+            .status(200)
+            .json(data);
+        })
+        .catch(function(err) {
+            logger.error('Error when find intersection, error: %s', err);
+            return res
+            .status(200)
+            .json({
+                status: 'error',
+                message: 'Lỗi'
+            })
+        });
+    },
+
     //Be not used yet
     deleteIntersection: function(req, res) {
         intersectionModel

@@ -33,7 +33,7 @@ a {
     align-items: center;
     padding: 0.5rem 1rem;
     border: none;
-    background-color: #0070e2;
+    background-color: #4958ab;
     font-size: 0.9rem;
 }
 
@@ -209,10 +209,11 @@ li > a:hover {
 
 .form-group > input {
     width: 100%;
+    padding: 0.5rem 0.1rem;
     border: none;
     border-bottom: 1px solid #CCC;
     outline: none;
-    padding: 0.5rem 0.1rem;
+    text-transform: capitalize;
 }
 
 .line {
@@ -1246,4 +1247,26 @@ li > a:hover {
 .chart {
     margin-top: 3rem;
     width: 100%;
+}
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4;
+    text-transform: capitalize;
+}
+
+.autocomplete-items div:hover {
+    background-color: #e9e9e9; 
 }

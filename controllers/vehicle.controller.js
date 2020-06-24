@@ -58,6 +58,8 @@ module.exports = {
         vehicleModel
         .find()
         .select('license_plate vehicleType phone status journey timeOn')
+        .sort({ 'updated_at': -1 })
+        .sort({ 'created_at': -1})
         .then(function(data) {
             // log4js.getLogger('data-send').debug('trackingVehicle: ', data);
             if (data) {

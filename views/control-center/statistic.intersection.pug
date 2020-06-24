@@ -7,16 +7,17 @@ block navbar
     script(src="/javascripts/lib/moment.min.js")
 
 block content
-    .i-form-container
+    form(autocomplete='off', action='/', name='searchUrl', method='get').i-form-container
         .form-group
-            input#intersectionName.form-control(type='text')
+            input#intersectionName.form-control(type='text', oninput='findIntersection()')
             label(for='intersectionName') Tên giao lộ
             .line
+            #autocomplete-box
         .form-group
-            input#fromTime.form-control(type='datetime-local')
+            input#fromTime.form-control(type='datetime-local', name='fromTime')
             label(for='fromTime') Từ
         .form-group
-            input#toTime.form-control(type='datetime-local')
+            input#toTime.form-control(type='datetime-local', name='toTime')
             label(for='toTime') Đến
         button#findInter
             span.icon
@@ -29,4 +30,5 @@ block content
 
 block addFile
     script(src="/javascripts/lib/Chart.min.js")
+    script(src="/javascripts/find-intersection.js")
     script(src="/javascripts/statistic.js")
