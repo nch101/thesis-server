@@ -292,7 +292,7 @@ module.exports = {
         .findById(req.params.id)
         .select('intersectionName modeControl delta trafficLights trafficDensity')
         .populate({ path: 'trafficLights', 
-        select: 'streetName priority timeRed timeYellow timeGreen camip' })
+        select: 'streetName priority timeRed timeYellow timeGreen' })
         .then(function(data) {
             if (data) {
                 logger.info('Get data intersection id: %s', req.params.id);

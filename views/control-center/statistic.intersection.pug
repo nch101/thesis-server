@@ -19,7 +19,7 @@ block content
         .form-group
             input#toTime.form-control(type='datetime-local', name='toTime')
             label(for='toTime') Đến
-        button#findInter
+        button(type='submit')
             span.icon
                 i.fas.fa-search
             |Tìm kiếm
@@ -27,6 +27,7 @@ block content
         canvas#intersection
     script.
         var trafficDensity = !{ JSON.stringify(data) };
+        var intersectionName = !{ JSON.stringify(intersectionName) };
 
 block addFile
     script(src="/javascripts/lib/Chart.min.js")

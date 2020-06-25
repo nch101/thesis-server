@@ -18,7 +18,7 @@ var config = {
     options: {
         title: {
             display: true,
-            text: 'Mật độ giao thông',
+            text: 'Mật độ giao thông tại ' + intersectionName.toUpperCase(),
             fontSize: 20,
             fontColor: '#333',
         },

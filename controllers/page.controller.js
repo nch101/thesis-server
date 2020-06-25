@@ -253,17 +253,51 @@ module.exports = {
         })
     },
 
+    editPage: function(req, res) {
+        logger.info('Render edit page')
+        return res
+        .status(200)
+        .render('control-center/edit.pug', {
+            name: res.locals.name,
+        })
+    },
+
+    editIntersection: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .select('intersectionName location delta trafficLights')
+        .populate({ path: 'trafficLights', 
+        select: 'streetName location bearing priority timeRed timeYellow timeGreen' })
+        .then(function(data) {
+            logger.info('Render edit page id: %s', req.params.id);
+            return res
+            .status(200)
+            .render('control-center/edit.intersection.pug', {
+                name: res.locals.name,
+                values: data
+            })
+        })
+        .catch(function(err) {
+            logger.error('Render edit page error, id: %s, error: %', req.params.id, err);
+            return res
+            .status(501)
+            .render('error/index.pug');
+        })
+    },
+
     statisticPage: function(req, res) {
         logger.info('Render statistic page');
         return res
         .status(200)
-        .render('control-center/statistic.pug');
+        .render('control-center/statistic.intersection.pug', {
+            name: res.locals.name,
+        });
     },
 
     statisticIntersectionPage: function(req, res) {
         intersectionModel
         .findById(req.params.id)
-        .select('trafficDensity')
+        .select('intersectionName trafficDensity')
         .then(function(data) {
             logger.info('Render statistic traffic density page');
             let trafficDensityArr = []
@@ -277,7 +311,9 @@ module.exports = {
             return res
             .status(200)
             .render('control-center/statistic.intersection.pug', {
-                data: trafficDensityArr
+                name: res.locals.name,
+                data: trafficDensityArr,
+                intersectionName: data.intersectionName
             });
         })
         .catch((err) => {

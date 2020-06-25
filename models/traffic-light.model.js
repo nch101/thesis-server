@@ -48,7 +48,6 @@ var trafficLightSchema = new Schema({
         type: Number,
         required: true
     },
-    camip: String,
 });
 
 module.exports = mongoose.model('Traffic-light', trafficLightSchema);

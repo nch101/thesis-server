@@ -41,6 +41,10 @@ ul.navbar
 		a(href='/center/statistic')
 			i.fas.fa-chart-bar
 			span Thống kê
+	li.navbar-item(class= (isActive === 'edit' ? 'active' : undefined))
+		a(href='/center/edit-intersection')
+			i.fas.fa-edit
+			span Chỉnh sửa
 	li.navbar-item.has-sub(class= (isActive === 'create' ? 'active' : undefined))
 		a(href='#')
 			i.far.fa-plus-square

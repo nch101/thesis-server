@@ -39,6 +39,8 @@ router.get('/center/tracking-vehicle/', userMiddleware.userMiddleware, vehicleCo
 router.get('/center/control/', userMiddleware.userMiddleware, pageController.controlLightPage);
 router.get('/center/statistic/', userMiddleware.userMiddleware, pageController.statisticPage);
 router.get('/center/statistic/:id', userMiddleware.userMiddleware, pageController.statisticIntersectionPage);
+router.get('/center/edit-intersection', userMiddleware.userMiddleware, pageController.editPage);
+router.get('/center/edit-intersection/:id', userMiddleware.userMiddleware, pageController.editIntersection);
 router.get('/center/create-control-center/', userMiddleware.userMiddleware, pageController.createControlCenterPage);
 router.get('/center/create-vehicle/', userMiddleware.userMiddleware, pageController.createVehiclePage);
 router.get('/center/create-intersection/', userMiddleware.userMiddleware, pageController.createIntersectionPage);
