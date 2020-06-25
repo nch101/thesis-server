@@ -2,6 +2,8 @@ var intersectionModel = require('../models/intersection.model');
 var trafficLightModel = require('../models/traffic-light.model');
 var log4js = require('log4js');
 var logger = log4js.getLogger('controllers.intersection');
+var jwtHelper = require('../helper/jwt');
+var key = require('../helper/key');
 
 function preProcessLocationData(locationDataString) {
     var locationDataArray = locationDataString.split(',');
@@ -48,9 +50,16 @@ module.exports = {
                 });
             });
         }
-        intersection.save()
+        jwtHelper.generateToken({ data: {
+            id: intersection._id,
+            intersectionName: intersection.intersectionName
+        }}, key.secretKeyForIntersection, key.refreshTokenLife)
+        .then(function(token) {
+            intersection.token = token;
+            intersection.save();
+        })
         .then(function(results) {
-            logger.info('Create intersection successful, id: %s', results._id);
+            logger.info('Created intersection successful');
             return res
             .status(200)
             .json({
