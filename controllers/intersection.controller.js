@@ -327,6 +327,34 @@ module.exports = {
         })
     },
 
+    getTimeAndStatus: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .select('intersectionName modeControl delta trafficLights')
+        .populate({ path: 'trafficLights', 
+        select: 'streetName priority timeRed timeYellow timeGreen' })
+        .then(function(data) {
+            if (data) {
+                logger.info('Get data intersection id: %s', req.params.id);
+                return res
+                .status(200)
+                .json(data);
+            }
+            else {
+                logger.warn('Intersection id: %s not found to get', req.params.id);
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
+        })
+        .catch(function(error) {
+            logger.error('Get intersection id: %s , error: %s', req.params.id, error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        })
+    },
+
     matchIntersection: function(req, res) {
         log4js.getLogger('data-received').info(req.body);
         var PromiseAllArray = []

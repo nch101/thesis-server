@@ -40,58 +40,58 @@ axios.defaults.baseURL = window.location.origin;
 
 var idIntersection;
 
-// mapboxgl.accessToken = cookiesParser('mapToken');
+mapboxgl.accessToken = cookiesParser('mapToken');
 
-// var map = new mapboxgl.Map({
-//     container: 'map',
-//     style: 'mapbox://styles/mapbox/streets-v11',
-//     center: [106.66008, 10.763512],
-//     zoom: 12
-// });
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [106.66008, 10.763512],
+    zoom: 12
+});
 
-// axios.get('/intersection')
-// .then(renderIntersectionsOnMap)
+axios.get('/intersection')
+.then(renderIntersectionsOnMap)
 
-// function renderIntersectionsOnMap(res) {
-//     var intersectionsData = res.data;
+function renderIntersectionsOnMap(res) {
+    var intersectionsData = res.data;
 
-//     for (var intersectionData of intersectionsData) {
-//         var el = document.createElement('div');
-//         el.className = 'intersection';
-//         el.addEventListener('click', getInfoIntersection);
-//         el.id = intersectionData._id;
-//         el.coordinates = intersectionData.location.coordinates;
+    for (var intersectionData of intersectionsData) {
+        var el = document.createElement('div');
+        el.className = 'intersection';
+        el.addEventListener('click', getInfoIntersection);
+        el.id = intersectionData._id;
+        el.coordinates = intersectionData.location.coordinates;
 
-//         new mapboxgl.Marker(el)
-//         .setLngLat(intersectionData.location.coordinates)
-//         .addTo(map);
-//     }
-// }
+        new mapboxgl.Marker(el)
+        .setLngLat(intersectionData.location.coordinates)
+        .addTo(map);
+    }
+}
 
-getInfoIntersection();
+// getInfoIntersection();
 
-function getInfoIntersection() {
+function getInfoIntersection(event) {
     // @params: event --------^
 
     /**
      * Fly to intersection has been clicked
      */
 
-    // var coordinates = event.currentTarget.coordinates;
-    // map.flyTo({
-    //     center: coordinates,
-    //     speed: 0.8,
-    //     zoom: 17
-    // })
+    var coordinates = event.currentTarget.coordinates;
+    map.flyTo({
+        center: coordinates,
+        speed: 0.8,
+        zoom: 17
+    })
     
     // /**
     //  * Unsubscribe intersection was clicked before and subscribe new intersection
     //  */
     
-    // unsubscribeIntersection();
-    // idIntersection = event.currentTarget.id;
+    unsubscribeIntersection();
+    idIntersection = event.currentTarget.id;
     // DEBUG
-    idIntersection = '5ec4a21420768c3fcd9b1665';
+    // idIntersection = '5ec4a21420768c3fcd9b1665';
     subscribeIntersection();
     
     /**
