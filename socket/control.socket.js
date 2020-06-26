@@ -47,15 +47,6 @@ module.exports = function(io) {
 			.catch(function(error) {
 				logger.error('Change mode control error: %s at intersection %s', error, roomID);
 			});
-
-			trafficLightModel
-			.findByIdAndUpdate(data.id, { $set: { priority: data.priority }})
-			.then(function(result) {
-				logger.info('Set priority: %s at traffic light %s', data.priority, data.id);
-			})
-			.catch(function(error) {
-				logger.error('Set priority error: %s at traffic light %s', error, data.id);
-			})
 		});
 	});
 }
