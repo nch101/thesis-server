@@ -47,7 +47,6 @@ module.exports = {
             }
         })
         .catch(function(error) {
-            console.log(error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -199,7 +198,6 @@ module.exports = {
             }
         })
         .catch(function(error) {
-            console.log(error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -227,7 +225,6 @@ module.exports = {
             }
         })
         .catch(function(error) {
-            console.log(error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -251,7 +248,6 @@ module.exports = {
                         .json({ message: 'Success!' })
                     })
                     .catch(function(error) {
-                        console.log(error)
                         return res
                         .status(501)
                         .json({ message: 'Failed!' })
@@ -270,7 +266,6 @@ module.exports = {
             }
         })
         .catch(function(error) {
-            console.log(error)
             return res
             .status(501)
             .json({ message: 'Error!' })
@@ -294,7 +289,6 @@ module.exports = {
             }
         })
         .catch(function(error) {
-            console.log(error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -320,7 +314,6 @@ module.exports = {
             }
         })
         .catch(function (error) {
-            console.log(error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -328,7 +321,6 @@ module.exports = {
     },
 
     updateCurrentLocation: function(req,res) {
-        console.log(req.body)
         vehicleModel
         .findOneAndUpdate(
             { '_id': req.params['vehicleID'], 'journey._id': req.params['locationID']},
@@ -351,7 +343,6 @@ module.exports = {
             }
         })
         .catch(function (error) {
-            console.log(error);
             return res
             .status(501)
             .json({ message: 'Error!' });

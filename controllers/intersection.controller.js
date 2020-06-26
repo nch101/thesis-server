@@ -365,14 +365,17 @@ module.exports = {
                 .where('location')
                 .intersects()
                 .geometry({ type: 'Point', coordinates: location })
-                .where('bearing', bearing)
-                .select('_id intersectionId location')
+                .select('_id intersectionId location bearing')
                 .exec(function(err, data) {
                     if (err) {
                         reject(err);
                     }
                     else {
-                        resolve(data);
+                        if (data != null) {
+                            dBearing = Math.abs(data.bearing - bearing);
+                            if (dBearing <= 5) return resolve(data);
+                        }
+                        return resolve(null);
                     }
                 })
             })
@@ -392,7 +395,7 @@ module.exports = {
                     idTrafficLight.push(data);
                 }
             }
-            logger4js.getLogger('data-send').info(idTrafficLight);
+            log4js.getLogger('data-send').info(idTrafficLight);
             logger.info('Matching intersection success');
             return res
             .status(200)

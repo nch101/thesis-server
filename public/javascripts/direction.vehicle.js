@@ -22,34 +22,38 @@ menu.addEventListener('click', function() {
     menuBox.classList.toggle('menu-box-active');
 });
 
-// var map = new mapboxgl.Map({
-//     container: 'map',
-//     style: 'mapbox://styles/mapbox/streets-v11',
-//     center: [106.658188, 10.770398],
-//     zoom: 13
-// });
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [106.658188, 10.770398],
+    zoom: 13
+});
 
-// var directions = new MapboxDirections({
-//     accessToken: mapboxgl.accessToken,
-//     profile: 'mapbox/driving',
-//     controls: {
-//         profileSwitcher: false,
-//     },
-//     unit: 'metric',
-//     placeholderOrigin: 'Điểm đi',
-//     placeholderDestination: 'Điểm đến',
-//     language: 'vi',
-// })
-// map.addControl(directions, 'top-left');
+var directions = new MapboxDirections({
+    accessToken: mapboxgl.accessToken,
+    profile: 'mapbox/driving',
+    controls: {
+        profileSwitcher: false,
+    },
+    unit: 'metric',
+    placeholderOrigin: 'Điểm đi',
+    placeholderDestination: 'Điểm đến',
+    language: 'vi',
+})
+map.addControl(directions, 'top-left');
 
 var RTLocation;
 var isPriority = true;
 var state = 'passed';
 var dist = 1.5;
 
-var idIntersections = ["5eb90fe69f1398273bba559a", "5ec4a21420768c3fcd9b1665", "5ec4a35020768c3fcd9b166f"]
-var idTrafficLights = ["5eb90fe69f1398273bba55a3", "5ec4a21420768c3fcd9b166d", "5ec4a35020768c3fcd9b1677"];
-var locIntersections = [[ 106.658104, 10.770378 ], [ 106.659889, 10.763996 ], [ 106.660973, 10.760356 ] ];
+var idIntersections = []
+var idTrafficLights = []
+var locIntersections = []
+
+// var idIntersections = ["5eb90fe69f1398273bba559a", "5ec4a21420768c3fcd9b1665", "5ec4a35020768c3fcd9b166f"]
+// var idTrafficLights = ["5eb90fe69f1398273bba55a3", "5ec4a21420768c3fcd9b166d", "5ec4a35020768c3fcd9b1677"];
+// var locIntersections = [[ 106.658104, 10.770378 ], [ 106.659889, 10.763996 ], [ 106.660973, 10.760356 ] ];
 
 /**
  * Fake realtime location
@@ -144,7 +148,7 @@ function onGeoError(error) {
  * This function will run when the vehicle get a navigation 
  */
 
-/* function extraFunction(steps) {
+function extraFunction(steps) {
     var data = [];
     console.log(steps)
     for (var step of steps) {
@@ -171,7 +175,7 @@ function onGeoError(error) {
             locIntersections.push(trafficLight.location.coordinates);
         }
     })
-} */
+}
 
 /** 
  * Check whether the vehicle is approaching intersection or not 
@@ -210,7 +214,7 @@ function onPriority() {
                 state = 'passed';
                 controlLightPath.emit('[vehicle]-set-priority', {
                     id: idTrafficLight,
-                    mode: 'automatic',
+                    mode: 'automatic-flexible-time',
                     priority: false
                 });
                 controlLightPath.emit('leave-room', idIntersection);
