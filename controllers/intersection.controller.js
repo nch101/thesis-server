@@ -6,8 +6,8 @@ var jwtHelper = require('../helper/jwt');
 var key = require('../helper/key');
 
 function preProcessLocationData(locationDataString) {
-    var locationDataArray = locationDataString.split(',');
-    var locationData = {
+    let locationDataArray = locationDataString.split(',');
+    let locationData = {
         'type': 'Point',
         'coordinates': [locationDataArray[0], locationDataArray[1]]
     }
@@ -23,13 +23,14 @@ function timeGMT7(time) {
 
 module.exports = {
     createIntersection: function(req, res) {
-        var intersection = new intersectionModel({
+        let intersection = new intersectionModel({
             intersectionName: req.body.intersectionName,
             location: preProcessLocationData(req.body.locations[0]),
             delta: req.body.delta
         });
-        for (var index in  req.body.bearings) {
-            var trafficLight = new trafficLightModel({
+        for (let index in req.body.bearings) {
+            let trafficLight = new trafficLightModel({
+                index: index,
                 intersectionId: intersection._id,
                 streetName: req.body.streetNames[index],
                 location: preProcessLocationData(req.body.locations[index]), 
@@ -365,7 +366,7 @@ module.exports = {
                 .where('location')
                 .intersects()
                 .geometry({ type: 'Point', coordinates: location })
-                .select('_id intersectionId location bearing')
+                .select('_id index intersectionId location bearing')
                 .exec(function(err, data) {
                     if (err) {
                         reject(err);

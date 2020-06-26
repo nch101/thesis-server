@@ -14,6 +14,10 @@ var pointSchema = new Schema({
 });
 
 var trafficLightSchema = new Schema({
+    index: {
+        type: Number,
+        required: true
+    },
     intersectionId: {
         type: Schema.Types.ObjectId, 
         ref: 'Intersection'

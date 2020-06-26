@@ -10,7 +10,6 @@ mapboxgl.accessToken = cookiesParser('mapToken');
 
 
 const controlLightPath = io(window.location.origin + '/socket/control-light');
-const trackingVehiclePath = io(window.location.origin + '/socket/tracking-vehicle');
 const stateMachine = {
     'approaching': 0,
     'passed': 1
@@ -51,62 +50,24 @@ var idIntersections = []
 var idTrafficLights = []
 var locIntersections = []
 
-// var idIntersections = ["5eb90fe69f1398273bba559a", "5ec4a21420768c3fcd9b1665", "5ec4a35020768c3fcd9b166f"]
-// var idTrafficLights = ["5eb90fe69f1398273bba55a3", "5ec4a21420768c3fcd9b166d", "5ec4a35020768c3fcd9b1677"];
-// var locIntersections = [[ 106.658104, 10.770378 ], [ 106.659889, 10.763996 ], [ 106.660973, 10.760356 ] ];
-
-/**
- * Fake realtime location
- */
-
-var locationArray = [[106.656680, 10.775478],
-                    [106.656986, 10.774867],
-                    [106.657168, 10.774119],
-                    [106.657383, 10.773413],
-                    [106.657555, 10.772717],
-                    [106.657791, 10.772032],
-                    [106.657973, 10.771284],
-                    [106.658230, 10.770578],
-                    [106.658412, 10.769882],
-                    [106.658594, 10.769165],
-                    [106.658680, 10.768353],
-                    [106.658980, 10.767678],
-                    [106.659162, 10.766961],
-                    [106.659344, 10.766213],
-                    [106.659623, 10.765528],
-                    [106.659773, 10.764822],
-                    [106.659966, 10.764105],
-                    [106.660170, 10.763357],
-                    [106.660363, 10.762609],
-                    [106.660588, 10.761861],
-                    [106.660835, 10.761165],
-                    [106.660996, 10.760459],
-                    [106.661189, 10.759690],
-                    [106.661393, 10.759005],
-                    [106.661586, 10.758278]]
-
-var i = 0;
-
 /** 
  * Repeat again with every 5 seconds 
  */
 
 setInterval(function() {
-    // getGeoLocation()
+    getGeoLocation()
     
-    if (locationArray[i] !== undefined && isPriority) {
-        axios({
-            method: 'put',
-            url: window.location.origin + '/vehicle/' + idVehicle + '/location/' + idLocation,
-            data: {
-                coordinates: locationArray[i]
-            }
-        })
-        if (isPriority) {
-            onPriority()
+    axios({
+        method: 'put',
+        url: window.location.origin + '/vehicle/' + idVehicle + '/location/' + idLocation,
+        data: {
+            coordinates: RTLocation
         }
-        i++;
+    })
+    if (isPriority) {
+        onPriority()
     }
+
 }, 5000)
 
 
@@ -114,7 +75,7 @@ setInterval(function() {
  * Get the geolocation of vehicle in realtime 
  */
 
-/* function getGeoLocation() {
+function getGeoLocation() {
     var options = {
         enableHighAccuracy: true,
         timeout: 5000,
@@ -125,8 +86,6 @@ setInterval(function() {
 
 function emitLocation(position) {
     RTLocation = [ position.coords.longitude, position.coords.latitude ];
-
-    trackingVehiclePath.emit('[vehicle]-realtime-location', { idVehicle: idVehicle, location: RTLocation, vehicleType: vehicleType })
 }
 
 function onGeoError(error) {
@@ -142,7 +101,7 @@ function onGeoError(error) {
     else if (error.code === error.UNKNOWN_ERROR) {
         detailError = "An unknown error occurred."
     }
-} */
+}
 
 /** 
  * This function will run when the vehicle get a navigation 
@@ -150,7 +109,6 @@ function onGeoError(error) {
 
 function extraFunction(steps) {
     var data = [];
-    console.log(steps)
     for (var step of steps) {
         for (var intersection of step.intersections) {
             if (intersection.in) {
