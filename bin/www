@@ -46,6 +46,7 @@ var io = require('socket.io')(server);
 require('../socket/camera.socket')(io);
 require('../socket/control.socket')(io);
 require('../socket/state.socket')(io);
+require('../socket/emergency.socket')(io);
 
 server.listen(app.get('port'));
 server.on('listening', function() {

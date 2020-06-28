@@ -14,7 +14,8 @@ module.exports = {
             .status(200)
             .render('control-center/create.vehicle.pug', {
                 success: true,
-                message: 'Tạo tài khoản thành công!'
+                message: 'Tạo tài khoản thành công!',
+                name: res.locals.name,
             });
         })
         .catch(function(error) {
@@ -24,7 +25,8 @@ module.exports = {
             .render('control-center/create.vehicle.pug', {
                 error: true,
                 values: req.body,
-                message: 'Tạo tài khoản thất bại!'
+                message: 'Tạo tài khoản thất bại!',
+                name: res.locals.name,                
             });
         });
     },

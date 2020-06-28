@@ -47,8 +47,8 @@ var state = 'passed';
 var dist = 1.5;
 
 var idIntersections = []
-var idTrafficLights = []
 var locIntersections = []
+var indexOfStreets = []
 
 /** 
  * Repeat again with every 5 seconds 
@@ -129,7 +129,7 @@ function extraFunction(steps) {
         isPriority = true;
         for (var trafficLight of res.data) {
             idTrafficLights.push(trafficLight._id);
-            idIntersections.push(trafficLight.intersectionId)
+            indexOfStreet.push(trafficLight.index);
             locIntersections.push(trafficLight.location.coordinates);
         }
     })
@@ -147,7 +147,7 @@ function onPriority() {
         var locIntersection = locIntersections[0];
         var preDist = dist;
         dist = distanceCalculation(locIntersection[0], locIntersection[1],
-                                        locationArray[i][0], locationArray[i][1]);
+                                        RTLocation[0], RTLocation[1]);
             
         trackingVehiclePath.emit('distance', dist);
     }

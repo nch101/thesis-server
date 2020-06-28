@@ -11,6 +11,7 @@ router.put('/:id', intersectionController.configTime);
 router.get('/api/:id', intersectionController.getTimeAndStatus);
 
 router.post('/api/traffic-density/:id', intersectionController.updateTrafficDensity);
+router.get('/api/traffic-density/:id', intersectionController.getTrafficDensity);
 router.get('/list/search', intersectionController.findIntersection);
 
 module.exports = router

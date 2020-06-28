@@ -209,6 +209,25 @@ module.exports = {
         })
     },
 
+    getTrafficDensity: function(req, res) {
+        intersectionModel
+        .findById(req.params.id)
+        .select('trafficDensity')
+        .then(function(data) {
+            logger.info('Get traffic density at %s', req.params.id);
+            let trafficDensity = data.trafficDensity[data.trafficDensity.length -1];
+            return res
+            .status(200)
+            .json({ trafficDensity: trafficDensity })
+        })
+        .catch(function(error) {
+            logger.error('Update failed, id: %s, error: %s', req.params.id, error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
+    },
+
     configTime: function(req, res) {
         intersectionModel
         .findById(req.params.id)

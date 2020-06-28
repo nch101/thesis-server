@@ -6,7 +6,7 @@ block navbar
 
 block content
     span.create-header Tạo phương tiện ưu tiên
-    form.create-container(action='/admin/vehicle', method='post')
+    form.create-container(action='/vehicle', method='post')
         .create-item
             .form-group
                 input#license_plate.form-control(type='text', name='license_plate', required='', style='text-transform:uppercase;', value=values ? values.license_plate : '')
@@ -18,7 +18,6 @@ block content
                     option(value='ambulance', selected) Xe cấp cứu
                     option(value='fire-truck') Xe cứu hỏa
                     option(value='police') Xe cảnh sát
-                    option(value='military') Xe quân đội
         .create-item
             .form-group
                 input#password.form-control(type='password', name='password', required='')

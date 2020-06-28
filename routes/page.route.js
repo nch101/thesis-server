@@ -53,5 +53,6 @@ router.get('/center/list/intersections', userMiddleware.userMiddleware, pageCont
  */
 
 router.get('/vehicle/direction', vehicleMiddleware.vehicleMiddleware, pageController.directionPage);
+router.get('/vehicle/dhbk-ktx', vehicleMiddleware.vehicleMiddleware, pageController.testPage1);
 
 module.exports = router;

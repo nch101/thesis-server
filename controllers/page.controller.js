@@ -429,4 +429,11 @@ module.exports = {
         .render('vehicle/direction.pug')
     },
 
+    testPage1: function(req, res) {
+        logger.info('Render test emergency dhbk-ktxbk')
+        return res
+        .status(200)
+        .render('vehicle/dhbk-ktx.pug')
+    },
+
 }

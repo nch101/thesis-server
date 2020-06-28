@@ -38,7 +38,7 @@ var vehicleSchema = new Schema({
     },
     vehicleType: {
         type: String,
-        enum: ['ambulance', 'firetruck', 'police', 'military'],
+        enum: ['ambulance', 'firetruck', 'police'],
         required: true
     },
     phone: String,
