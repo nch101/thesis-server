@@ -2,7 +2,7 @@ var features = [];
 var popupArray = [];
 var url = window.location.origin + '/vehicle/location';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+mapboxgl.accessToken = cookiesParser('mapToken');
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -61,7 +61,8 @@ map.on('load', async function() {
             map.on('click', 'vehicle', function(e) {
                 map.flyTo({
                     center: e.features[0].geometry.coordinates,
-                    speed: 0.8
+                    speed: 0.8,
+                    zoom: 15
                 })
             })
         })
@@ -70,14 +71,10 @@ map.on('load', async function() {
 
 function processLocationData(vehicles) {
     features = [];
-    for (var vehicle of vehicles) {
-        for (var feature of vehicle.journey) {
-            if (feature.properties.name === 'Current-position') {
-                feature.properties.license_plate = vehicle.license_plate;
-                delete feature._id;
-                features.push(feature);
-            }
-        }
+    for (let vehicle of vehicles) {
+        vehicle.location.properties.license_plate = vehicle.license_plate;
+        delete vehicle.location._id;
+        features.push(vehicle.location);
     }
 }
 
@@ -91,4 +88,19 @@ function focusVehicle(license_plate) {
             break;
         }
     }
+}
+
+/**
+ * Cookies parser
+ */
+
+function cookiesParser(cookieName) {
+    var cookieName = cookieName + "=";
+    var cookiesArray = document.cookie.split('; ');
+    for (var cookie of cookiesArray) {
+        if (cookie.indexOf(cookieName) == 0) {
+            return cookie.substring(cookieName.length, cookie.length);
+        }
+    }
+    return "";
 }

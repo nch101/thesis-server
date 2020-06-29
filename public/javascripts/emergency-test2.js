@@ -31,7 +31,6 @@ var locationArray = [[106.656680, 10.775478],
 var i = 0;
 
 var idVehicle = cookiesParser('vehicleId');
-var idLocation = cookiesParser('locId');
 var vehicleType = cookiesParser('vehicleType');
 var preDist = 0;
 var isEmitted = false;
@@ -53,7 +52,7 @@ var testLoop = setInterval(function() {
 
     axios({
         method: 'put',
-        url: window.location.origin + '/vehicle/' + idVehicle + '/location/' + idLocation,
+        url: window.location.origin + '/vehicle/location/' + idVehicle,
         data: {
             coordinates: locationArray[i]
         }

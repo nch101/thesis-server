@@ -7,6 +7,7 @@ module.exports = {
     createVehicle: function(req, res) {
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var vehicle = new vehicleModel(req.body);
+        vehicle.location = {};
         vehicle.save()
         .then(function(data) {
             logger.info('Create vehicle id %s successful', data._id);
@@ -58,9 +59,8 @@ module.exports = {
     trackingVehicle: function(req, res) {
         vehicleModel
         .find()
-        .select('license_plate vehicleType phone status journey timeOn')
-        .sort({ 'updated_at': -1 })
-        .sort({ 'created_at': -1})
+        .select('license_plate vehicleType phone status location timeOn')
+        .sort('license_plate status')
         .then(function(data) {
             // log4js.getLogger('data-send').debug('trackingVehicle: ', data);
             if (data) {
@@ -88,7 +88,7 @@ module.exports = {
 
     blockedVehicle: function(req, res) {
         vehicleModel
-        .findByIdAndUpdate(req.params.id, { $set: {blocked: true}})
+        .findByIdAndUpdate(req.params.id, { $set: { blocked: true }})
         .select('_id')
         .then(function(data) {
             if (data) {
@@ -120,7 +120,7 @@ module.exports = {
 
     unlockedVehicle: function(req, res) {
         vehicleModel
-        .findByIdAndUpdate(req.params.id, { $set: {blocked: false}})
+        .findByIdAndUpdate(req.params.id, { $set: { blocked: false }})
         .then(function(data) {
             if (data) {
                 logger.info('Unlocked vehicle id: %s', req.params.id);
@@ -277,7 +277,7 @@ module.exports = {
     getLocation: function(req, res) {
         vehicleModel
         .findById(req.params.id)
-        .select('license_plate journey -_id')
+        .select('license_plate location -_id')
         .then(function(data) {
             if (data) {
                 return res
@@ -300,7 +300,7 @@ module.exports = {
     updateLocation: function(req,res) {
         vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: {
-            journey: req.body.journey
+            location: req.body.location
         }})
         .select('_id')
         .then(function(data) {
@@ -324,13 +324,9 @@ module.exports = {
 
     updateCurrentLocation: function(req,res) {
         vehicleModel
-        .findOneAndUpdate(
-            { '_id': req.params['vehicleID'], 'journey._id': req.params['locationID']},
-            { 
-                '$set': {
-                    'journey.$.geometry.coordinates': req.body.coordinates
-                }
-            })
+        .findByIdAndUpdate(req.params.id, { $set: {
+            'location.geometry.coordinates': req.body.coordinates
+        }})
         .select('_id')
         .then(function(data) {
             if (data) {
@@ -345,6 +341,7 @@ module.exports = {
             }
         })
         .catch(function (error) {
+            logger.error('Update current location %s, $s', req.params.id, error);
             return res
             .status(501)
             .json({ message: 'Error!' });
@@ -354,7 +351,7 @@ module.exports = {
     getAllCurrentLocation: function(req, res) {
         vehicleModel
         .find()
-        .select('_id license_plate vehicleType journey')
+        .select('_id license_plate vehicleType location')
         .then(function(data) {
             logger.info('Get location data of all vehicles')
             return res

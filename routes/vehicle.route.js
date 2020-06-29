@@ -9,8 +9,8 @@ router.put('/unlocked/:id', vehicleController.unlockedVehicle);
 router.delete('/:id', vehicleController.deleteVehicle);
 
 router.get('/location', vehicleController.getAllCurrentLocation);
+router.put('/location/:id', vehicleController.updateCurrentLocation);
 router.put('/journey', intersectionController.matchIntersection);
-router.put('/:vehicleID/location/:locationID', vehicleController.updateCurrentLocation);
 
 
 

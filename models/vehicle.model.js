@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var journeySchema = new Schema({
+var locationSchema = new Schema({
     type: {
         type: String,
         default: 'Feature'
@@ -19,8 +19,7 @@ var journeySchema = new Schema({
     properties: {
         name: {
             type: String,
-            enum: ['Departure', 'Current-position','Destination'],
-            require: true
+            default: 'Current-position',
         }
     }
 });
@@ -55,9 +54,9 @@ var vehicleSchema = new Schema({
         default: false,
         required: true
     },
-    journey: [{
-        type: journeySchema,
-    }],
+    location: {
+        type: locationSchema,
+    },
     timeOn: {
         type: Number
     }
