@@ -84,8 +84,7 @@ module.exports = {
         intersectionModel
         .find({ intersectionName: regex }, { 'intersectionName': 1})
         .select('intersectionName')
-        .sort({ 'updated_at': -1 })
-        .sort({ 'created_at': -1})
+        .sort('intersectionName')
         .limit(10)
         .then(function(data) {
             logger.info('Response intersection name');

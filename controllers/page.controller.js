@@ -114,7 +114,7 @@ module.exports = {
             .clearCookie('refreshToken')
             .clearCookie('accessToken')
             .clearCookie('vehicleId')
-            .clearCookie('locId')
+            .clearCookie('vehicleType')
             .clearCookie('io')
             .clearCookie('mapToken')
             .redirect('/login');
@@ -173,10 +173,13 @@ module.exports = {
     overviewPage: function(req, res) {
         let vehicle = vehicleModel
         .find()
-        .select('license_plate vehicleType status timeOn');
+        .select('license_plate vehicleType status timeOn')
+        .sort('license_plate vehicleType status');
+
         let intersection = intersectionModel
         .find()
-        .select('intersectionName modeControl trafficDensity');
+        .select('intersectionName modeControl trafficDensity')
+        .sort('intersectionName modeControl trafficDensity')
 
         Promise
         .all([vehicle, intersection])
@@ -363,6 +366,7 @@ module.exports = {
         vehicleModel
         .find()
         .select('license_plate vehicleType phone address company status blocked')
+        .sort('license_plate vehicleType status')
         .then(function(data) {
             if (data) {
                 logger.info('Render list vehicles page');
