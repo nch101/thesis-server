@@ -6,9 +6,9 @@ mixin infoIntersections(item, index)
         td #{ item.intersectionName }
         td
             if item.modeControl == 'automatic-flexible-time'
-                span.badge.automatic-flexible tự động - thời gian linh hoạt
+                span.badge.automatic-flexible thời gian linh hoạt
             else if item.modeControl == 'automatic-fixed-time'
-                span.badge.automatic-fixed tự động - thời gian định sẵn
+                span.badge.automatic-fixed thời gian cố định
             else if item.modeControl == 'manual'
                 span.badge.manual-control điều khiển từ xa
             else if item.modeControl == 'emergency'
@@ -47,11 +47,8 @@ mixin infoVehicles(item, index)
                 span.badge.online-badge Đang hoạt động
             else
                 span.badge.offline-badge Không hoạt động
-        td #{ item.uptime }
         td 
-
         
-
 block navbar
     - var isActive = 'home'
     include navbar
@@ -89,7 +86,7 @@ block content
                 div
                     span.number #{ nMode[1] }
                     span.species Giao lộ
-                span.state.automatic-fixed-text trong chế độ thời gian định sẵn
+                span.state.automatic-fixed-text trong chế độ thời gian cố định
         span.list-item
             span.icon.manual-control
                 i.fas.fa-hand-paper
@@ -131,7 +128,6 @@ block content
                         th Biển kiểm soát
                         th Loại phương tiện
                         th Trạng thái hoạt động
-                        th Thời gian hoạt động
                         th Hành động
                 tbody
                     each item, index in vehiclesData

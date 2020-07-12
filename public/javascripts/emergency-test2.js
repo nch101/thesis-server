@@ -36,6 +36,7 @@ var preDist = 0;
 var isEmitted = false;
 var isNewIntersection = true;
 var isGot = false;
+var isFinished = false;
 
 var res = {};
 
@@ -47,9 +48,6 @@ const stateVehicle = {
 const emergencyPath = io(window.location.origin + '/socket/emergency');
 
 var testLoop = setInterval(function() {
-    let dist = distanceCalculation(locIntersections[0][0], locIntersections[0][1],
-        locationArray[0][0], locationArray[0][1]);
-
     axios({
         method: 'put',
         url: window.location.origin + '/vehicle/location/' + idVehicle,
@@ -57,39 +55,46 @@ var testLoop = setInterval(function() {
             coordinates: locationArray[i]
         }
     })
-
-    console.log('Distance: ', dist);
     console.log('Location: ', locationArray[0]);
-    console.log('Intersection: ', idIntersections[0]);
-    console.log('Array intersection: ', idIntersections);
+
+    if (!isFinished) {
+        let dist = distanceCalculation(locIntersections[0][0], locIntersections[0][1],
+            locationArray[0][0], locationArray[0][1]);
     
-
-    if (isNewIntersection) {
-        preDist = dist;
-        isNewIntersection = false;
-    };
-
-    if (preDist >= dist) {
-        if (!isEmitted) {
-            prepareApproaching(dist);
-        }
-    }
-    else {
-        console.log('Passed is running');
-        emitData(stateVehicle.passed);
-        isNewIntersection = true;
-        isEmitted = false;
-        isGot = false;
+        console.log('Distance: ', dist);
+        console.log('Intersection: ', idIntersections[0]);
+        console.log('Array intersection: ', idIntersections);
         
-        if (idIntersections.length > 1) {
-            idIntersections.shift();
-            locIntersections.shift();
-            indexOfStreets.shift();
+        if (isNewIntersection) {
+            preDist = dist;
+            isNewIntersection = false;
+        };
+    
+        if (preDist >= dist) {
+            if (!isEmitted) {
+                prepareApproaching(dist);
+            }
         }
-        else console.log('Finished');
-    };
-
-    preDist = dist;
+        else {
+            console.log('Passed is running');
+            emitData(stateVehicle.passed);
+            isNewIntersection = true;
+            isEmitted = false;
+            isGot = false;
+            
+            if (idIntersections.length > 1) {
+                idIntersections.shift();
+                locIntersections.shift();
+                indexOfStreets.shift();
+            }
+            else {
+                console.log('Finished');
+                isFinished = true;
+            }
+        };
+    
+        preDist = dist;
+    }
 
     if (locationArray.length > 1) {
         locationArray.shift();
@@ -101,7 +106,6 @@ var testLoop = setInterval(function() {
 
 async function prepareApproaching(distance) {
     if (distance <= 0.5) {
-        console.log('PrepareApproaching is running');
 
         if (!isGot) {
             res = await axios.get(window.location.origin + '/intersection/api/traffic-density/' + idIntersections[0]);
@@ -140,6 +144,8 @@ function emitData(state) {
         state: state,
         indexOfStreet: indexOfStreets[0],
     });
+
+    console.log('Emitted')
 };
 
 /** 

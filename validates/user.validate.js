@@ -33,6 +33,7 @@ module.exports = {
                     .status(304)
                     .cookie('accessToken', token[0])
                     .cookie('refreshToken', token[1], { maxAge: 3600000 * 24 * 3650 })
+                    .cookie('mapToken', key.mapToken)
                     .redirect('/center/overview');
                 })
                 .catch(function(error) {

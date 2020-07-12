@@ -230,7 +230,6 @@ module.exports = {
         logger.info('Render create intersection page');
         return res
         .status(200)
-        .cookie('mapToken', key.mapToken)
         .render('control-center/create.intersection.pug', {
             name: res.locals.name,
         })
@@ -240,7 +239,6 @@ module.exports = {
         logger.info('Render control light page');
         return res
         .status(200)
-        .cookie('mapToken', key.mapToken)
         .render('control-center/control.intersection.pug', {
             name: res.locals.name,
         })
@@ -250,7 +248,6 @@ module.exports = {
         logger.info('Render tracking vehicle page');
         return res
         .status(200)
-        .cookie('mapToken', key.mapToken)
         .render('control-center/tracking-vehicles.pug', {
             name: res.locals.name,
         })
