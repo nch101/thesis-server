@@ -16,7 +16,6 @@ var pageRouter = require('./routes/page.route');
 var userRouter = require('./routes/user.route');
 var vehicleRouter = require('./routes/vehicle.route');
 var intersectionRouter = require('./routes/intersection.route');
-var trafficLightRouter = require('./routes/trafficLight.route');
 
 var app = express();
 
@@ -34,7 +33,6 @@ app.use('/', pageRouter);
 app.use('/user', userRouter);
 app.use('/vehicle', cors(), vehicleRouter);
 app.use('/intersection', cors(), intersectionRouter);
-app.use('/traffic-light', trafficLightRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
