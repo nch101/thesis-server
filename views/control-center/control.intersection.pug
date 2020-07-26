@@ -15,8 +15,12 @@ block content
             #map
         #render-interact.c-container
             .cam-container
-                canvas#north-cam.cam-item
-                canvas#west-cam.cam-item
+                .cam-item
+                    canvas#north-cam
+                    #north-street
+                .cam-item
+                    canvas#west-cam
+                    #west-street
             .interact-container
                 .animation-wrapper
                     .angle

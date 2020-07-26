@@ -591,9 +591,21 @@ li > a:hover {
 }
 
 .cam-item {
+    position: relative;
     width: 711px;
     height: 400px;
     background-color: #BBB;
+}
+
+#north-street, #west-street {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    text-transform: capitalize;
+    color: black;
+    font-weight: 700;
+    font-size: medium;
+    z-index: 1;
 }
 
 .cam-item:last-child {

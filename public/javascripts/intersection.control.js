@@ -28,6 +28,9 @@ var rightStreetLight = document.getElementById('right-street-light');
 var bottomStreetLight = document.getElementById('bottom-street-light');
 var leftStreetLight = document.getElementById('left-street-light');
 
+var northStreet = document.getElementById('north-street');
+var westStreet = document.getElementById('west-street');
+
 var btnChange = document.getElementById('btn-change');
 var btnUpdate = document.getElementById('btn-update');
 
@@ -84,9 +87,9 @@ function getInfoIntersection(event) {
         zoom: 17
     })
     
-    // /**
-    //  * Unsubscribe intersection was clicked before and subscribe new intersection
-    //  */
+    /**
+     * Unsubscribe intersection was clicked before and subscribe new intersection
+     */
     
     unsubscribeIntersection();
     idIntersection = event.currentTarget.id;
@@ -132,6 +135,9 @@ function renderInfoIntersection(res) {
     for (var index in streetInfo) {
         streetArray[index].innerHTML = streetInfo[index].streetName;
     }
+
+    northStreet.innerHTML = streetInfo[3].streetName;
+    westStreet.innerHTML = streetInfo[2].streetName;
 
     intersectionNameHTML.innerHTML = intersectionName;
     delta.value = deltaTime;
@@ -193,7 +199,6 @@ function updateTrafficDensity(trafficDensity) {
         trafficDensityClass.add('vh-badge');
     }
 
-    console.log(typeof(trafficDensity.date));
     updateTime.innerHTML = trafficDensity.date;
 }
 
