@@ -295,6 +295,8 @@ module.exports = {
     },
 
     statisticIntersectionPage: function(req, res) {
+        var toTime = req.query.toTime == '' ? Date.now() : Date.parse(req.query.toTime);
+        var fromTime = req.query.fromTime == '' ? toTime - 604800000 : Date.parse(req.query.fromTime);
         intersectionModel
         .findById(req.params.id)
         .select('intersectionName trafficDensity')
@@ -302,12 +304,14 @@ module.exports = {
             logger.info('Render statistic traffic density page');
             let trafficDensityArr = [];
             for (let item of data.trafficDensity) {
-                if (item.date >= Date.parse(req.query.fromTime) && item.date <= Date.parse(req.query.toTime)) {
-                    let processData = {
-                        rate: item.rate,
-                        date: timeGMT7(item.date)
-                    };
-                    trafficDensityArr.push(processData);
+                if (item.date >= fromTime) {
+                    if (item.date <= toTime) {
+                        let processData = {
+                            rate: item.rate,
+                            date: timeGMT7(item.date)
+                        };
+                        trafficDensityArr.push(processData);
+                    }
                 }
             };
             return res

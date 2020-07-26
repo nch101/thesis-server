@@ -17,7 +17,7 @@ mixin infoIntersections(item, index)
                 i.fas.fa-copy
                 span.tool-tip Copy
         td
-            a(href="/center/statistic/" + item._id).btn-func.has-tooltip.btn-statistic
+            a(href="/center/statistic/" + item._id + "?fromTime=&toTime=").btn-func.has-tooltip.btn-statistic
                 i.fas.fa-chart-bar
                 span.tool-tip Xem thống kê mật độ
             a(href="/center/edit-intersection/" + item._id).btn-func.has-tooltip.btn-edit
