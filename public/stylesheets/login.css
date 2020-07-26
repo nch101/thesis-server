@@ -152,7 +152,7 @@ form a {
     margin-top: 30px;
     outline: none;
     text-decoration: none;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     color: #FE2B54;
     font-size: 1rem;
     font-weight: 300;

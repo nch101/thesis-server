@@ -300,13 +300,15 @@ module.exports = {
         .select('intersectionName trafficDensity')
         .then(function(data) {
             logger.info('Render statistic traffic density page');
-            let trafficDensityArr = []
+            let trafficDensityArr = [];
             for (let item of data.trafficDensity) {
-                let processData = {
-                    rate: item.rate,
-                    date: timeGMT7(item.date)
-                };
-                trafficDensityArr.push(processData);
+                if (item.date >= Date.parse(req.query.fromTime) && item.date <= Date.parse(req.query.toTime)) {
+                    let processData = {
+                        rate: item.rate,
+                        date: timeGMT7(item.date)
+                    };
+                    trafficDensityArr.push(processData);
+                }
             };
             return res
             .status(200)
