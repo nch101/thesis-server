@@ -189,6 +189,7 @@ module.exports = {
             return res
             .status(200)
             .render('control-center/overview.pug', {
+                title: 'Tổng quan',
                 name: res.locals.name,
                 vehiclesData: data[0],
                 intersectionsData: processInterData[0],
@@ -213,6 +214,7 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/create.vehicle.pug', {
+            title: 'Tạo tài khoản phương tiện',
             name: res.locals.name,
         });
     },
@@ -222,6 +224,7 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/create.control-center.pug', {
+            title: 'Tạo tài khoản trung tâm quản lý',
             name: res.locals.name,
         })
     },
@@ -231,6 +234,7 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/create.intersection.pug', {
+            title: 'Tạo thông tin giao lộ',
             name: res.locals.name,
         })
     },
@@ -240,17 +244,39 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/control.intersection.pug', {
+            title: 'Điều khiển đèn giao thông',
             name: res.locals.name,
         })
     },
 
-    trackingPage: function(req, res) {
-        logger.info('Render tracking vehicle page');
-        return res
-        .status(200)
-        .render('control-center/tracking-vehicles.pug', {
-            name: res.locals.name,
+    trackingVehicle: function(req, res) {
+        vehicleModel
+        .find()
+        .select('license_plate vehicleType phone status location timeOn')
+        .sort('license_plate status')
+        .then(function(data) {
+            if (data) {
+                logger.info('Render tracking vehicle page');
+                return res
+                .status(200)
+                .render('control-center/tracking-vehicles.pug', {
+                    title: 'Giám sát phương tiện',
+                    nVehicle: data
+                })
+            }
+            else {
+                logger.warn('Vehicles not found to tracking');
+                return res
+                .status(404)
+                .json({ message: 'Not found!' });
+            }
         })
+        .catch(function(error) {
+            logger.error('Render tracking vehicle error: %s', error);
+            return res
+            .status(501)
+            .json({ message: 'Error!' });
+        });
     },
 
     editPage: function(req, res) {
@@ -258,6 +284,7 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/edit.pug', {
+            title: 'Chỉnh sửa',
             name: res.locals.name,
         })
     },
@@ -273,6 +300,7 @@ module.exports = {
             return res
             .status(200)
             .render('control-center/edit.intersection.pug', {
+                title: 'Chỉnh sửa',
                 name: res.locals.name,
                 values: data
             })
@@ -290,6 +318,7 @@ module.exports = {
         return res
         .status(200)
         .render('control-center/statistic.intersection.pug', {
+            title: 'Thống kê mật độ giao thông',
             name: res.locals.name,
         });
     },
@@ -317,6 +346,7 @@ module.exports = {
             return res
             .status(200)
             .render('control-center/statistic.intersection.pug', {
+                title: 'Thống kê mật độ giao thông',
                 name: res.locals.name,
                 data: trafficDensityArr,
                 intersectionName: data.intersectionName
@@ -340,6 +370,7 @@ module.exports = {
                 return res
                 .status(200)
                 .render('control-center/list.managers.pug', {
+                    title: 'Danh sách quản lý',
                     name: res.locals.name,
                     managers: data
                 });
@@ -376,6 +407,7 @@ module.exports = {
                 return res
                 .status(200)
                 .render('control-center/list.vehicles.pug', {
+                    title: 'Danh sách phương tiện khẩn cấp',
                     name: res.locals.name,
                     vehicles: data
                 });
@@ -410,6 +442,7 @@ module.exports = {
             return res
             .status(200)
             .render('control-center/list.intersections.pug', {
+                title: 'Danh sách giao lộ',
                 name: res.locals.name,
                 intersections: data
             });

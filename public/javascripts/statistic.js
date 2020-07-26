@@ -23,8 +23,8 @@ var config = {
             fontColor: '#333',
         },
         tooltips: {
-            mode: 'index',
-            intersect: false,
+            mode: 'nearest',
+            intersect: true,
         },
         hover: {
             mode: 'nearest',

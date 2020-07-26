@@ -56,36 +56,6 @@ module.exports = {
         });
     },
 
-    trackingVehicle: function(req, res) {
-        vehicleModel
-        .find()
-        .select('license_plate vehicleType phone status location timeOn')
-        .sort('license_plate status')
-        .then(function(data) {
-            // log4js.getLogger('data-send').debug('trackingVehicle: ', data);
-            if (data) {
-                logger.info('Render tracking vehicle page');
-                return res
-                .status(200)
-                .render('control-center/tracking-vehicles.pug', {
-                    nVehicle: data
-                })
-            }
-            else {
-                logger.warn('Vehicles not found to tracking');
-                return res
-                .status(404)
-                .json({ message: 'Not found!' });
-            }
-        })
-        .catch(function(error) {
-            logger.error('Render tracking vehicle error: %s', error);
-            return res
-            .status(501)
-            .json({ message: 'Error!' });
-        });
-    },
-
     blockedVehicle: function(req, res) {
         vehicleModel
         .findByIdAndUpdate(req.params.id, { $set: { blocked: true }})

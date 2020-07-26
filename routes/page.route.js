@@ -35,7 +35,7 @@ router.get('/center/logout', userMiddleware.userMiddleware, pageController.cente
  */
 
 router.get('/center/overview/', userMiddleware.userMiddleware, pageController.overviewPage);
-router.get('/center/tracking-vehicle/', userMiddleware.userMiddleware, vehicleController.trackingVehicle);//
+router.get('/center/tracking-vehicle/', userMiddleware.userMiddleware, pageController.trackingVehicle);
 router.get('/center/control/', userMiddleware.userMiddleware, pageController.controlLightPage);
 router.get('/center/statistic/', userMiddleware.userMiddleware, pageController.statisticPage);
 router.get('/center/statistic/:id', userMiddleware.userMiddleware, pageController.statisticIntersectionPage);
