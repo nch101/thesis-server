@@ -12,8 +12,6 @@ router.get('/location', vehicleController.getAllCurrentLocation);
 router.put('/location/:id', vehicleController.updateCurrentLocation);
 router.put('/journey', intersectionController.matchIntersection);
 
-
-
 router.get('/:id', vehicleController.getVehicle);
 
 router.put('/:id', vehicleController.editVehicle);

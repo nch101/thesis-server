@@ -15,10 +15,8 @@ var log = log4js.getLogger('app');
 var pageRouter = require('./routes/page.route');
 var userRouter = require('./routes/user.route');
 var vehicleRouter = require('./routes/vehicle.route');
-var adminRouter = require('./routes/admin.route');
 var intersectionRouter = require('./routes/intersection.route');
 var trafficLightRouter = require('./routes/trafficLight.route');
-var apiRouter = require('./routes/api.route');
 
 var app = express();
 
@@ -35,22 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', pageRouter);
 app.use('/user', userRouter);
 app.use('/vehicle', cors(), vehicleRouter);
-app.use('/admin', cors(), adminRouter);
 app.use('/intersection', cors(), intersectionRouter);
-app.use('/api', cors(), apiRouter);
 app.use('/traffic-light', trafficLightRouter);
-
-//Test socketIO
-app.use('/upload-location', function(req, res) {
-	return res
-	.status(200)
-	.render('upload-location');
-});
-app.use('/tracking-vehicle', function(req, res) {
-	return res
-	.status(200)
-	.render('tracking-vehicle');
-})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

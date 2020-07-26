@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var pageController = require('../controllers/page.controller');
-var vehicleController = require('../controllers/vehicle.controller');
 var userValidate = require('../validates/user.validate');
 var userMiddleware = require('../middleware/user.middleware');
 
