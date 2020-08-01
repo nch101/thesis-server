@@ -27,6 +27,38 @@ const stateVehicle = {
 
 const emergencyPath = io(window.location.origin + '/socket/emergency');
 
+/**
+ * Fake locations
+ */
+
+var locationArray = [[106.656680, 10.775478],
+                    [106.656986, 10.774867],
+                    [106.657168, 10.774119],
+                    [106.657383, 10.773413],
+                    [106.657555, 10.772717],
+                    [106.657791, 10.772032],
+                    [106.657973, 10.771284],
+                    [106.658230, 10.770578],
+                    [106.658412, 10.769882],
+                    [106.658594, 10.769165],
+                    [106.658680, 10.768353],
+                    [106.658980, 10.767678],
+                    [106.659162, 10.766961],
+                    [106.659344, 10.766213],
+                    [106.659623, 10.765528],
+                    [106.659773, 10.764822],
+                    [106.659966, 10.764105],
+                    [106.660170, 10.763357],
+                    [106.660363, 10.762609],
+                    [106.660588, 10.761861],
+                    [106.660835, 10.761165],
+                    [106.660996, 10.760459],
+                    [106.661189, 10.759690],
+                    [106.661393, 10.759005],
+                    [106.661586, 10.758278]]
+
+var i = 0;
+
 menu.addEventListener('click', function() {
     menuIcon.classList.toggle('menu-icon-active');
     menuBox.classList.toggle('menu-box-active');
@@ -77,20 +109,19 @@ async function extraFunction(steps) {
         indexOfStreets.push(trafficLight.index);
     }
 
-    setInterval(async function() {
-        var RTLocation = await getGeoLocation();
-
+    var testLoop = setInterval(function() {
         axios({
             method: 'put',
             url: window.location.origin + '/vehicle/location/' + idVehicle,
             data: {
-                coordinates: RTLocation
+                coordinates: locationArray[i]
             }
         })
+        console.log('Location: ', locationArray[0]);
     
         if (!isFinished) {
             let dist = distanceCalculation(locIntersections[0][0], locIntersections[0][1],
-                RTLocation[0], RTLocation[1]);
+                locationArray[0][0], locationArray[0][1]);
         
             console.log('Distance: ', dist);
             console.log('Intersection: ', idIntersections[0]);
@@ -127,6 +158,12 @@ async function extraFunction(steps) {
             preDist = dist;
         }
     
+        if (locationArray.length > 1) {
+            locationArray.shift();
+        }
+        else {
+            clearInterval(testLoop);
+        }
     }, 5000);
 }
 
@@ -216,9 +253,29 @@ function cookiesParser(cookieName) {
  */
 
 function getGeoLocation() {
-    return new Promise(function (resolve, reject) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            resolve([ position.coords.longitude, position.coords.latitude ]);
-        }); 
-    });
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 5000
+    };
+    navigator.geolocation.getCurrentPosition(emitLocation, onGeoError, options);
+};
+
+function emitLocation(position) {
+    RTLocation = [ position.coords.longitude, position.coords.latitude ];
+};
+
+function onGeoError(error) {
+    if (error.code === error.PERMISSION_DENIED) {
+        detailError = "User denied the request for Geolocation.";
+    }
+    else if (error.code === error.POSITION_UNAVAILABLE) {
+        detailError = "Location information is unavailable.";
+    }
+    else if (error.code === error.TIMEOUT) {
+        detailError = "The request to get user location timed out."
+    }
+    else if (error.code === error.UNKNOWN_ERROR) {
+        detailError = "An unknown error occurred."
+    }
 };

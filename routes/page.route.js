@@ -6,6 +6,7 @@ var userMiddleware = require('../middleware/user.middleware');
 
 var vehicleValidate = require('../validates/vehicle.validate');
 var vehicleMiddleware = require('../middleware/vehicle.middleware');
+const { testSelectionPage } = require('../controllers/page.controller');
 
 /**
  * Login page
@@ -51,7 +52,11 @@ router.get('/center/list/intersections', userMiddleware.userMiddleware, pageCont
  * Vehicle side
  */
 
+router.get('/vehicle/test-selection', vehicleMiddleware.vehicleMiddleware, pageController.testSelectionPage);
 router.get('/vehicle/direction', vehicleMiddleware.vehicleMiddleware, pageController.directionPage);
-router.get('/vehicle/dhbk-ktx', vehicleMiddleware.vehicleMiddleware, pageController.testPage1);
+router.get('/vehicle/ltk-bk-ktx', vehicleMiddleware.vehicleMiddleware, pageController.dhbkKtx);
+router.get('/vehicle/tht-lg', vehicleMiddleware.vehicleMiddleware, pageController.thtLg);
+router.get('/vehicle/ltk-ktx-bk', vehicleMiddleware.vehicleMiddleware, pageController.ktxDhbk);
+router.get('/vehicle/lg-tht', vehicleMiddleware.vehicleMiddleware, pageController.lgTht);
 
 module.exports = router;

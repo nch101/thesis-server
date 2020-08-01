@@ -462,6 +462,13 @@ module.exports = {
      * Vehicle side
      */
 
+    testSelectionPage: function(req, res) {
+        logger.info('Render test emergency page');
+        return res
+        .status(200)
+        .render('vehicle/test.emergency.pug');
+    },
+
     directionPage: function(req, res) {
         logger.info('Render direction page');
         return res
@@ -469,11 +476,32 @@ module.exports = {
         .render('vehicle/direction.pug')
     },
 
-    testPage1: function(req, res) {
-        logger.info('Render test emergency dhbk-ktxbk')
+    dhbkKtx: function(req, res) {
+        logger.info('Render test emergency dhbk-ktxbk');
         return res
         .status(200)
         .render('vehicle/dhbk-ktx.pug')
+    },
+
+    lgTht: function(req,res) {
+        logger.info('Render test emergency lg-tht');
+        return res
+        .status(200)
+        .render('vehicle/lg-tht.pug')
+    },
+
+    thtLg: function(req,res) {
+        logger.info('Render test emergency tht-lg');
+        return res
+        .status(200)
+        .render('vehicle/tht-lg.pug')
+    },
+
+    ktxDhbk: function(req,res) {
+        logger.info('Render test emergency ktx-dhbk');
+        return res
+        .status(200)
+        .render('vehicle/ktx-dhbk.pug')
     },
 
 }

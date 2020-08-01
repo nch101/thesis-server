@@ -27,6 +27,25 @@ const stateVehicle = {
 
 const emergencyPath = io(window.location.origin + '/socket/emergency');
 
+/**
+ * Fake locations
+ */
+
+var locationArray = [[106.659629, 10.764642],
+                    [106.6594788, 10.7653270],
+                    [106.659366, 10.766054],
+                    [106.659227, 10.766750],
+                    [106.659025, 10.767428],
+                    [106.658914, 10.768124],
+                    [106.658543, 10.768766],
+                    [106.658350, 10.769398],
+                    [106.657985, 10.770800],
+                    [106.657749, 10.771454],
+                    [106.657737, 10.772253],
+                    [106.657380, 10.772854]];
+
+var i = 0;
+
 menu.addEventListener('click', function() {
     menuIcon.classList.toggle('menu-icon-active');
     menuBox.classList.toggle('menu-box-active');
@@ -77,20 +96,19 @@ async function extraFunction(steps) {
         indexOfStreets.push(trafficLight.index);
     }
 
-    setInterval(async function() {
-        var RTLocation = await getGeoLocation();
-
+    var testLoop = setInterval(function() {
         axios({
             method: 'put',
             url: window.location.origin + '/vehicle/location/' + idVehicle,
             data: {
-                coordinates: RTLocation
+                coordinates: locationArray[i]
             }
         })
+        console.log('Location: ', locationArray[0]);
     
         if (!isFinished) {
             let dist = distanceCalculation(locIntersections[0][0], locIntersections[0][1],
-                RTLocation[0], RTLocation[1]);
+                locationArray[0][0], locationArray[0][1]);
         
             console.log('Distance: ', dist);
             console.log('Intersection: ', idIntersections[0]);
@@ -127,6 +145,12 @@ async function extraFunction(steps) {
             preDist = dist;
         }
     
+        if (locationArray.length > 1) {
+            locationArray.shift();
+        }
+        else {
+            clearInterval(testLoop);
+        }
     }, 5000);
 }
 
@@ -216,9 +240,29 @@ function cookiesParser(cookieName) {
  */
 
 function getGeoLocation() {
-    return new Promise(function (resolve, reject) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            resolve([ position.coords.longitude, position.coords.latitude ]);
-        }); 
-    });
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 5000
+    };
+    navigator.geolocation.getCurrentPosition(emitLocation, onGeoError, options);
+};
+
+function emitLocation(position) {
+    RTLocation = [ position.coords.longitude, position.coords.latitude ];
+};
+
+function onGeoError(error) {
+    if (error.code === error.PERMISSION_DENIED) {
+        detailError = "User denied the request for Geolocation.";
+    }
+    else if (error.code === error.POSITION_UNAVAILABLE) {
+        detailError = "Location information is unavailable.";
+    }
+    else if (error.code === error.TIMEOUT) {
+        detailError = "The request to get user location timed out."
+    }
+    else if (error.code === error.UNKNOWN_ERROR) {
+        detailError = "An unknown error occurred."
+    }
 };

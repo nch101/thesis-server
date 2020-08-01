@@ -36,7 +36,7 @@ module.exports = {
                         .cookie('vehicleId', String(data._id))
                         .cookie('vehicleType', data.vehicleType)
                         .cookie('mapToken', key.mapToken)
-                        .redirect('/vehicle/direction');
+                        .redirect('/vehicle/test-selection');
                     })
                     .catch(function(error) {
                         logger.error('Generate accessToken error, id: %s, error: %s', data._id, error);

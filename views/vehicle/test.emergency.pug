@@ -4,9 +4,23 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Test emergency
-        link(rel="stylesheet", href="/stylesheets/main.css")
+        link(rel="stylesheet", href="/stylesheets/test.css")
     body
-        a(href="/vehicle/ltk-bk-ktx").choice-test Lý Thường Kiệt (DHBK-KTX)
-        a(href="/vehicle/tht-lg").choice-test Tô Hiến Thành - Lữ Gia
-        a(href="/vehicle/ltk-ktx-bk").choice-test Lý Thường Kiệt (KTX-DHBK)
-        a(href="/vehicle/lg-tht").choice-test Lữ Gia - Tô Hiến Thành
+        .choice-wrap
+            .choice-main-title Chọn kiểu kiểm tra
+            .choice-container
+                a(href="/vehicle/direction").choice-test 
+                    .choice-title Lựa chọn 1
+                    .choice-content Thật
+                a(href="/vehicle/ltk-bk-ktx").choice-test 
+                    .choice-title Lựa chọn 2
+                    .choice-content DHBK-KTX
+                a(href="/vehicle/tht-lg").choice-test 
+                    .choice-title Lựa chọn 3
+                    .choice-content THT-LG
+                a(href="/vehicle/ltk-ktx-bk").choice-test 
+                    .choice-title Lựa chọn 4
+                    .choice-content KTX-DHBK
+                a(href="/vehicle/lg-tht").choice-test 
+                    .choice-title Lựa chọn 5
+                    .choice-content LG-THT

@@ -380,7 +380,7 @@ module.exports = {
         function matchIntersectionPromise(location, bearing) {
             return new Promise(function(resolve, reject) {
                 trafficLightModel
-                .findOne()
+                .find()
                 .where('location')
                 .intersects()
                 .geometry({ type: 'Point', coordinates: location })
@@ -390,9 +390,11 @@ module.exports = {
                         reject(err);
                     }
                     else {
-                        if (data != null) {
-                            dBearing = Math.abs(data.bearing - bearing);
-                            if (dBearing <= 5) return resolve(data);
+                        if (data.length > 0) {
+                            for (let fixedData of data) {
+                                dBearing = Math.abs(fixedData.bearing - bearing);
+                                if (dBearing <= 5) return resolve(fixedData);
+                            }
                         }
                         return resolve(null);
                     }

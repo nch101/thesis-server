@@ -15,6 +15,7 @@ module.exports = function(io) {
         });
 
         socket.on('[vehicle]-emergency', function(data) {
+            logger.info('Emitted emergency signal to ', data.idIntersection);
             emergencyPath.to(data.idIntersection).emit('[intersection]-emergency', {
                 vehicleId: data.vehicleId,
                 vehicleType: data.vehicleType,

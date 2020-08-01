@@ -6,14 +6,14 @@ mixin infoIntersections(item, index)
         td #{ item.intersectionName}
         td.has-limited
             span.limited-text #{ item._id }
-            input(type="hidden", value=item._id)
-            button.btn-func.has-tooltip.btn-copy(onclick='copyValue()')
+            input(type="text", value=item._id, id = item._id, style='display: none')
+            button.btn-func.has-tooltip.btn-copy(onclick='onCopy("' + item._id + '")')
                 i.fas.fa-copy
                 span.tool-tip Copy
         td
             span.limited-text #{ item.token }
-            input(type="hidden", value=item.token)
-            button.btn-func.has-tooltip.btn-copy(onclick='copyValue()')
+            input(type="text", value=item.token, id = item.token, style='display: none')
+            button.btn-func.has-tooltip.btn-copy(id = item.token, onclick='onCopy("' + item.token + '")')
                 i.fas.fa-copy
                 span.tool-tip Copy
         td
@@ -46,3 +46,6 @@ block content
                 tbody
                     each item, index in intersections
                         +infoIntersections(item, index)
+
+block addFile
+    script(src='/javascripts/list.intersections.js')
