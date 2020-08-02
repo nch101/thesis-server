@@ -82,12 +82,10 @@ async function extraFunction(steps) {
     var data = [];
     for (var step of steps) {
         for (var intersection of step.intersections) {
-            if (intersection.in) {
-                data.push({
-                    location: intersection.location,
-                    bearing: intersection.bearings[intersection.in]
-                });
-            }
+            data.push({
+                location: intersection.location,
+                bearing: intersection.bearings[intersection.in]
+            });
         }
     }
 
