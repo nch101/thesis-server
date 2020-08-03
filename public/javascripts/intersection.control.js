@@ -161,13 +161,25 @@ function renderInfoIntersection(res) {
     }
     else;
 
-    flexibleTime.addEventListener('click', automaticFlexibleTime);
-    manual.addEventListener('click', manualControl);
-    fixedTime.addEventListener('click', async function() {
-        var res = await axios.get('/intersection/' + idIntersection);
-        automaticFixedTime(res.data.trafficLights);
-    });
+    flexibleTime.addEventListener('click', flexibleTimeExtra);
+    manual.addEventListener('click', manualControlExtra);
+    fixedTime.addEventListener('click', fixedTimeExtra);
+}
 
+function flexibleTimeExtra() {
+    controlLightSocket.emit('[center]-change-mode', { mode: 'automatic-flexible-time' });
+    automaticFlexibleTime()
+};
+
+function manualControlExtra() {
+    controlLightSocket.emit('[center]-change-mode', { mode: 'manual' });
+    manualControl()
+};
+
+async function fixedTimeExtra() {
+    controlLightSocket.emit('[center]-change-mode', { mode: 'automatic-fixed-time' });
+    var res = await axios.get('/intersection/' + idIntersection);
+    automaticFixedTime(res.data.trafficLights);
 }
 
 function updateTrafficDensity(trafficDensity) {
@@ -203,7 +215,6 @@ function updateTrafficDensity(trafficDensity) {
 }
 
 function automaticFlexibleTime() {
-    controlLightSocket.emit('[center]-change-mode', { mode: 'automatic-flexible-time' });
     var btnActive = document.getElementsByClassName('btn-active');
     btnActive[0].classList.remove('btn-active');
     flexibleTime.classList.add('btn-active');
@@ -212,7 +223,6 @@ function automaticFlexibleTime() {
 }
 
 function automaticFixedTime(streetInfo) {
-    controlLightSocket.emit('[center]-change-mode', { mode: 'automatic-fixed-time' });
     var btnActive = document.getElementsByClassName('btn-active');
     btnActive[0].classList.remove('btn-active');
     fixedTime.classList.add('btn-active');
@@ -259,7 +269,6 @@ function automaticFixedTime(streetInfo) {
 }
 
 function manualControl() {
-    controlLightSocket.emit('[center]-change-mode', { mode: 'manual' });
     var btnActive = document.getElementsByClassName('btn-active');
     btnActive[0].classList.remove('btn-active');
     manual.classList.add('btn-active');
