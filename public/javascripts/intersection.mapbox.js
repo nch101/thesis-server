@@ -1,7 +1,7 @@
 var lineTool = document.getElementById('line-tool');
 var deleteTool = document.getElementById('delete-tool');
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHV5bmd1eWVuY29uZyIsImEiOiJjazN6N3VrOG0wNWJqM29vOGtsanNzd2pnIn0.5QK7L0ZSRMvtyrE08PZGMA';
+mapboxgl.accessToken = cookiesParser('mapToken');
 
 var map = new mapboxgl.Map({
     container: 'map',
@@ -160,3 +160,18 @@ deleteTool.addEventListener('click', function() {
         marker.remove();
     }
 })
+
+/**
+ * Cookies parser
+ */
+
+function cookiesParser(cookieName) {
+    var cookieName = cookieName + "=";
+    var cookiesArray = document.cookie.split('; ');
+    for (var cookie of cookiesArray) {
+        if (cookie.indexOf(cookieName) == 0) {
+            return cookie.substring(cookieName.length, cookie.length);
+        }
+    }
+    return "";
+}
