@@ -30,7 +30,7 @@ function processIntersectionData(intersections) {
     let nEmergency = 0;
 
     let nVL = 0;
-    let nL =0;
+    let nL = 0;
     let nM = 0;
     let nH = 0;
     let nVH = 0;
