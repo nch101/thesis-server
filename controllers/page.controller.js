@@ -40,20 +40,22 @@ function processIntersectionData(intersections) {
 
     for (let interData of intersections) {
         interData = interData.toObject();
-        interData.trafficDensity = interData.trafficDensity[interData.trafficDensity.length - 1];
-        interData.trafficDensity.date = timeGMT7(interData.trafficDensity.date);
-        interArr.push(interData);
-
-        if (interData.trafficDensity.state === 'very-low') nVL++;
-        else if (interData.trafficDensity.state === 'low') nL++;
-        else if (interData.trafficDensity.state === 'medium') nM++;
-        else if (interData.trafficDensity.state === 'high') nH++;
-        else if (interData.trafficDensity.state === 'very-high') nVH++;
-
-        if (interData.modeControl === 'automatic-flexible-time') nAutoFlexible++;
-        else if (interData.modeControl === 'automatic-fixed-time') nAutoFixed++;
-        else if (interData.modeControl === 'manual') nManual++;
-        else if (interData.modeControl === 'emergency') nEmergency++;
+        if (interData.trafficDensity.length > 0) {
+            interData.trafficDensity = interData.trafficDensity[interData.trafficDensity.length - 1];
+            interData.trafficDensity.date = timeGMT7(interData.trafficDensity.date);
+            interArr.push(interData);
+    
+            if (interData.trafficDensity.state === 'very-low') nVL++;
+            else if (interData.trafficDensity.state === 'low') nL++;
+            else if (interData.trafficDensity.state === 'medium') nM++;
+            else if (interData.trafficDensity.state === 'high') nH++;
+            else if (interData.trafficDensity.state === 'very-high') nVH++;
+    
+            if (interData.modeControl === 'automatic-flexible-time') nAutoFlexible++;
+            else if (interData.modeControl === 'automatic-fixed-time') nAutoFixed++;
+            else if (interData.modeControl === 'manual') nManual++;
+            else if (interData.modeControl === 'emergency') nEmergency++;
+        }
     }
 
     stateArr.push(nVL, nL, nM, nH, nVH);
