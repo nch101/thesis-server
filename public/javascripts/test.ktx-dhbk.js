@@ -6,6 +6,7 @@ var menuBox = document.getElementById('menu-box')
 //Cookies
 var idVehicle = cookiesParser('vehicleId');
 var vehicleType = cookiesParser('vehicleType');
+var initialLocation = cookiesParser('initialLocation').split('%2C');
 mapboxgl.accessToken = cookiesParser('mapToken');
 
 var preDist = 0;
@@ -62,7 +63,7 @@ menu.addEventListener('click', function() {
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [106.658188, 10.770398],
+    center: initialLocation,
     zoom: 13
 });
 

@@ -117,6 +117,7 @@ module.exports = {
             .clearCookie('vehicleType')
             .clearCookie('io')
             .clearCookie('mapToken')
+            .clearCookie('initialLocation')
             .redirect('/login');
         })
         .catch(function(error) {

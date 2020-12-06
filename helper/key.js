@@ -10,5 +10,7 @@ module.exports = {
     tokenLife: process.env.TOKEN_LIFE,
     refreshTokenLife: process.env.REFRESH_TOKEN_LIFE,
 
-    mapToken: process.env.MAP_ACCESS_TOKEN
+    mapToken: process.env.MAP_ACCESS_TOKEN,
+
+    initialLocation: process.env.INITIAL_LOCATION
 }

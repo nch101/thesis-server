@@ -36,6 +36,7 @@ module.exports = {
                         .cookie('vehicleId', String(data._id))
                         .cookie('vehicleType', data.vehicleType)
                         .cookie('mapToken', key.mapToken)
+                        .cookie('initialLocation', key.initialLocation)
                         .redirect('/vehicle/test-selection');
                     })
                     .catch(function(error) {

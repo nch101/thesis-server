@@ -1,12 +1,13 @@
 var lineTool = document.getElementById('line-tool');
 var deleteTool = document.getElementById('delete-tool');
 
+var initialLocation = cookiesParser('initialLocation').split('%2C');
 mapboxgl.accessToken = cookiesParser('mapToken');
 
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [106.66008, 10.763512],
+    center: initialLocation,
     zoom: 13
 });
 
