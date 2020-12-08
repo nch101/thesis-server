@@ -325,8 +325,10 @@ module.exports = {
             if (data) {
                 logger.info('Get data intersection id: %s', req.params.id);
                 data = data.toObject();
-                data.trafficDensity = data.trafficDensity[data.trafficDensity.length - 1];
-                data.trafficDensity.date = timeGMT7(data.trafficDensity.date);
+                if (data.trafficDensity.length > 0) {
+                    data.trafficDensity = data.trafficDensity[data.trafficDensity.length - 1];
+                    data.trafficDensity.date = timeGMT7(data.trafficDensity.date);
+                }
                 return res
                 .status(200)
                 .json(data);
