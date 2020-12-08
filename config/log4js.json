@@ -1,20 +1,25 @@
 {
   	"appenders": {
+		"out": {
+			"type": "stdout",
+			"level": "DEBUG"
+		},
 		"access": {
 			"type": "dateFile",
-			"filename": "log/access.log",
+			"filename": "logs/access.log",
 			"pattern": "-yyyy-MM-dd",
 			"category": "http"
 		},
 		"app": {
 			"type": "file",
-			"filename": "log/app.log",
+			"filename": "logs/app.log",
 			"maxLogSize": 10485760,
-			"numBackups": 3
+			"numBackups": 3,
+			"level": "INFO"
 		},
 		"errorFile": {
 			"type": "file",
-			"filename": "log/errors.log"
+			"filename": "logs/errors.log"
 		},
 		"errors": {
 			"type": "logLevelFilter",
@@ -23,13 +28,13 @@
 		},
 		"data": {
 			"type": "file",
-			"filename": "log/data.log",
+			"filename": "logs/data.log",
 			"maxLogSize": 10485760,
 			"category": [ "data-received", "data-send" ]
 		}
   	},
   	"categories": {
-		"default": { "appenders": [ "app", "errors" ], "level": "DEBUG" },
+		"default": { "appenders": [ "app", "errors", "out" ], "level": "DEBUG" },
 		"http": { "appenders": [ "access" ], "level": "DEBUG" },
 		"data-received": { "appenders": [ "data" ], "level": "DEBUG"},
 		"data-send": { "appenders": [ "data" ], "level": "DEBUG"}

@@ -8,7 +8,7 @@ var debug = require('debug')('project:server');
 
 var fs = require('fs')
 try {
-	fs.mkdirSync('./log');
+	fs.mkdirSync('./logs');
 }
 catch(error) {
 	if (error.code != 'EEXIST') {
