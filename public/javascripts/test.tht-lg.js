@@ -170,7 +170,11 @@ async function prepareApproaching(distance) {
             console.log('Got');
         }
 
-        if (res.data.trafficDensity.state == 'very-low' && distance <= 0.25) {
+        if (res.data.length == undefined && distance <= 0.5) {
+            emitData(stateVehicle.approaching);
+            isEmitted = true;
+        }
+        else if (res.data.trafficDensity.state == 'very-low' && distance <= 0.25) {
             emitData(stateVehicle.approaching);
             isEmitted = true;
         }
