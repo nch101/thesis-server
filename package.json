@@ -15,7 +15,7 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "log4js": "^6.2.1",
+    "log4js": "^6.4.0",
     "mongoose": "^5.9.5",
     "mongoose-unique-validator": "^2.0.3",
     "pug": "^2.0.4",
